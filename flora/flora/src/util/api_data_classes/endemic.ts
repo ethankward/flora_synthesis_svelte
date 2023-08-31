@@ -1,19 +1,10 @@
-class EndemicChoice {
-    value: string;
-    text: string;
-
-    constructor(api_data: any) {
-        this.value = api_data.value;
-        this.text = api_data.text;
-    }
-}
-
+import type { EndemicAPIType } from "../../util/api_data_classes/api_data_types";
 
 class EndemicChoices {
-    choices: EndemicChoice[];
+    choices: EndemicAPIType[];
 
-    constructor(api_data: any) {
-        this.choices = api_data.map((x: any) => new EndemicChoice(x));
+    constructor(api_data: EndemicAPIType[]) {
+        this.choices = api_data;
     }
 
     select() {

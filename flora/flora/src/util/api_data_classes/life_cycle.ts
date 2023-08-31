@@ -1,19 +1,11 @@
-class LifeCycleChoice {
-    value: string;
-    text: string;
-
-    constructor(api_data: any) {
-        this.value = api_data.value;
-        this.text = api_data.text;
-    }
-}
+import type { LifeCycleAPIType } from "../../util/api_data_classes/api_data_types";
 
 
 class LifeCycleChoices {
-    choices: LifeCycleChoice[];
+    choices: LifeCycleAPIType[];
 
-    constructor(api_data: any) {
-        this.choices = api_data.map((x: any) => new LifeCycleChoice(x));
+    constructor(api_data: LifeCycleAPIType[]) {
+        this.choices = api_data;
     }
 
     select() {

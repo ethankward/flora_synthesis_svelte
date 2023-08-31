@@ -9,6 +9,6 @@ export async function load({ params }) {
         taxon_data: await api_manager.getTaxon(taxon_id),
         life_cycle_data: await api_manager.getLifeCycleChoices(),
         endemic_data: await api_manager.getEndemicChoices(),
-        checklist_record_data: await api_manager.getChecklistRecords(taxon_id)
+        checklist_records: await api_manager.getChecklistRecords(taxon_id)
     }
 }

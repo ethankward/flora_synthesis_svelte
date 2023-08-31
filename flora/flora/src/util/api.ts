@@ -11,7 +11,7 @@ class APIManager {
     getUrl(path: string[], params?: { [key: string]: string;}) {
         let url = new URL(path.join('/'), this.api_url);
         if (params) {
-            for (const [key, value] of params.entries) {
+            for (const [key, value] of Object.entries(params)) {
                 url.searchParams.set(key, value);
             }
             return url.toString();
@@ -32,6 +32,10 @@ class APIManager {
 
     patch(data: any, path: string[], params?: { [key: string]: string;}) {
         return axios.patch(this.getUrl(path, params), data);
+    }
+
+    post(data: any, path: string[]) {
+        return axios.post(this.getUrl(path), data);
     }
 
     getChecklists() {
@@ -67,8 +71,22 @@ class APIManager {
     }
     
     getChecklistRecords(taxon_id: number) {
-        return this.get(["checklist_records", "?taxon_id=" + taxon_id]);
+        return this.get(["checklist_records"], {"taxon_id": taxon_id.toString()});
     }
+
+    getTaxaAutocompletion(search_term: string) {
+        return this.get(["taxa_autocomplete"], {"search_term": search_term})
+    }
+
+    makeSynonymOf(taxon_id_1: number, taxon_id_2: number) {
+        return this.post({"taxon_id_1": taxon_id_1, "taxon_id_2": taxon_id_2},
+        ["make_synonym_of"]);
+    }
+
+    getChecklistRecord(checklist_type: string, checklist_record_id: number) {
+        return this.get(["checklist_records", checklist_type, checklist_record_id.toString()]);
+    }
+
 }
 
 

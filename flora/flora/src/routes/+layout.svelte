@@ -3,7 +3,7 @@
 </script>
 
 
-<main class="container" ata-theme="dark">
+<main class="container" data-theme="dark">
 
     <nav>
         <ul>

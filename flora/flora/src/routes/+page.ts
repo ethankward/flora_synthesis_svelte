@@ -5,6 +5,5 @@ export async function load({ params }) {
 
     return {
         checklist_data: await api_manager.getChecklists(),
-        taxon_data: await api_manager.getTaxa()
     }
 }

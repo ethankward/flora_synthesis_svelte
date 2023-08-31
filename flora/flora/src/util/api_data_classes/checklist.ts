@@ -1,28 +1,18 @@
-import axios from "axios";
-
-
-class Checklist {
-    id: number;
-    checklist_name: string;
-
-    constructor(id: number, checklist_name: string) {
-        this.id = id;
-        this.checklist_name = checklist_name;
-    }
-}
+import type { ChecklistAPIType } from "../../util/api_data_classes/api_data_types";
 
 
 class ChecklistList {
-    checklists: {[key: number]: Checklist;};
+    checklists: {[key: number]: ChecklistAPIType;};
 
-    constructor(api_data: any) {
-        this.checklists = Object.fromEntries(api_data.map((ch: any) => [ch.pk, new Checklist(ch.pk, ch.checklist_name)]));
+    constructor(api_data: ChecklistAPIType[]) {
+        this.checklists = Object.fromEntries(api_data.map((ch) => [ch.id, ch]));
     }
 
     getChecklist(id: number) {
         return this.checklists[id];
     }
+
 }
 
 
-export {Checklist, ChecklistList}
+export {ChecklistList}

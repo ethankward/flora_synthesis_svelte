@@ -1,48 +1,4 @@
-class Taxon {
-    id: number;
-    primary: boolean;
-    seinet_id: number;
-    inat_id: number;
-    taxon_name: string;
-    genus: string;
-    family: string;
-    checklists: number[];
-    observation_types: number[];
-    synonyms: string[];
-    mapped_to: Taxon[];
-    parent_species?: number;
-    subtaxa: number[];
-
-    constructor(
-        api_data: any, primary: boolean
-    ) {
-        this.id = api_data.pk;
-        this.primary = primary;
-        this.seinet_id = api_data.seinet_id;
-        this.inat_id = api_data.inat_id;
-        this.taxon_name = api_data.taxon_name;
-        this.genus = api_data.genus;
-        this.family = api_data.family;
-        if (api_data.on_checklists) {
-            this.checklists = api_data.on_checklists;
-        } else {
-            this.checklists = [];
-        }
-        
-        this.observation_types = api_data.observation_types;
-        if (api_data.taxonsynonym_set) {
-            this.synonyms = api_data.taxonsynonym_set;
-        } else {
-            this.synonyms = [];
-        }
-        
-        this.mapped_to = [];
-        if (api_data.parent_species) {
-            this.parent_species = api_data.parent_species;
-        }
-        this.subtaxa = api_data.subtaxa;
-    }
-}
+import type { TaxonAPIType, TaxonSynonymAPIType, TaxonNameAPIType, ChecklistTaxonAPIType } from "../../util/api_data_classes/api_data_types";
 
 
 type GroupedTaxa = {
@@ -56,6 +12,52 @@ enum GroupBy {
     alphabetic,
 }
 
+class Taxon {
+    id: number;
+    checklists: number[];
+    taxon_name: string;
+    family: string;
+    genus: string;
+    primary: boolean;
+    all_mapped_taxa: TaxonNameAPIType[];
+    seinet_id?: number;
+    inat_id?: number;
+    synonyms: TaxonSynonymAPIType[];
+    parent_species?: TaxonNameAPIType;
+    subtaxa: TaxonNameAPIType[];
+
+
+    constructor(taxon_api_data?: TaxonAPIType, checklist_taxon_api_data?: ChecklistTaxonAPIType) {
+        if (taxon_api_data) {
+            this.id = taxon_api_data.id;
+            this.checklists = taxon_api_data.checklists;
+            this.taxon_name = taxon_api_data.taxon_name;
+            this.family = taxon_api_data.family;
+            this.genus = taxon_api_data.genus;
+            this.primary = true;
+            this.all_mapped_taxa = [];
+            this.seinet_id = taxon_api_data.seinet_id;
+            this.inat_id = taxon_api_data.inat_id;
+            this.synonyms = taxon_api_data.taxonsynonym_set;
+            this.parent_species = taxon_api_data.parent_species;
+            this.subtaxa = taxon_api_data.subtaxa;
+        } else {
+            if (checklist_taxon_api_data === undefined) {
+                throw new Error("Specify one of taxon_api_data or checklist_taxon_api_data");
+            }
+            this.id = checklist_taxon_api_data.id;
+            this.checklists = [checklist_taxon_api_data.checklist];
+            this.taxon_name = checklist_taxon_api_data.taxon_name;
+            this.family = checklist_taxon_api_data.family;
+            this.genus = checklist_taxon_api_data.genus;
+            this.primary = false;
+            this.all_mapped_taxa = checklist_taxon_api_data.all_mapped_taxa;
+            this.synonyms = [];
+            this.subtaxa = [];
+        }
+
+    }
+}
 
 class TaxonList {
     taxa: Taxon[];
@@ -65,7 +67,6 @@ class TaxonList {
     }
 
     filterByChecklist(checklist: number) {
-
         return new TaxonList(
             this.taxa.filter((taxon) =>
                 taxon.checklists.includes(checklist)
@@ -73,25 +74,14 @@ class TaxonList {
         );
     }
 
-    filterByIncludedObservationType(observation_types: number[]) {
-        return new TaxonList(
-            this.taxa.filter((taxon) =>
-                taxon.observation_types.some((v: any) =>
-                    observation_types.includes(v)
-                )
-            )
-        );
-    }
-
-    filterByExcludedObservationType(observation_types: number[]) {
-        return new TaxonList(
-            this.taxa.filter(
-                (taxon) =>
-                    !taxon.observation_types.some((v: any) =>
-                        observation_types.includes(v)
-                    )
-            )
-        );
+    filterByTaxonNameContains(taxon_name_filter?: string) {
+        if (!taxon_name_filter) {
+            return this;
+        } else {
+            return new TaxonList(
+                this.taxa.filter((taxon) => taxon.taxon_name.toLowerCase().includes(taxon_name_filter.toLowerCase()))
+            );
+        }
     }
 
     getGroupKey(taxon: Taxon, grouped_by: GroupBy) {
@@ -127,7 +117,7 @@ class TaxonList {
             if (taxon.primary) {
                 result.add(taxon.id);
             } else {
-                taxon.mapped_to.forEach((mt) => result.add(mt.id));
+                taxon.all_mapped_taxa.forEach((mt) => result.add(mt.id));
             }
 
         });
@@ -140,8 +130,18 @@ class TaxonList {
         let common_taxon_ids = new Set(
             [...this_taxon_ids].filter((x) => other_taxon_ids.has(x))
         );
+        console.log(common_taxon_ids);
+        console.log(this_taxon_ids.has(55));
+        console.log(this.taxa);
+        console.log(this.taxa.filter((taxon) => common_taxon_ids.has(taxon.id)).length);
         return new TaxonList(
-            this.taxa.filter((taxon) => common_taxon_ids.has(taxon.id))
+            this.taxa.filter((taxon) => {
+                if (taxon.primary) {
+                    return common_taxon_ids.has(taxon.id)
+                } else {
+                    return taxon.all_mapped_taxa.some((mt) => common_taxon_ids.has(mt.id))
+                }
+            })
         );
     }
 
@@ -157,7 +157,7 @@ class TaxonList {
                 if (taxon.primary) {
                     return diff_ids.has(taxon.id);
                 } else {
-                    return taxon.mapped_to.map((t) => t.id).filter((i) => diff_ids.has(i)).length > 0;
+                    return taxon.all_mapped_taxa.filter((i) => diff_ids.has(i.id)).length > 0;
                 }
                 
             })
@@ -166,42 +166,18 @@ class TaxonList {
 }
 
 
-function loadTaxaFromAPIData(api_data: any) {
-    let canonical_taxa = new TaxonList(
-        api_data.map(
-            (t: any) =>
-                new Taxon(
-                    t,
-                    true
-                )
-        )
-    );
+function loadTaxaFromAPIData(api_data: TaxonAPIType[]) {
 
-    let taxa_map_index: {[key: number]: Taxon;} = {};
-    canonical_taxa.taxa.forEach((canonical_taxon: Taxon) => {
-        taxa_map_index[canonical_taxon.id] = canonical_taxon;
-     });
+    let canonical_taxa = new TaxonList([]);
+    let checklist_taxa = new TaxonList([]);
 
-    let checklist_taxa_obj: {[key: number]: Taxon} = {};
-    
-    api_data.forEach((taxon: any) => {
-        taxon.taxon_checklist_taxa.forEach(
-            (checklist_taxon: any) => {
-                if (!(checklist_taxon.pk in checklist_taxa_obj)) {
-                    checklist_taxa_obj[checklist_taxon.pk] = new Taxon(
-                        checklist_taxon,
-                        false
-                    );
-                }
-
-                checklist_taxa_obj[checklist_taxon.pk].mapped_to.push(taxa_map_index[taxon.pk]);
-                checklist_taxa_obj[checklist_taxon.pk].checklists.push(checklist_taxon.checklist);
-                checklist_taxa_obj[checklist_taxon.pk].observation_types.push(...checklist_taxon.observation_types);
-            }
-        );
+    api_data.forEach((taxon) => {
+        canonical_taxa.taxa.push(new Taxon(taxon, undefined));
+        taxon.taxon_checklist_taxa.forEach((checklist_taxon) => {
+            checklist_taxa.taxa.push(new Taxon(undefined, checklist_taxon));
+        });
     });
 
-    let checklist_taxa = new TaxonList(Object.values(checklist_taxa_obj));
     return [canonical_taxa, checklist_taxa];
 
 }

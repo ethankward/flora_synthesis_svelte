@@ -12,16 +12,16 @@
     <ul>
         <li>
             <TaxonLink taxon={taxon} />
-            {#if taxon.mapped_to.length > 0}
+            {#if taxon.all_mapped_taxa.length > 0}
 
-            → {#each taxon.mapped_to as mapped_taxon, i}{#if i > 0},&nbsp;{/if}<TaxonLink taxon={mapped_taxon} />{/each}
+            → {#each taxon.all_mapped_taxa as mapped_taxon, i}{#if i > 0},&nbsp;{/if}<TaxonLink taxon={mapped_taxon} />{/each}
 
             {/if}
 
             {#if taxon.synonyms.length > 0}
                 <ul>
                     <li>
-                        Synonyms: {#each taxon.synonyms as taxon_synonym, i}{#if i > 0},&nbsp;{/if}{taxon_synonym.synonym}{/each}
+                        <small>Synonyms: {#each taxon.synonyms as taxon_synonym, i}{#if i > 0},&nbsp;{/if}{taxon_synonym.synonym}{/each}</small>
                     </li>
                 </ul>
             {/if}
