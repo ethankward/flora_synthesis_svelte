@@ -1,27 +1,24 @@
 <script lang="ts">
-	import { onMount } from "svelte";
 	import { APIManager } from "../../../util/api";
 	import AutoComplete from "simple-svelte-autocomplete";
-	import { redirect } from '@sveltejs/kit';
-	import { goto } from '$app/navigation';
 
-	import TaxonLinkRaw from "../../../components/TaxonLinkRaw.svelte";
+	import TaxonNameLink from "../../../components/TaxonNameLink.svelte";
 	import InlineFormEditor from "../../../components/InlineFormEditor.svelte";
+	import CRUDList from "../../../components/CRUDList.svelte";
+
 	import { Taxon } from "../../../util/api_data_classes/taxon";
-	import { ChecklistList } from "../../../util/api_data_classes/checklist";
 	import {ChecklistRecordList} from "../../../util/api_data_classes/checklist_records";
 
 	import { EndemicChoices } from "../../../util/api_data_classes/endemic";
 	import { LifeCycleChoices } from "../../../util/api_data_classes/life_cycle";
 
-    import TaxonLink from "../../../components/TaxonLink.svelte";
 
 	export let data;
 
-	let taxon = new Taxon(data.taxon_data.data);
-	let life_cycle_choices = new LifeCycleChoices(data.life_cycle_data.data);
-	let endemic_choices=  new EndemicChoices(data.endemic_data.data);
-	let checklist_records = new ChecklistRecordList(data.checklist_records.data);
+	let taxon = new Taxon(data.taxon_data);
+	let life_cycle_choices = new LifeCycleChoices(data.life_cycle_data);
+	let endemic_choices =  new EndemicChoices(data.endemic_data);
+	let checklist_records = new ChecklistRecordList(data.checklist_records);
 
     let api_manager = new APIManager("http://127.0.0.1:8000/api/");
 	let selectedSynonymOfChoice: object;
@@ -47,6 +44,10 @@
 	}
 
 </script>
+
+<svelte:head>
+    <title>{taxon.taxon_name}</title> 
+</svelte:head>
 
 <article>
 	<header>Taxon details: <span id="taxon_name_span"><mark>{taxon.taxon_name}</mark></span> <small><kbd><a href="#" on:click={copyTaxonName} >copy</a></kbd></small>
@@ -83,15 +84,15 @@
 			apiMethod={(value) => api_manager.updateTaxon(taxon.id, {family: value})}
 			/>
 		</li>
-		{#if taxon.synonyms.length > 0}
 		<li>Synonyms:
-			<ul>
-				{#each taxon.synonyms as taxon_synonym}
-				<li>{taxon_synonym.synonym}</li>
-				{/each}
-			</ul>
+			<CRUDList 
+			existing_values={taxon.synonyms}
+			addNewAPIMethod={(value) => api_manager.createNewSynonym({taxon_id: taxon.id, synonym: value})}
+			deletionAPIMethod={(synonym_id) => api_manager.deleteSynonym(synonym_id)}
+			updateAPIMethod={(synonym_id, value) => api_manager.updateSynonym(synonym_id, {synonym: value})}
+			/>
 		</li>
-		{/if}
+
 		<li>SEINet ID:
 			<InlineFormEditor
 			id="seinet_id_editor"
@@ -108,11 +109,25 @@
 			apiMethod={(value) => api_manager.updateTaxon(taxon.id, {inat_id: value})}
 			/>
 		</li>
+		<li>Introduced status: {taxon.introduced.display}
+
+		</li>
+		<li>Endemic status:
+			<InlineFormEditor
+			id="endemic_editor"
+			type="select"
+			display_value={taxon.endemic.display}
+			value={taxon.endemic.value}
+			choices={endemic_choices.select()}
+			apiMethod={(value) => api_manager.updateTaxon(taxon.id, {endemic: value})}
+			/>
+		</li>
+		<li>Life cycle: {taxon.life_cycle.display}</li>
 		{#if taxon.parent_species}
-		<li>Parent species: <TaxonLinkRaw taxon={taxon.parent_species}/></li>
+		<li>Parent species: <TaxonNameLink taxon={taxon.parent_species}/></li>
 		{/if}
 		{#if taxon.subtaxa.length > 0}
-		<li>Subtaxa: {#each taxon.subtaxa as subtaxon, i}{#if i > 0},&nbsp;{/if}<TaxonLinkRaw taxon={subtaxon}/>{/each}</li>
+		<li>Subtaxa: {#each taxon.subtaxa as subtaxon, i}{#if i > 0},&nbsp;{/if}<TaxonNameLink taxon={subtaxon}/>{/each}</li>
 		{/if}
 	</ul>
 </article>
@@ -129,16 +144,22 @@
 		{#each group_records as checklist_record}
 		<li>
 			<a href={"/checklist_record_detail/" + checklist_record.checklist.checklist_type + "/" + checklist_record.id} target="_blank">{checklist_record.checklist_taxon.taxon_name}</a>
+
 			{#if checklist_record.external_url}
 			<a href={checklist_record.external_url} target="_blank">→</a>
 			{/if}
 			<ul>
-				{#if checklist_record.date}
-				<li>Date: {checklist_record.date}</li>
-				{/if}
 				{#if checklist_record.observer}
-				<li>Observer: {checklist_record.observer}</li>
+				<li>
+					<small>{checklist_record.observer}</small>
+				</li>
 				{/if}
+				{#if checklist_record.date}
+				<li>
+					<small>{checklist_record.date}</small>
+				</li>
+				{/if}
+
 			</ul>
 		</li>
 		{/each}
@@ -149,7 +170,7 @@
 </article>
 
 <article>
-	<header>Make synonym of</header>
+	<header>Synonymize</header>
 	<form  on:submit={submitMakeSynonymOf}>
 		<div class="grid">
 		<AutoComplete

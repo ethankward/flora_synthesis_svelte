@@ -38,12 +38,24 @@ class APIManager {
         return axios.post(this.getUrl(path), data);
     }
 
+    put(data: any, path: string[]) {
+        return axios.put(this.getUrl(path), data);
+    }
+
     getChecklists() {
         return this.get(["checklists"]);
     }
     
     getTaxa() {
         return this.get(["taxa"]);
+    }
+    
+    getPrimaryChecklistTaxa() {
+        return this.get(["primary_taxa"]);
+    }
+
+    getChecklistTaxa(checklist_id: number) {
+        return this.get(["taxa"], {"checklist": checklist_id.toString()});
     }
     
     getTaxon(taxon_id: number) {
@@ -61,7 +73,15 @@ class APIManager {
     updateSynonym(synonym_id: number, data: any) {
         return this.patch(data, ["taxon_synonyms", synonym_id.toString()]);
     }
+
+    createNewSynonym(data: any) {
+        return this.put(data, ["create_new_synonym"]);
+    }
     
+    deleteSynonym(synonym_id: number) {
+        return this.post({synonym_id: synonym_id}, ["delete_taxon_synonym"])
+    }
+
     getLifeCycleChoices() {
         return this.get(["life_cycles"]);
     }
@@ -87,6 +107,15 @@ class APIManager {
         return this.get(["checklist_records", checklist_type, checklist_record_id.toString()]);
     }
 
+    updateChecklistRecordMappedTo(checklist_type: string, checklist_record_id: number, mapped_to_id: number) {
+        console.log(checklist_type);
+        
+        return this.post({
+            "checklist_type": checklist_type,
+            "checklist_record_id": checklist_record_id,
+            "mapped_to_id": mapped_to_id},
+            ["update_checklist_record_mapping"]);
+    }
 }
 
 

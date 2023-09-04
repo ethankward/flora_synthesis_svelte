@@ -8,5 +8,6 @@ export async function load({ params }) {
     return {
         checklist_record_id: checklist_record_id,
         checklist_record_data: await api_manager.getChecklistRecord(checklist_type, checklist_record_id),
+        checklist_type: checklist_type
     }
 }

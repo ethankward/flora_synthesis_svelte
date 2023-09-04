@@ -21,21 +21,42 @@ type ChecklistTaxonAPIType = {
     all_mapped_taxa: TaxonNameAPIType[];
 }
 
+type ValueDisplayType = {
+    value: string,
+    display: string
+}
+
 type TaxonAPIType = {
     id: number,
     taxon_name: string,
     rank: string,
     genus: string,
     family: string,
-    life_cycle: string,
     seinet_id?: number,
     inat_id?: number,
     taxon_checklist_taxa: ChecklistTaxonAPIType[],
-    taxonsynonym_set: TaxonSynonymAPIType[],
+    synonyms: ValueDisplayType[],
     parent_species?: TaxonNameAPIType
     subtaxa: TaxonNameAPIType[],
-    checklists: number[]
+    checklists: number[],
+    introduced: ValueDisplayType,
+    endemic: ValueDisplayType,
+    life_cycle: ValueDisplayType
 }
+
+type MinimalTaxonAPIType = {
+    id: number,
+    taxon_name: string,
+    rank: string,
+    genus: string,
+    family: string,
+    introduced: ValueDisplayType,
+    endemic: ValueDisplayType,
+    life_cycle: ValueDisplayType,
+    seinet_id?: number,
+    inat_id?: number,
+}
+
 
 type ChecklistAPIType = {
     id: number,
@@ -67,7 +88,9 @@ type ChecklistRecordAPIType = {
     mapped_taxon: TaxonNameAPIType,
     checklist: ChecklistAPIType,
     date: string,
-    observer: string
+    observer: string,
+    external_url: string,
+    observation_type: string
 }
 
 export type {
@@ -78,5 +101,7 @@ export type {
     LifeCycleAPIType, 
     TaxonSynonymAPIType, 
     ChecklistTaxonAPIType, 
-    ChecklistRecordAPIType
+    ChecklistRecordAPIType,
+    ValueDisplayType,
+    MinimalTaxonAPIType
 }

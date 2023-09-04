@@ -1,7 +1,10 @@
 <script lang="ts">
-    import TaxonLink from "../components/TaxonLink.svelte";
+    import TaxonLink from "./TaxonLink.svelte";
+    import TaxonNameLink from "./TaxonNameLink.svelte";
 
-    export let grouped_checklist_taxa: any;
+    import type {GroupedTaxa} from "../util/api_data_classes/taxon";
+
+    export let grouped_checklist_taxa: GroupedTaxa;
 </script>
 
 
@@ -14,14 +17,14 @@
             <TaxonLink taxon={taxon} />
             {#if taxon.all_mapped_taxa.length > 0}
 
-            → {#each taxon.all_mapped_taxa as mapped_taxon, i}{#if i > 0},&nbsp;{/if}<TaxonLink taxon={mapped_taxon} />{/each}
+            → {#each taxon.all_mapped_taxa as mapped_taxon, i}{#if i > 0},&nbsp;{/if}<TaxonNameLink taxon={mapped_taxon} />{/each}
 
             {/if}
 
             {#if taxon.synonyms.length > 0}
                 <ul>
                     <li>
-                        <small>Synonyms: {#each taxon.synonyms as taxon_synonym, i}{#if i > 0},&nbsp;{/if}{taxon_synonym.synonym}{/each}</small>
+                        <small>Synonyms: {#each taxon.synonyms as taxon_synonym, i}{#if i > 0},&nbsp;{/if}{taxon_synonym.display}{/each}</small>
                     </li>
                 </ul>
             {/if}

@@ -1,4 +1,4 @@
-import type { TaxonAPIType, TaxonSynonymAPIType, TaxonNameAPIType, ChecklistTaxonAPIType } from "../../util/api_data_classes/api_data_types";
+import type { TaxonAPIType, TaxonSynonymAPIType, TaxonNameAPIType, ChecklistTaxonAPIType, ValueDisplayType} from "../../util/api_data_classes/api_data_types";
 
 
 type GroupedTaxa = {
@@ -22,10 +22,12 @@ class Taxon {
     all_mapped_taxa: TaxonNameAPIType[];
     seinet_id?: number;
     inat_id?: number;
-    synonyms: TaxonSynonymAPIType[];
+    synonyms: ValueDisplayType[];
     parent_species?: TaxonNameAPIType;
     subtaxa: TaxonNameAPIType[];
-
+    introduced?: ValueDisplayType;
+    endemic?: ValueDisplayType;
+    life_cycle?: ValueDisplayType;
 
     constructor(taxon_api_data?: TaxonAPIType, checklist_taxon_api_data?: ChecklistTaxonAPIType) {
         if (taxon_api_data) {
@@ -38,9 +40,13 @@ class Taxon {
             this.all_mapped_taxa = [];
             this.seinet_id = taxon_api_data.seinet_id;
             this.inat_id = taxon_api_data.inat_id;
-            this.synonyms = taxon_api_data.taxonsynonym_set;
+            this.synonyms = taxon_api_data.synonyms;
             this.parent_species = taxon_api_data.parent_species;
             this.subtaxa = taxon_api_data.subtaxa;
+            this.introduced = taxon_api_data.introduced;
+            this.endemic = taxon_api_data.endemic;
+            this.life_cycle = taxon_api_data.life_cycle;
+
         } else {
             if (checklist_taxon_api_data === undefined) {
                 throw new Error("Specify one of taxon_api_data or checklist_taxon_api_data");
@@ -72,6 +78,17 @@ class TaxonList {
                 taxon.checklists.includes(checklist)
             )
         );
+    }
+
+    deduplicate() {
+        let taxon_ids: {
+            [key: number]: Taxon;
+        } = {};
+        this.taxa.forEach((taxon) => {
+            taxon_ids[taxon.id] = taxon;
+        });
+        return new TaxonList(Object.values(taxon_ids));
+
     }
 
     filterByTaxonNameContains(taxon_name_filter?: string) {
@@ -130,10 +147,7 @@ class TaxonList {
         let common_taxon_ids = new Set(
             [...this_taxon_ids].filter((x) => other_taxon_ids.has(x))
         );
-        console.log(common_taxon_ids);
-        console.log(this_taxon_ids.has(55));
-        console.log(this.taxa);
-        console.log(this.taxa.filter((taxon) => common_taxon_ids.has(taxon.id)).length);
+
         return new TaxonList(
             this.taxa.filter((taxon) => {
                 if (taxon.primary) {
@@ -184,3 +198,4 @@ function loadTaxaFromAPIData(api_data: TaxonAPIType[]) {
 
 
 export {Taxon, TaxonList, GroupBy, loadTaxaFromAPIData}
+export type {GroupedTaxa}

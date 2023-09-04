@@ -46,7 +46,7 @@
         <select bind:value>
             <option value="" />
             {#each choices as choice}
-                <option value={choice.value}>{choice.text}</option>
+                <option value={choice[0]}>{choice[1]}</option>
             {/each}
         </select>
     {/if}

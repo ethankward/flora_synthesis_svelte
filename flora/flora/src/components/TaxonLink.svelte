@@ -1,5 +1,7 @@
-<script>
-    export let taxon;
+<script lang="ts">
+    import type {Taxon} from "../util/api_data_classes/taxon";
+
+    export let taxon: Taxon;
 </script>
 
 {#if taxon.primary}
