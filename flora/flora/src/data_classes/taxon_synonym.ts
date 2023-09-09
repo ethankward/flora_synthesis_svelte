@@ -1,10 +1,10 @@
-import type { TaxonSynonymAPIType } from "../../util/api_data_classes/api_data_types";
+import type { TaxonSynonymType } from "../data_classes/types";
 
 
 class TaxonSynonymList {
-    taxon_synonyms: {[key: number]: TaxonSynonymAPIType;};
+    taxon_synonyms: {[key: number]: TaxonSynonymType;};
 
-    constructor(api_data: TaxonSynonymAPIType[]) {
+    constructor(api_data: TaxonSynonymType[]) {
         this.taxon_synonyms = Object.fromEntries(api_data.map((ch) => [ch.id, ch]));
     }
 

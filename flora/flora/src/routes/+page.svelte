@@ -1,127 +1,139 @@
 <script lang="ts">
-    import {
-        ChecklistList,
-    } from "../util/api_data_classes/checklist";
-    import type { ChecklistAPIType } from "../util/api_data_classes/api_data_types";
-
-    import { APIManager } from "../util/api";
+    import {ChecklistList} from "../data_classes/checklist";
+    import type {GroupedTaxa} from "../data_classes/taxon";
     import {
         GroupBy,
         TaxonList,
         loadTaxaFromAPIData,
-    } from "../util/api_data_classes/taxon";
-    import type {GroupedTaxa} from "../util/api_data_classes/taxon";
-    import DisplayGroupedTaxa from "../components/DisplayGroupedTaxa.svelte";
-    import TaxaTable from "../components/TaxaTable.svelte";
+    } from "../data_classes/taxon";
+
+
+    import type { ChecklistType } from "../data_classes/types";
+    import type {selectedFieldsOptions} from "../routes/types";
+	import {callExternalEndpoint, APIEndpoints} from "../util/local_api_dispatch";
+
+    import TaxaListOrTable from "../components/routes/index/TaxaListOrTable.svelte";
 
     export let data;
 
 
-    let checklists: ChecklistList = new ChecklistList(data.checklist_data);
-    let selected_checklist_id: number = -1;
-    let selected_checklist: ChecklistAPIType | undefined;
-    let compare_to_checklist_id: number = -1;
-    let compare_to_checklist: ChecklistAPIType | undefined;
+    let formProperties = {
+        selectedChecklistID: -1 as number,
+        comparisonChecklistID: -1 as number,
+        selectedChecklist: undefined as ChecklistType | undefined,
+        comparisonChecklist: undefined as ChecklistType | undefined,
+        taxonNameFilter: undefined as string | undefined,
+        useCanonicalTaxa: true as boolean,
+        selectedFieldsOptions: {
+            lifecycle: false,
+            introduced: false,
+            endemic: false,
+            synonyms: true,
+            first_observation_date: false,
+            last_observation_date: false
+            } as selectedFieldsOptions,
+        taxaGroupedBy: 0 as number ,
+        hideChecklistTaxa: true,
+        hideComparisonTaxa: true,
+        displayAsList: true,
+        grouped_checklist_taxa: {} as GroupedTaxa,
+        common_taxa: {} as GroupedTaxa,
+        taxa_diff_1: {} as GroupedTaxa,
+        taxa_diff_2: {} as GroupedTaxa
+    };
 
-    let canonical_taxa: {[key: number]: TaxonList;} = {};
-    let checklist_taxa: {[key: number]: TaxonList;} = {};
-    let api_manager: APIManager = new APIManager("http://127.0.0.1:8000/api/");
+    class TaxonManager {
+        canonical_taxa: checklistTaxaType;
+        checklist_taxa: checklistTaxaType;
 
-    let taxon_name_filter: string;
+        constructor() {
+            this.canonical_taxa = {};
+            this.checklist_taxa = {};
 
-    let taxa_grouped_by: number = 0;
-
-    let use_canonical_taxa: boolean = true;
-
-    let grouped_checklist_taxa: GroupedTaxa = {};
-    let common_taxa: GroupedTaxa = {};
-    let taxa_diff_1: GroupedTaxa = {};
-    let taxa_diff_2: GroupedTaxa = {};
-
-    let hideChecklistTaxa = true;
-    let hideComparisonTaxa = true;
-
-    async function loadTaxonData(checklist_id: number) {
-        return api_manager.getChecklistTaxa(checklist_id).then((response) => {
-            let [loaded_canonical_taxa, loaded_checklist_taxa] = loadTaxaFromAPIData(
-                response.data
-            );
-            canonical_taxa[checklist_id] = loaded_canonical_taxa.deduplicate();
-            checklist_taxa[checklist_id] = loaded_checklist_taxa.filterByChecklist(checklist_id).deduplicate();
-        });
-    }
-
-    async function getCanonicalTaxa(checklist_id: number) {
-        if (!(checklist_id in canonical_taxa)) {
-            grouped_checklist_taxa = {};
-            await loadTaxonData(checklist_id);
         }
-        return canonical_taxa[checklist_id];
-    }
-
-    async function getChecklistTaxa(checklist_id: number) {
-        if (!(checklist_id in checklist_taxa)) {
-            await loadTaxonData(checklist_id);
+        async loadTaxonData(checklist_id: number) {
+            return callExternalEndpoint({checklist_id: checklist_id}, APIEndpoints.get_checklist_taxa).then((response) => {
+                let [loaded_canonical_taxa, loaded_checklist_taxa] = loadTaxaFromAPIData(
+                    response
+                );
+                this.canonical_taxa[checklist_id] = loaded_canonical_taxa.deduplicate();
+                this.checklist_taxa[checklist_id] = loaded_checklist_taxa.filterByChecklist(checklist_id).deduplicate();
+            });
         }
-        return checklist_taxa[checklist_id];
+        
+        async getCanonicalTaxa(checklistID: number) {
+            if (!(checklistID in this.canonical_taxa)) {
+                await this.loadTaxonData(checklistID);
+            }
+            return this.canonical_taxa[checklistID];
+        }
+
+        async getChecklistTaxa(checklistID: number) {
+            if (!(checklistID in this.checklist_taxa)) {
+                await this.loadTaxonData(checklistID);
+            }
+            return this.checklist_taxa[checklistID];
+        }
     }
 
     async function getVisibleTaxa(checklist_id: number) {
         let result: TaxonList;
 
-        if (use_canonical_taxa) {
-            result = await getCanonicalTaxa(checklist_id);
+        if (formProperties.useCanonicalTaxa) {
+            result = await taxonManager.getCanonicalTaxa(checklist_id);
         } else {
-            result = await getChecklistTaxa(checklist_id);
+            result = await taxonManager.getChecklistTaxa(checklist_id);
         }
-        result = result.filterByTaxonNameContains(taxon_name_filter);
+        result = result.filterByTaxonNameContains(formProperties.taxonNameFilter);
         return result;
     }
 
     function getSelectedChecklist() {
-        if (selected_checklist_id != -1) {
-            return checklists.checklists[selected_checklist_id];
+        if (formProperties.selectedChecklistID != -1) {
+            return checklists.checklists[formProperties.selectedChecklistID];
         }
     }
 
     function getCompareToChecklist() {
-        if (compare_to_checklist_id != -1) {
-            return checklists.checklists[compare_to_checklist_id];
+        if (formProperties.comparisonChecklistID != -1) {
+            return checklists.checklists[formProperties.comparisonChecklistID];
         }
     }
 
     async function handleChecklistChange() {    
-        hideChecklistTaxa = true;
-        hideComparisonTaxa = true;
+        formProperties.hideChecklistTaxa = true;
+        formProperties.hideComparisonTaxa = true;
 
         let visible_taxa = await getVisibleTaxa(
-            selected_checklist_id,
+            formProperties.selectedChecklistID,
         );
 
-        selected_checklist = getSelectedChecklist();
-        compare_to_checklist = getCompareToChecklist();
+        formProperties.selectedChecklist = getSelectedChecklist();
+        formProperties.comparisonChecklist = getCompareToChecklist();
 
-        if (selected_checklist_id != -1 && compare_to_checklist_id != -1) {
-            let other_taxa = await getVisibleTaxa(compare_to_checklist_id);
-            hideComparisonTaxa = false;
-            common_taxa = visible_taxa
+        if (formProperties.selectedChecklistID != -1 && formProperties.comparisonChecklistID != -1) {
+            let other_taxa = await getVisibleTaxa(formProperties.comparisonChecklistID);
+            formProperties.hideComparisonTaxa = false;
+            formProperties.common_taxa = visible_taxa
                 .commonTaxa(other_taxa)
-                .getGrouped(taxa_grouped_by);
-            taxa_diff_1 = visible_taxa
+                .getGrouped(formProperties.taxaGroupedBy);
+            formProperties.taxa_diff_1 = visible_taxa
                 .differingTaxa(other_taxa)
-                .getGrouped(taxa_grouped_by);
-            taxa_diff_2 = other_taxa
+                .getGrouped(formProperties.taxaGroupedBy);
+            formProperties.taxa_diff_2 = other_taxa
                 .differingTaxa(visible_taxa)
-                .getGrouped(taxa_grouped_by);
+                .getGrouped(formProperties.taxaGroupedBy);
         } else {
-            hideChecklistTaxa = false;
-            grouped_checklist_taxa = visible_taxa.getGrouped(taxa_grouped_by);
+            formProperties.hideChecklistTaxa = false;
+            formProperties.grouped_checklist_taxa = visible_taxa.getGrouped(formProperties.taxaGroupedBy);
         }
     }
 
-    
-
+    type checklistTaxaType = {[key: number]: TaxonList;};
+    let taxonManager = new TaxonManager();
+    let checklists: ChecklistList = new ChecklistList(data.checklist_data);
 </script>
+
 <svelte:head>
     <title>Checklists</title> 
 </svelte:head>
@@ -133,7 +145,7 @@
                 Checklist
                 <select
                     id="primary_checklist_selection"
-                    bind:value={selected_checklist_id}
+                    bind:value={formProperties.selectedChecklistID}
                     on:change={handleChecklistChange}
                 >
                     <option value="-1" />
@@ -149,7 +161,7 @@
                 Compare With
                 <select
                     id="compare_checklist_selection"
-                    bind:value={compare_to_checklist_id}
+                    bind:value={formProperties.comparisonChecklistID}
                     on:change={handleChecklistChange}
                 >
                     <option value="-1" />
@@ -164,7 +176,7 @@
             <label for="group_taxa_selection">
                 Group Taxa By
                 <select
-                    bind:value={taxa_grouped_by}
+                    bind:value={formProperties.taxaGroupedBy}
                     on:change={handleChecklistChange}
                     id="group_taxa_selection"
                 >
@@ -179,38 +191,93 @@
         <hr>
         <details>
             <summary>More options</summary>
-
-            <div class="grid">
-                <label>
-                    <input
-                        type="radio"
-                        bind:group={use_canonical_taxa}
-                        name="taxon_source"
-                        value={true}
-                        on:change={handleChecklistChange}
-                    />
-                    Display Mapped taxa
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        bind:group={use_canonical_taxa}
-                        name="taxon_source"
-                        value={false}
-                        on:change={handleChecklistChange}
-                    />
-                    Display Checklist taxa
-                </label>
-            </div>
             <hr>
             <div class="grid">
                 <label>
                     Filter taxon name:
                     <input
                         type="text"
-                        bind:value={taxon_name_filter}
+                        bind:value={formProperties.taxonNameFilter}
                         on:keyup={handleChecklistChange}
                     />
+                </label>
+            </div>
+            <hr>
+            <div class="grid">
+                <label>
+                    <input
+                        type="radio"
+                        bind:group={formProperties.useCanonicalTaxa}
+                        name="taxon_source"
+                        value={true}
+                        on:change={handleChecklistChange}
+                    />
+                    Display mapped taxa
+                </label>
+                <label>
+                    <input
+                        type="radio"
+                        bind:group={formProperties.useCanonicalTaxa}
+                        name="taxon_source"
+                        value={false}
+                        on:change={handleChecklistChange}
+                    />
+                    Display checklist taxa
+                </label>
+                <label>
+                    <input
+                        type="radio"
+                        bind:group={formProperties.displayAsList}
+                        name="list_display"
+                        value={true}
+                    />
+                    Display as list
+                </label>
+                <label>
+                    <input
+                        type="radio"
+                        bind:group={formProperties.displayAsList}
+                        name="table_display"
+                        value={false}
+                    />
+                    Display as table
+                </label>
+            </div>
+            <hr>
+            <h6>Show fields</h6>
+            <div class="grid">
+                <label>
+                    <input type="checkbox" 
+                    bind:checked={formProperties.selectedFieldsOptions.lifecycle}
+                    />
+                    Life cycle
+                </label>
+                <label>
+                    <input type="checkbox" 
+                    bind:checked={formProperties.selectedFieldsOptions.introduced}
+                    />
+                    Introduced
+                </label>
+                <label>
+                    <input type="checkbox" 
+                    bind:checked={formProperties.selectedFieldsOptions.endemic}
+                    />
+                    Endemic
+                </label>
+                <label>
+                    <input type="checkbox" 
+                    bind:checked={formProperties.selectedFieldsOptions.synonyms}/>
+                    Synonyms
+                </label>
+                <label>
+                    <input type="checkbox" 
+                    bind:checked={formProperties.selectedFieldsOptions.first_observation_date}/>
+                    First observation date
+                </label>
+                <label>
+                    <input type="checkbox" 
+                    bind:checked={formProperties.selectedFieldsOptions.last_observation_date}/>
+                    Last observation date
                 </label>
             </div>
     
@@ -219,42 +286,57 @@
     </form>
 </article>
 
-<article aria-busy="true" class:hide={!(hideChecklistTaxa && hideComparisonTaxa) || selected_checklist_id == -1}>
+<article aria-busy="true" class:hide={!(formProperties.hideChecklistTaxa && formProperties.hideComparisonTaxa) || formProperties.selectedChecklistID == -1}>
 
 </article>
-<article class:hide={(hideChecklistTaxa && hideComparisonTaxa) || selected_checklist_id == -1}>
+<article class:hide={(formProperties.hideChecklistTaxa && formProperties.hideComparisonTaxa) || formProperties.selectedChecklistID == -1}>
 
-    <div id="single_checklist_div" class:hide={hideChecklistTaxa}>
+    <div id="single_checklist_div" class:hide={formProperties.hideChecklistTaxa}>
         <details open>
-            <summary>Checklist Taxa: <mark>{#if selected_checklist}{selected_checklist.checklist_name}{/if}</mark></summary>
-            <!--<TaxaTable bind:grouped_checklist_taxa/>-->
-            <DisplayGroupedTaxa bind:grouped_checklist_taxa={grouped_checklist_taxa} />
+            <summary>Checklist Taxa: <mark>{#if formProperties.selectedChecklist}{formProperties.selectedChecklist.checklist_name}{/if}</mark></summary>
+            <TaxaListOrTable
+                list={formProperties.displayAsList}
+                grouped_checklist_taxa={formProperties.grouped_checklist_taxa}
+                selectedFieldsOptions={formProperties.selectedFieldsOptions}
+            />
         </details>
     </div>
-    <div id="compare_checklist_div" class:hide={hideComparisonTaxa}>
+    <div id="compare_checklist_div" class:hide={formProperties.hideComparisonTaxa}>
         <details>
             <summary>Common Taxa</summary>
-            <DisplayGroupedTaxa bind:grouped_checklist_taxa={common_taxa} />
+            <TaxaListOrTable
+                list={formProperties.displayAsList}
+                grouped_checklist_taxa={formProperties.common_taxa}
+                selectedFieldsOptions={formProperties.selectedFieldsOptions}
+            />
         </details>
         <details>
-            {#if selected_checklist && compare_to_checklist}
+            {#if formProperties.selectedChecklist && formProperties.comparisonChecklist}
             <summary
-            >In <mark>{selected_checklist.checklist_name}</mark> but not
+            >In <mark>{formProperties.selectedChecklist.checklist_name}</mark> but not
             in
-            <mark>{compare_to_checklist.checklist_name}</mark></summary
+            <mark>{formProperties.comparisonChecklist.checklist_name}</mark></summary
             >
             {/if}
-            <DisplayGroupedTaxa bind:grouped_checklist_taxa={taxa_diff_1} />
+            <TaxaListOrTable
+                list={formProperties.displayAsList}
+                grouped_checklist_taxa={formProperties.taxa_diff_1}
+                selectedFieldsOptions={formProperties.selectedFieldsOptions}
+            />
         </details>
         <details>
-            {#if selected_checklist && compare_to_checklist}
+            {#if formProperties.selectedChecklist && formProperties.comparisonChecklist}
                 <summary
-                    >In <mark>{compare_to_checklist.checklist_name}</mark> but
+                    >In <mark>{formProperties.comparisonChecklist.checklist_name}</mark> but
                     not in
-                    <mark>{selected_checklist.checklist_name}</mark></summary
+                    <mark>{formProperties.selectedChecklist.checklist_name}</mark></summary
                 >
             {/if}
-            <DisplayGroupedTaxa bind:grouped_checklist_taxa={taxa_diff_2} />
+            <TaxaListOrTable
+                list={formProperties.displayAsList}
+                grouped_checklist_taxa={formProperties.taxa_diff_2}
+                selectedFieldsOptions={formProperties.selectedFieldsOptions}
+            />
         </details>
     </div>
 </article>

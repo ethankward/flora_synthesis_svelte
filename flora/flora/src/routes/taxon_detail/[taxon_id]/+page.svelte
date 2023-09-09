@@ -1,47 +1,45 @@
 <script lang="ts">
-	import { APIManager } from "../../../util/api";
 	import AutoComplete from "simple-svelte-autocomplete";
 
-	import TaxonNameLink from "../../../components/TaxonNameLink.svelte";
-	import InlineFormEditor from "../../../components/InlineFormEditor.svelte";
-	import CRUDList from "../../../components/CRUDList.svelte";
+    import TaxonNameLink from "../../../components/common/TaxonNameLink.svelte";
+	import InlineList from "../../../components/crud/InlineList.svelte";
+	import InlineSelect from "../../../components/crud/InlineSelect.svelte";
+	import InlineText from "../../../components/crud/InlineText.svelte";
 
-	import { Taxon } from "../../../util/api_data_classes/taxon";
-	import {ChecklistRecordList} from "../../../util/api_data_classes/checklist_records";
+	import { Taxon } from "../../../data_classes/taxon";
+	import {ChecklistRecordList} from "../../../data_classes/checklist_record";
 
-	import { EndemicChoices } from "../../../util/api_data_classes/endemic";
-	import { LifeCycleChoices } from "../../../util/api_data_classes/life_cycle";
-
+	import type { EndemicType, LifeCycleType, IntroducedType } from "../../../data_classes/types";
+	import {callExternalEndpoint, APIEndpoints} from "../../../util/local_api_dispatch";
 
 	export let data;
 
 	let taxon = new Taxon(data.taxon_data);
-	let life_cycle_choices = new LifeCycleChoices(data.life_cycle_data);
-	let endemic_choices =  new EndemicChoices(data.endemic_data);
+	let life_cycle_choices: LifeCycleType[] = data.life_cycle_data;
+	let endemic_choices: EndemicType[] =  data.endemic_data;
+	let introduced_choices: IntroducedType[] =  data.introduced_data;
 	let checklist_records = new ChecklistRecordList(data.checklist_records);
-
-    let api_manager = new APIManager("http://127.0.0.1:8000/api/");
-	let selectedSynonymOfChoice: object;
+	let selectedSynonymOfChoice: {id: number};
 
 	function copyTaxonName() {
 		navigator.clipboard.writeText(taxon.taxon_name);
 	}
 
 	async function getSynonymAutocompletion(search_term: string) {
-		const response = await api_manager.getTaxaAutocompletion(search_term);
-		const json = await response.data;
-		return json;
+		return await callExternalEndpoint({search_term: search_term}, APIEndpoints.taxon_name_autocomplete);
 	}
 
-	
 	function submitMakeSynonymOf() {
 		let synonym_of_id: number = selectedSynonymOfChoice.id;
+		callExternalEndpoint({taxon_id_1: taxon.id, taxon_id_2: synonym_of_id}, APIEndpoints.make_taxon_synonym_of).then(
+			(result) => {
+				window.location.href = '/taxon_detail/' + synonym_of_id;
+			}
+		);
 
-		api_manager.makeSynonymOf(taxon.id, synonym_of_id).then((result) => {
-			window.location.href = '/taxon_detail/' + synonym_of_id;
-		}).catch(function (error) {
-        });
 	}
+
+	let form;
 
 </script>
 
@@ -70,65 +68,87 @@
 
 	<ul>
 		<li>Taxon name: 
-			<InlineFormEditor
-			type="text"
+			<InlineText
+			id="taxon_name_editor"
 			display_value={taxon.taxon_name}
-			apiMethod={(value) => api_manager.updateTaxon(taxon.id, {taxon_name: value})}
+			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, taxon_name: value}, APIEndpoints.update_taxon)}
 			/>
 		</li>
 
 		<li>Family:
-			<InlineFormEditor
-			type="text"
+			<InlineText
+			id="taxon_family_editor"
 			display_value={taxon.family}
-			apiMethod={(value) => api_manager.updateTaxon(taxon.id, {family: value})}
+			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, family: value}, APIEndpoints.update_taxon)}
 			/>
 		</li>
 		<li>Synonyms:
-			<CRUDList 
+			<InlineList 
 			existing_values={taxon.synonyms}
-			addNewAPIMethod={(value) => api_manager.createNewSynonym({taxon_id: taxon.id, synonym: value})}
-			deletionAPIMethod={(synonym_id) => api_manager.deleteSynonym(synonym_id)}
-			updateAPIMethod={(synonym_id, value) => api_manager.updateSynonym(synonym_id, {synonym: value})}
+			createAPIMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, synonym: value}, APIEndpoints.create_new_synonym)}
+			deleteAPIMethod={(synonym_id) => callExternalEndpoint({synonym_id: parseInt(synonym_id)}, APIEndpoints.delete_synonym)}
+			updateAPIMethod={(synonym_id, value) => callExternalEndpoint({synonym_id: parseInt(synonym_id), synonym: value}, APIEndpoints.update_synonym)}
 			/>
 		</li>
 
 		<li>SEINet ID:
-			<InlineFormEditor
+			<InlineText
 			id="seinet_id_editor"
-			type="text"
-			display_value={taxon.seinet_id}
-			apiMethod={(value) => api_manager.updateTaxon(taxon.id, {seinet_id: value})}
+			display_value={taxon.seinet_id?.toString()}
+			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, seinet_id: value}, APIEndpoints.update_taxon)}
 			/>
 		</li>
 		<li>INat ID:
-			<InlineFormEditor
+			<InlineText
 			id="inat_id_editor"
-			type="text"
-			display_value={taxon.inat_id}
-			apiMethod={(value) => api_manager.updateTaxon(taxon.id, {inat_id: value})}
+			display_value={taxon.inat_id?.toString()}
+			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, inat_id: value}, APIEndpoints.update_taxon)}
 			/>
 		</li>
-		<li>Introduced status: {taxon.introduced.display}
+		<li>Introduced status:
+			<InlineSelect
+			id="introduced_editor"
+			display_value={taxon.introduced_display}
+			value={taxon.introduced}
+			choices={introduced_choices}
+			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, introduced: value}, APIEndpoints.update_taxon)}
+			/>
 
 		</li>
 		<li>Endemic status:
-			<InlineFormEditor
+			<InlineSelect
 			id="endemic_editor"
-			type="select"
-			display_value={taxon.endemic.display}
-			value={taxon.endemic.value}
-			choices={endemic_choices.select()}
-			apiMethod={(value) => api_manager.updateTaxon(taxon.id, {endemic: value})}
+			display_value={taxon.endemic_display}
+			value={taxon.endemic}
+			choices={endemic_choices}
+			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, endemic: value}, APIEndpoints.update_taxon)}
 			/>
 		</li>
-		<li>Life cycle: {taxon.life_cycle.display}</li>
+		<li>Life cycle:
+			<InlineSelect
+			id="life_cycle_editor"
+			display_value={taxon.life_cycle_display}
+			value={taxon.life_cycle}
+			choices={life_cycle_choices}
+			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, life_cycle: value}, APIEndpoints.update_taxon)}
+			/>
+
+		</li>
 		{#if taxon.parent_species}
 		<li>Parent species: <TaxonNameLink taxon={taxon.parent_species}/></li>
 		{/if}
 		{#if taxon.subtaxa.length > 0}
 		<li>Subtaxa: {#each taxon.subtaxa as subtaxon, i}{#if i > 0},&nbsp;{/if}<TaxonNameLink taxon={subtaxon}/>{/each}</li>
 		{/if}
+
+		{#if taxon.first_observation_date}
+		<li>First observed in Rincons on <a href="{taxon.first_observation_date.url}">{taxon.first_observation_date.date}</a> </li>
+		{/if}
+		
+		{#if taxon.last_observation_date}
+		<li>Last observed in Rincons on <a href="{taxon.last_observation_date.url}">{taxon.last_observation_date.date}</a> </li>
+		{/if}
+		
 	</ul>
 </article>
 
@@ -159,7 +179,9 @@
 					<small>{checklist_record.date}</small>
 				</li>
 				{/if}
-
+				{#if checklist_record.observation_type}
+				<li>Observation type: {checklist_record.observation_type}</li>
+				{/if}
 			</ul>
 		</li>
 		{/each}
@@ -184,6 +206,8 @@
 		bind:selectedItem="{selectedSynonymOfChoice}"
 	  />
 	</div>
-	<input type="submit" value="Go">
+	<hr>
+	<input type="submit" value="Make synonym">
 	</form>
+
 </article>

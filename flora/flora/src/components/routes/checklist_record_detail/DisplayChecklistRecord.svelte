@@ -1,6 +1,6 @@
 <script lang="ts">
 
-    import type {ChecklistRecordAPIType} from "../util/api_data_classes/api_data_types";
+    import type {ChecklistRecordAPIType} from "../../../util/api_data_classes/api_data_types";
 
     export let checklist_record: ChecklistRecordAPIType;
 

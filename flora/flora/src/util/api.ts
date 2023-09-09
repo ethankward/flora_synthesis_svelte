@@ -1,4 +1,4 @@
-import axios, { AxiosHeaders } from "axios";
+import axios from "axios";
 
 
 class APIManager {
@@ -90,6 +90,10 @@ class APIManager {
         return this.get(["endemic"]);
     }
     
+    getIntroducedChoices() {
+        return this.get(["introduced"]);
+    }
+
     getChecklistRecords(taxon_id: number) {
         return this.get(["checklist_records"], {"taxon_id": taxon_id.toString()});
     }
@@ -117,6 +121,5 @@ class APIManager {
             ["update_checklist_record_mapping"]);
     }
 }
-
 
 export {APIManager}

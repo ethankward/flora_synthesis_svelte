@@ -1,31 +1,29 @@
 <script lang="ts">
-    import { ChecklistRecordList } from "../../../../util/api_data_classes/checklist_records";
-    import type {ChecklistRecordAPIType} from "../../../../util/api_data_classes/api_data_types";
-    import InlineFormEditor from "../../../../components/InlineFormEditor.svelte";
-	import { APIManager } from "../../../../util/api";
+    import type {ChecklistRecordType} from "../../../../data_classes/types";
+
 	import AutoComplete from "simple-svelte-autocomplete";
-	import DisplayChecklistRecord from "../../../../components/DisplayChecklistRecord.svelte";
+	import DisplayChecklistRecord from "../../../../components/routes/checklist_record_detail/DisplayChecklistRecord.svelte";
+	import {callExternalEndpoint, APIEndpoints} from "../../../../util/local_api_dispatch";
 
 	export let data;
-    console.log(data);
-    let api_manager = new APIManager("http://127.0.0.1:8000/api/");
 
-	let checklist_record: ChecklistRecordAPIType = data.checklist_record_data.data;
-    let mapped_to_choice: object;
+	let checklist_record: ChecklistRecordType = data.checklist_record_data;
+    let mapped_to_choice: {id: number};
 
 	async function getTaxonNameAutocompletion(search_term: string) {
-		const response = await api_manager.getTaxaAutocompletion(search_term);
-		const json = await response.data;
-		return json;
+		return await callExternalEndpoint({search_term: search_term}, APIEndpoints.taxon_name_autocomplete);
 	}
-
 	
 	function submitUpdateMapping() {
-		let mapped_to_id: number = mapped_to_choice.id;
-
-		api_manager.updateChecklistRecordMappedTo(data.checklist_type, checklist_record.id, mapped_to_id).then((result) => {
+        callExternalEndpoint(
+            {
+                checklist_type: data.checklist_type, 
+                checklist_record_id: checklist_record.id, 
+                mapped_to_id: mapped_to_choice.id
+            }, APIEndpoints.update_checklist_record_mapping).then((result) => {
 			window.location.href = '/checklist_record_detail/' + data.checklist_type + "/" + checklist_record.id;
 		}).catch(function (error) {
+
         });
 
 	}
@@ -62,6 +60,7 @@
             bind:selectedItem="{mapped_to_choice}"
             />
         </div>
+        <hr>
         <input type="submit" value="Update">
 
     </form>

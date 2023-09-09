@@ -1,11 +1,8 @@
 <script lang="ts">
-    import type {Taxon} from "../util/api_data_classes/taxon";
-
+    import type {Taxon} from "../../data_classes/taxon";
     export let taxon: Taxon;
 </script>
 
-{#if taxon.primary}
-<a href={"/taxon_detail/" + taxon.id} target="_blank">{taxon.taxon_name}</a>
 <sup>
     {#if taxon.seinet_id}<a
             href="https://swbiodiversity.org/seinet/taxa/index.php?taxon={taxon.seinet_id}"
@@ -18,6 +15,3 @@
             >IN</a
         >{/if}
 </sup>
-{:else}
-{taxon.taxon_name}
-{/if}

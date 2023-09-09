@@ -1,15 +1,15 @@
-import type { ChecklistRecordAPIType } from "../../util/api_data_classes/api_data_types";
+import type { ChecklistRecordType } from "../data_classes/types";
 
 
 class ChecklistRecordList {
-    checklist_records: ChecklistRecordAPIType[];
+    checklist_records: ChecklistRecordType[];
 
-    constructor(api_data: ChecklistRecordAPIType[]) {
+    constructor(api_data: ChecklistRecordType[]) {
         this.checklist_records = api_data;
     }
 
     groupByChecklist() {
-        let result: {[key: string]: ChecklistRecordAPIType[];} = {};
+        let result: {[key: string]: ChecklistRecordType[];} = {};
 
         this.checklist_records.forEach((checklist_record) => {
             let checklist_name = checklist_record.checklist.checklist_name;

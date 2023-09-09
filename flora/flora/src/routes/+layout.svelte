@@ -3,7 +3,7 @@
 </script>
 
 
-<main class="container" data-theme="dark">
+<main class="container" data-theme="dark" >
 
     <nav>
         <ul>
@@ -11,12 +11,14 @@
           <li><strong>Ranges</strong></li>
           <li><strong><a href="/introduced">Introduced</a></strong></li>
           <li><strong><a href="/endemic">Endemic</a></strong></li>
-          <li><strong><a href="/life_cycles">Life Cycles</a></strong></li>
-          <li><strong>Dates</strong></li>
+          <li><strong><a href="/life_cycles">Life cycles</a></strong></li>
+          <li><strong><a href="/observation_dates">Observation dates</a></strong></li>
           <li><strong>Collectors</strong></li>
         </ul>
 
       </nav>
-    
-    <slot />
+    <hr>
+
+      <slot />
+
 </main>

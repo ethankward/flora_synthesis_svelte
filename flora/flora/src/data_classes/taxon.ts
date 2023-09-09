@@ -1,5 +1,5 @@
-import type { TaxonAPIType, TaxonSynonymAPIType, TaxonNameAPIType, ChecklistTaxonAPIType, ValueDisplayType} from "../../util/api_data_classes/api_data_types";
-
+import type { TaxonType, TaxonSynonymType, TaxonNameType, ChecklistTaxonType, ObservationDateType} from "../data_classes/types";
+import type {ValueDisplayType} from "../types"
 
 type GroupedTaxa = {
     [key: string]: Taxon[];
@@ -19,17 +19,22 @@ class Taxon {
     family: string;
     genus: string;
     primary: boolean;
-    all_mapped_taxa: TaxonNameAPIType[];
+    all_mapped_taxa: TaxonNameType[];
     seinet_id?: number;
     inat_id?: number;
     synonyms: ValueDisplayType[];
-    parent_species?: TaxonNameAPIType;
-    subtaxa: TaxonNameAPIType[];
-    introduced?: ValueDisplayType;
-    endemic?: ValueDisplayType;
-    life_cycle?: ValueDisplayType;
+    parent_species?: TaxonNameType;
+    subtaxa: TaxonNameType[];
+    introduced?: string;
+    introduced_display?: string;
+    endemic?: string;
+    endemic_display?: string;
+    life_cycle?: string;
+    life_cycle_display?: string;
+    first_observation_date?: ObservationDateType
+    last_observation_date?: ObservationDateType
 
-    constructor(taxon_api_data?: TaxonAPIType, checklist_taxon_api_data?: ChecklistTaxonAPIType) {
+    constructor(taxon_api_data?: TaxonType, checklist_taxon_api_data?: ChecklistTaxonType) {
         if (taxon_api_data) {
             this.id = taxon_api_data.id;
             this.checklists = taxon_api_data.checklists;
@@ -44,8 +49,13 @@ class Taxon {
             this.parent_species = taxon_api_data.parent_species;
             this.subtaxa = taxon_api_data.subtaxa;
             this.introduced = taxon_api_data.introduced;
+            this.introduced_display = taxon_api_data.introduced_display;
             this.endemic = taxon_api_data.endemic;
+            this.endemic_display = taxon_api_data.endemic_display;
             this.life_cycle = taxon_api_data.life_cycle;
+            this.life_cycle_display = taxon_api_data.life_cycle_display;
+            this.first_observation_date = taxon_api_data.first_observation_date;
+            this.last_observation_date = taxon_api_data.last_observation_date;
 
         } else {
             if (checklist_taxon_api_data === undefined) {
@@ -60,6 +70,7 @@ class Taxon {
             this.all_mapped_taxa = checklist_taxon_api_data.all_mapped_taxa;
             this.synonyms = [];
             this.subtaxa = [];
+
         }
 
     }
@@ -180,7 +191,7 @@ class TaxonList {
 }
 
 
-function loadTaxaFromAPIData(api_data: TaxonAPIType[]) {
+function loadTaxaFromAPIData(api_data: TaxonType[]) {
 
     let canonical_taxa = new TaxonList([]);
     let checklist_taxa = new TaxonList([]);

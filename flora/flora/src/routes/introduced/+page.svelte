@@ -1,20 +1,20 @@
 <script lang="ts">
-        import type { MinimalTaxonAPIType } from "../../util/api_data_classes/api_data_types";
+    import type { MinimalTaxonType } from "../../data_classes/types";
 
     export let data;
 
-    let taxa: MinimalTaxonAPIType[] = data.taxon_data;
+    let taxa: MinimalTaxonType[] = data.taxon_data;
 
-    let groups: {[key: string]: MinimalTaxonAPIType[];} = {};
+    let groups: {[key: string]: MinimalTaxonType[];} = {};
     let status_types: {[key: string]: string} = {};
 
     taxa.forEach((taxon) => {
         let introduced_status = taxon.introduced.value;
         if (introduced_status) {
             if (!(introduced_status in groups)) {
-            groups[introduced_status] = [];
-            status_types[introduced_status] = taxon.introduced.display;
-        }
+                groups[introduced_status] = [];
+                status_types[introduced_status] = taxon.introduced.display;
+            }
             groups[introduced_status].push(taxon);
         }
     });
