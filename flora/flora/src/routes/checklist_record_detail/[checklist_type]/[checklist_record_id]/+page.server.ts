@@ -1,8 +1,8 @@
 import { APIManager } from "../../../../util/api";
-import { API_ENDPOINT } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
 export async function load({ params }) {
-    let api_manager = new APIManager(API_ENDPOINT);
+    let api_manager = new APIManager(env.API_ENDPOINT);
 
     let checklist_record_id = parseInt(params.checklist_record_id);
     let checklist_type = params.checklist_type;

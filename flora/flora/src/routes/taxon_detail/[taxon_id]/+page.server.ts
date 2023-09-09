@@ -1,7 +1,7 @@
 import { APIManager } from "../../../util/api";
-import { API_ENDPOINT } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 
-let api_manager = new APIManager(API_ENDPOINT);
+let api_manager = new APIManager(env.API_ENDPOINT);
 
 
 export async function load({ params }) {

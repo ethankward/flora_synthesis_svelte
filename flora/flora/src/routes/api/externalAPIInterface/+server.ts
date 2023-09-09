@@ -1,10 +1,10 @@
 import { json } from '@sveltejs/kit';
-import { API_ENDPOINT } from '$env/static/private';
+import { env } from '$env/dynamic/private';
 import { APIManager } from "../../../util/api";
 import {execute, APIEndpoints} from "../../../util/local_api_dispatch";
 
 
-let external_api_manager = new APIManager(API_ENDPOINT);
+let external_api_manager = new APIManager(env.API_ENDPOINT);
 
 
 /** @type {import('./$types').RequestHandler} */
