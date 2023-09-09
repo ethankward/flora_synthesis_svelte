@@ -2,6 +2,9 @@ import axios from "axios";
 import { env } from '$env/dynamic/private';
 
 
+axios.defaults.headers.common['Authorization'] = `Token ${env.API_AUTH_TOKEN}`;
+
+
 class APIManager {
     api_url: URL;
 
