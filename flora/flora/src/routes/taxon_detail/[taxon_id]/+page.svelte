@@ -186,6 +186,15 @@
 				{#if checklist_record.observation_type}
 				<li>Observation type: {checklist_record.observation_type}</li>
 				{/if}
+				{#if checklist_record.notes}
+				<li>Notes:
+					<ul>
+						{#each checklist_record.notes as note}
+						<li>{note.note}</li>
+						{/each}
+					</ul>
+				</li>
+				{/if}
 			</ul>
 		</li>
 		{/each}
