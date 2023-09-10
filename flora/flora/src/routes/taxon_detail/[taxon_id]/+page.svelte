@@ -47,8 +47,12 @@
     <title>{taxon.taxon_name}</title> 
 </svelte:head>
 
+<h3>
+	Taxon details: <span id="taxon_name_span"><mark>{taxon.taxon_name}</mark></span> <small><kbd><a href="#" on:click={copyTaxonName} >copy</a></kbd></small>
+</h3>
+
 <article>
-	<header>Taxon details: <span id="taxon_name_span"><mark>{taxon.taxon_name}</mark></span> <small><kbd><a href="#" on:click={copyTaxonName} >copy</a></kbd></small>
+	<header>
 		{#if taxon.seinet_id}
 		[<a
 			href="https:swbiodiversity.org/seinet/taxa/index.php?taxon={taxon.seinet_id}"
@@ -65,20 +69,20 @@
 		>]
 	{/if}
 	</header>
-
 	<ul>
-		<li>Taxon name: 
+		<li>Taxon name:
 			<InlineText
 			id="taxon_name_editor"
 			display_value={taxon.taxon_name}
 			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, taxon_name: value}, APIEndpoints.update_taxon)}
 			/>
 		</li>
-
+		<li>Genus: <a href="/genus/{taxon.genus}">{taxon.genus}</a></li>
 		<li>Family:
 			<InlineText
 			id="taxon_family_editor"
 			display_value={taxon.family}
+			create_link={(value) => "/family/" + value}
 			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, family: value}, APIEndpoints.update_taxon)}
 			/>
 		</li>

@@ -61,6 +61,14 @@ class APIManager {
     getChecklistTaxa(checklist_id: number) {
         return this.get(["taxa"], {"checklist": checklist_id.toString()});
     }
+
+    getGenusTaxa(genus: string) {
+        return this.get(["taxa"], {"genus": genus});
+    }
+
+    getFamilyTaxa(family: string) {
+        return this.get(["taxa"], {"family": family});
+    }
     
     getTaxon(taxon_id: number) {
         return this.get(["taxa", taxon_id.toString()]);

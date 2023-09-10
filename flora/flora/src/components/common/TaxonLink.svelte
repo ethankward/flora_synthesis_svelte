@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type {Taxon} from "../../util/api_data_classes/taxon";
+    import type {Taxon} from "../../data_classes/taxon";
 
     export let taxon: Taxon;
     export let new_tab: boolean = true;

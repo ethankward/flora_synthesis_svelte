@@ -20,9 +20,7 @@
         <li>
             <TaxonLink taxon={taxon} /> <TaxonExternalLinks taxon={taxon} />
             {#if taxon.all_mapped_taxa.length > 0}
-
             → {#each taxon.all_mapped_taxa as mapped_taxon, i}{#if i > 0},&nbsp;{/if}<TaxonNameLink taxon={mapped_taxon} />{/each}
-
             {/if}
 
             {#if selectedFieldsOptions.lifecycle}

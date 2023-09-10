@@ -1,7 +1,7 @@
 <script lang="ts">
-    import type {TaxonNameAPIType} from "../../util/api_data_classes/api_data_types";
+    import type {TaxonNameType} from "../../data_classes/types";
 
-    export let taxon: TaxonNameAPIType;
+    export let taxon: TaxonNameType;
     export let new_tab: boolean = true;
 
 </script>

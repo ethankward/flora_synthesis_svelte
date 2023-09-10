@@ -7,6 +7,7 @@
     export let display_value: string | undefined;
     export let value: string | undefined = display_value;
     export let apiMethod: apiMethodType;
+    export let create_link: (((value: string | undefined) => string) | undefined) = undefined;
 
     let active = false;
     let submission_invalid: boolean;
@@ -30,7 +31,11 @@
 
 </script>
 
+{#if create_link !== undefined}
+<a href={create_link(display_value)}>{display_value}</a>
+{:else}
 {display_value}
+{/if}
 <a href=""><small on:click={handleActiveToggle}><sup>edit</sup></small></a>
 
 <form class:hide={!active} on:change={handleOnSubmit} id={id}>
