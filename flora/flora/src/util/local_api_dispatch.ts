@@ -11,7 +11,10 @@ enum APIEndpoints {
     delete_synonym = "delete_synonym",
     update_synonym = "update_synonym",
     update_checklist_record_mapping = "update_checklist_record_mapping",
-    get_checklist_taxa = "get_checklist_taxa"
+    get_checklist_taxa = "get_checklist_taxa",
+    create_new_checklist_record_note = "create_new_checklist_record_note",
+    delete_checklist_record_note = "delete_checklist_record_note",
+    update_checklist_record_note = "update_checklist_record_note"
 }
 
 
@@ -84,10 +87,36 @@ class UpdatechecklistRecordMappingEndpoint implements APIDispatcher {
 class GetChecklistTaxa implements APIDispatcher {
     endpoint_identifier = APIEndpoints.get_checklist_taxa;
 
-    action(data: {chedklist_id: number}, api_manager: APIManager) {
+    action(data: {checklist_id: number}, api_manager: APIManager) {
         return api_manager.getChecklistTaxa(data.checklist_id);
     }
 }
+
+class CreateNewChecklistRecordNote implements APIDispatcher {
+    endpoint_identifier = APIEndpoints.create_new_checklist_record_note;
+
+    action(data: {checklist_record_id: number, checklist_record_type: string, note: string}, api_manager: APIManager) {
+        return api_manager.createNewChecklistRecordNote(data.checklist_record_id, data.checklist_record_type, data.note);
+    }
+}
+
+class DeleteChecklistRecordNote implements APIDispatcher {
+    endpoint_identifier = APIEndpoints.delete_checklist_record_note;
+
+    action(data: {note_id: number}, api_manager: APIManager) {
+        return api_manager.deleteChecklistRecordNote(data.note_id);
+    }
+}
+
+
+class UpdateChecklistRecordNote implements APIDispatcher {
+    endpoint_identifier = APIEndpoints.update_checklist_record_note;
+
+    action(data: {note_id: number, note: string}, api_manager: APIManager) {
+        return api_manager.updateChecklistRecordNote(data.note_id, data.note);
+    }
+}
+
 
 function execute(api_manager: APIManager, data: object, endpoint_identifier: APIEndpoints): AxiosPromise | undefined {
     let all_endpoints = [
@@ -98,7 +127,10 @@ function execute(api_manager: APIManager, data: object, endpoint_identifier: API
       new DeleteSynonymEndpoint(),
       new UpdateSynonymEndpoint(),
       new UpdatechecklistRecordMappingEndpoint(),
-      new GetChecklistTaxa()
+      new GetChecklistTaxa(),
+      new CreateNewChecklistRecordNote(),
+      new DeleteChecklistRecordNote(),
+      new UpdateChecklistRecordNote()
     ];
 
     let result;

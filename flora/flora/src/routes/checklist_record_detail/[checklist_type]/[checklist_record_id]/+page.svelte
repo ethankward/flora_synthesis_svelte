@@ -4,6 +4,7 @@
 	import AutoComplete from "simple-svelte-autocomplete";
 	import DisplayChecklistRecord from "../../../../components/routes/checklist_record_detail/DisplayChecklistRecord.svelte";
 	import {callExternalEndpoint, APIEndpoints} from "../../../../util/local_api_dispatch";
+	import InlineList from "../../../../components/crud/InlineList.svelte";
 
 	export let data;
 
@@ -42,6 +43,18 @@
     </header>
 
     <DisplayChecklistRecord checklist_record={checklist_record}/>
+
+</article>
+
+<article>
+    <header>Notes for this record</header>
+
+    <InlineList 
+    existing_values={checklist_record.notes.map((note) => ({value: note.id.toString(), display: note.note}))}
+    createAPIMethod={(value) => callExternalEndpoint({checklist_record_id: checklist_record.id, checklist_record_type: data.checklist_type, note: value}, APIEndpoints.create_new_checklist_record_note)}
+    deleteAPIMethod={(note_id) => callExternalEndpoint({note_id: parseInt(note_id)}, APIEndpoints.delete_checklist_record_note)}
+    updateAPIMethod={(note_id, value) => callExternalEndpoint({note_id: parseInt(note_id), note: value}, APIEndpoints.update_checklist_record_note)}
+    />
 
 </article>
 

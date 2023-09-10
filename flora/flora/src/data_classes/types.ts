@@ -78,6 +78,12 @@ type MinimalTaxonType = {
 }
 
 
+type ChecklistRecordNoteType = {
+    id: number,
+    note: string,
+    added_on: string
+}
+
 
 type ChecklistRecordType = {
     id: number,
@@ -89,7 +95,8 @@ type ChecklistRecordType = {
     date: string,
     observer: string,
     external_url: string,
-    observation_type: string
+    observation_type: string,
+    notes: ChecklistRecordNoteType[]
 }
 
 type TaxonSynonymType = {

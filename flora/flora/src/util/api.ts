@@ -123,14 +123,24 @@ class APIManager {
         return this.get(["checklist_records", checklist_type, checklist_record_id.toString()]);
     }
 
-    updateChecklistRecordMappedTo(checklist_type: string, checklist_record_id: number, mapped_to_id: number) {
-        console.log(checklist_type);
-        
+    updateChecklistRecordMappedTo(checklist_type: string, checklist_record_id: number, mapped_to_id: number) {        
         return this.post({
             "checklist_type": checklist_type,
             "checklist_record_id": checklist_record_id,
             "mapped_to_id": mapped_to_id},
             ["update_checklist_record_mapping"]);
+    }
+
+    createNewChecklistRecordNote(checklist_record_id: number, checklist_record_type: string, note: string) {
+        return this.put({checklist_record_id: checklist_record_id, checklist_record_type: checklist_record_type, note: note}, ["create_new_checklist_record_note"])
+    }
+
+    deleteChecklistRecordNote(note_id: number) {
+        return this.post({note_id: note_id}, ["delete_checklist_record_note"])
+    }
+
+    updateChecklistRecordNote(note_id: number, note: string) {
+        return this.post({note_id: note_id, note: note}, ["update_checklist_record_note"])
     }
 }
 
