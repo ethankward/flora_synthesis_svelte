@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { AxiosPromise } from 'axios';
+	import FakeLink from "../../components/common/FakeLink.svelte";
 
     type apiMethodType = (value: string) => AxiosPromise;
 
@@ -36,7 +37,7 @@
 {:else}
 {display_value}
 {/if}
-<a href=""><small on:click={handleActiveToggle}><sup>edit</sup></small></a>
+<sup on:click={handleActiveToggle}><FakeLink display="edit"/></sup>
 
 <form class:hide={!active} on:change={handleOnSubmit} id={id}>
     <input type="text" bind:value aria-invalid={submission_invalid}/>

@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { AxiosError, AxiosPromise } from 'axios';
+	import FakeLink from "../../components/common/FakeLink.svelte";
 
     type choiceType = {value: string, display: string | undefined};
 
@@ -69,7 +70,7 @@
 
 </script>
 
-<a href=""><small on:click={handleActiveToggle}><sup>edit</sup></small></a>
+<sup on:click={handleActiveToggle}><FakeLink display="edit"/></sup>
 
 <div class:hide={active}>
     <ul>

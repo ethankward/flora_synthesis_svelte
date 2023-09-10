@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { AxiosPromise } from 'axios';
+	import FakeLink from "../../components/common/FakeLink.svelte";
 
     type apiMethodType = (value: string) => AxiosPromise;
     type choiceType = {value: string, display: string};
@@ -41,7 +42,7 @@
 </script>
 
 {display_value}
-<a href=""><small on:click={handleActiveToggle}><sup>edit</sup></small></a>
+<sup on:click={handleActiveToggle}><FakeLink display="edit"/></sup>
 
 <form class:hide={!active} on:change={handleOnSubmit} id={id}>
     <select bind:value>

@@ -5,7 +5,7 @@
 	import InlineList from "../../../components/crud/InlineList.svelte";
 	import InlineSelect from "../../../components/crud/InlineSelect.svelte";
 	import InlineText from "../../../components/crud/InlineText.svelte";
-
+	
 	import { Taxon } from "../../../data_classes/taxon";
 	import {ChecklistRecordList} from "../../../data_classes/checklist_record";
 
