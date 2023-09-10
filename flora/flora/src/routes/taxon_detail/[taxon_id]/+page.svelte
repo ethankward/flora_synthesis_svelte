@@ -55,16 +55,16 @@
 	<header>
 		{#if taxon.seinet_id}
 		[<a
-			href="https:swbiodiversity.org/seinet/taxa/index.php?taxon={taxon.seinet_id}"
+			href="https://swbiodiversity.org/seinet/taxa/index.php?taxon={taxon.seinet_id}"
 			target="_blank">SEINet</a
 		>] [<a
-			href="https:swbiodiversity.org/seinet/collections/map/googlemap.php?taxa={taxon.seinet_id}"
+			href="https://swbiodiversity.org/seinet/collections/map/googlemap.php?taxa={taxon.seinet_id}"
 			target="_blank">Map</a
 		>]
 	{/if}
 	{#if taxon.inat_id}
 		[<a
-			href="https:www.inaturalist.org/taxa/{taxon.inat_id}"
+			href="https://www.inaturalist.org/taxa/{taxon.inat_id}"
 			target="_blank">iNat</a
 		>]
 	{/if}
