@@ -10,7 +10,7 @@
 	import {ChecklistRecordList} from "../../../data_classes/checklist_record";
 
 	import type { EndemicType, LifeCycleType, IntroducedType } from "../../../data_classes/types";
-	import {callExternalEndpoint, APIEndpoints} from "../../../util/local_api_dispatch";
+	import {callExternalEndpoint} from "../../../util/local_api_dispatch";
 
 	export let data;
 
@@ -26,12 +26,12 @@
 	}
 
 	async function getSynonymAutocompletion(search_term: string) {
-		return await callExternalEndpoint({search_term: search_term}, APIEndpoints.taxon_name_autocomplete);
+		return await callExternalEndpoint({search_term: search_term}, "taxa_autocompletion");
 	}
 
 	function submitMakeSynonymOf() {
 		let synonym_of_id: number = selectedSynonymOfChoice.id;
-		callExternalEndpoint({taxon_id_1: taxon.id, taxon_id_2: synonym_of_id}, APIEndpoints.make_taxon_synonym_of).then(
+		callExternalEndpoint({taxon_id_1: taxon.id, taxon_id_2: synonym_of_id}, "make_taxon_synonym_of").then(
 			(result) => {
 				window.location.href = '/taxon_detail/' + synonym_of_id;
 			}
@@ -74,7 +74,7 @@
 			<InlineText
 			id="taxon_name_editor"
 			display_value={taxon.taxon_name}
-			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, taxon_name: value}, APIEndpoints.update_taxon)}
+			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, taxon_name: value}, "update_taxon")}
 			/>
 		</li>
 		<li>Genus: <a href="/genus/{taxon.genus}">{taxon.genus}</a></li>
@@ -83,15 +83,15 @@
 			id="taxon_family_editor"
 			display_value={taxon.family}
 			create_link={(value) => "/family/" + value}
-			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, family: value}, APIEndpoints.update_taxon)}
+			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, family: value}, "update_taxon")}
 			/>
 		</li>
 		<li>Synonyms:
 			<InlineList 
 			existing_values={taxon.synonyms}
-			createAPIMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, synonym: value}, APIEndpoints.create_new_synonym)}
-			deleteAPIMethod={(synonym_id) => callExternalEndpoint({synonym_id: parseInt(synonym_id)}, APIEndpoints.delete_synonym)}
-			updateAPIMethod={(synonym_id, value) => callExternalEndpoint({synonym_id: parseInt(synonym_id), synonym: value}, APIEndpoints.update_synonym)}
+			createAPIMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, synonym: value}, "create_new_taxon_synonym")}
+			deleteAPIMethod={(synonym_id) => callExternalEndpoint({synonym_id: parseInt(synonym_id)}, "delete_taxon_synonym")}
+			updateAPIMethod={(synonym_id, value) => callExternalEndpoint({synonym_id: parseInt(synonym_id), synonym: value}, "update_taxon_synonym")}
 			/>
 		</li>
 
@@ -99,14 +99,14 @@
 			<InlineText
 			id="seinet_id_editor"
 			display_value={taxon.seinet_id?.toString()}
-			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, seinet_id: value}, APIEndpoints.update_taxon)}
+			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, seinet_id: value},  "update_taxon")}
 			/>
 		</li>
 		<li>INat ID:
 			<InlineText
 			id="inat_id_editor"
 			display_value={taxon.inat_id?.toString()}
-			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, inat_id: value}, APIEndpoints.update_taxon)}
+			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, inat_id: value},  "update_taxon")}
 			/>
 		</li>
 		<li>Introduced status:
@@ -115,7 +115,7 @@
 			display_value={taxon.introduced_display}
 			value={taxon.introduced}
 			choices={introduced_choices}
-			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, introduced: value}, APIEndpoints.update_taxon)}
+			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, introduced: value},  "update_taxon")}
 			/>
 
 		</li>
@@ -125,7 +125,7 @@
 			display_value={taxon.endemic_display}
 			value={taxon.endemic}
 			choices={endemic_choices}
-			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, endemic: value}, APIEndpoints.update_taxon)}
+			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, endemic: value},  "update_taxon")}
 			/>
 		</li>
 		<li>Life cycle:
@@ -134,7 +134,7 @@
 			display_value={taxon.life_cycle_display}
 			value={taxon.life_cycle}
 			choices={life_cycle_choices}
-			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, life_cycle: value}, APIEndpoints.update_taxon)}
+			apiMethod={(value) => callExternalEndpoint({taxon_id: taxon.id, life_cycle: value},  "update_taxon")}
 			/>
 
 		</li>
@@ -186,7 +186,7 @@
 				{#if checklist_record.observation_type}
 				<li>Observation type: {checklist_record.observation_type}</li>
 				{/if}
-				{#if checklist_record.notes}
+				{#if checklist_record.notes.length > 0}
 				<li>Notes:
 					<ul>
 						{#each checklist_record.notes as note}

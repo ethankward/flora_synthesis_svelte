@@ -1,5 +1,6 @@
 import type { TaxonType, TaxonSynonymType, TaxonNameType, ChecklistTaxonType, ObservationDateType} from "../data_classes/types";
 import type {ValueDisplayType} from "../types"
+import type { APIManager, APIEndpoint } from "../util/api";
 
 type GroupedTaxa = {
     [key: string]: Taxon[];
@@ -207,6 +208,105 @@ function loadTaxaFromAPIData(api_data: TaxonType[]) {
 
 }
 
+class GetTaxa implements APIEndpoint {
+    external_endpoint = "taxa";
 
-export {Taxon, TaxonList, GroupBy, loadTaxaFromAPIData}
-export type {GroupedTaxa}
+    action(api_manager: APIManager, data: {}) {
+        return api_manager.get([this.external_endpoint]);
+    }
+}
+
+class GetTaxon implements APIEndpoint {
+    external_endpoint = "taxa";
+
+    action(api_manager: APIManager, data: {taxon_id: number}) {
+        return api_manager.get([this.external_endpoint, data.taxon_id.toString()]);
+    }
+}
+
+
+class GetPrimaryChecklistTaxa implements APIEndpoint {
+    external_endpoint = "primary_taxa";
+    
+    action(api_manager: APIManager, data: {}) {
+        return api_manager.get([this.external_endpoint]);
+    }
+}
+
+class GetChecklistTaxa implements APIEndpoint {
+    external_endpoint = "taxa";
+
+    action(api_manager: APIManager, data: {checklist_id: number}) {
+        return api_manager.get([this.external_endpoint], {"checklist": data.checklist_id.toString()});
+    }
+}
+
+class GetGenusTaxa implements APIEndpoint {
+    external_endpoint = "taxa";
+
+    action(api_manager: APIManager, data: {genus: string}) {
+        return api_manager.get([this.external_endpoint], {"genus": data.genus});
+    }
+
+}
+class GetFamilyTaxa implements APIEndpoint {
+    external_endpoint = "taxa";
+
+    action(api_manager: APIManager, data: {family: string}) {
+        return api_manager.get([this.external_endpoint], {"family": data.family});
+    }
+
+}
+
+class UpdateTaxon implements APIEndpoint {
+    external_endpoint = "taxa";
+
+    action(api_manager: APIManager, data: {taxon_id: number}) {
+        return api_manager.patch(data, [this.external_endpoint, data.taxon_id.toString()]);
+    }
+
+}
+
+
+class GetTaxaAutocompletion implements APIEndpoint {
+    external_endpoint = "taxa_autocomplete";
+    
+    action(api_manager: APIManager, data: {search_term: string}) {
+        return api_manager.get([this.external_endpoint], {"search_term": data.search_term});
+    }
+
+}
+
+class MakeSynonymOf implements APIEndpoint {
+    external_endpoint = "make_synonym_of";
+
+    action(api_manager: APIManager, data: {taxon_id_1: number, taxon_id_2: number}) {
+        return api_manager.post({"taxon_id_1": data.taxon_id_1, "taxon_id_2": data.taxon_id_2}, [this.external_endpoint]);
+    }
+}
+
+class GetAllFamilies implements APIEndpoint {
+    external_endpoint = "taxon_families"
+
+    action(api_manager: APIManager, data: {}) {
+        return api_manager.get([this.external_endpoint], data);
+    }
+}
+
+
+let exported_taxon_endpoints = {
+    "get_taxa": new GetTaxa(),
+    "get_taxon": new GetTaxon(),
+    "get_primary_checklist_taxa": new GetPrimaryChecklistTaxa(),
+    "get_checklist_taxa": new GetChecklistTaxa(),
+    "get_genus_taxa": new GetGenusTaxa(),
+    "get_family_taxa": new GetFamilyTaxa(),
+    "update_taxon": new UpdateTaxon(),
+    "get_taxa_autocompletion": new GetTaxaAutocompletion(),
+    "make_synonym_of": new MakeSynonymOf(),
+    "get_all_families": new GetAllFamilies(),
+};
+
+
+export {Taxon, TaxonList, GroupBy, loadTaxaFromAPIData, exported_taxon_endpoints}
+export type { GroupedTaxa, GetTaxon };

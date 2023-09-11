@@ -1,5 +1,7 @@
 import type { ValueDisplayType } from "../types";
 import type { ChecklistType } from "../data_classes/types";
+import type { APIManager, APIEndpoint } from "../util/api";
+
 
 class ChecklistList {
     checklists: {[key: number]: ChecklistType;};
@@ -19,5 +21,18 @@ class ChecklistList {
 
 }
 
+class GetChecklists implements APIEndpoint {
+    external_endpoint = "checklists";
+    unique_identifier = "get_checklists";
 
-export {ChecklistList}
+    action(api_manager: APIManager, data: {}) {
+        return api_manager.get([this.external_endpoint]);
+    }
+}
+
+
+let checklist_exported_endpoints = {
+    "get_checklists": new GetChecklists()   
+}
+
+export {ChecklistList, checklist_exported_endpoints}

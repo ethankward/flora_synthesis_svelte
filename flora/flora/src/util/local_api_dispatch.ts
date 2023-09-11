@@ -1,143 +1,33 @@
 import type { AxiosPromise } from "axios";
-import type { APIManager } from "./api";
+import type { APIManager, APIEndpoint } from "./api";
 import axios from "axios";
-
-enum APIEndpoints {
-    get_taxon_data = "get_taxon_data",
-    taxon_name_autocomplete = "taxon_name_autocomplete",
-    make_taxon_synonym_of = "make_taxon_synonym_of",
-    update_taxon = "update_taxon",
-    create_new_synonym = "create_new_synonym",
-    delete_synonym = "delete_synonym",
-    update_synonym = "update_synonym",
-    update_checklist_record_mapping = "update_checklist_record_mapping",
-    get_checklist_taxa = "get_checklist_taxa",
-    create_new_checklist_record_note = "create_new_checklist_record_note",
-    delete_checklist_record_note = "delete_checklist_record_note",
-    update_checklist_record_note = "update_checklist_record_note"
-}
+import {taxon_synonym_exported_endpoints} from "../data_classes/taxon_synonym";
+import {checklist_record_note_exported_endpoints} from "../data_classes/checklist_record_note";
+import {checklist_exported_endpoints} from "../data_classes/checklist";
+import {checklist_records_exported_endpoints} from "../data_classes/checklist_record";
+import {life_cycle_exported_endpoints} from "../data_classes/life_cycle";
+import {endemic_exported_endpoints} from "../data_classes/endemic";
+import {introduced_exported_endpoints} from "../data_classes/introduced";
+import {exported_taxon_endpoints} from "../data_classes/taxon";
 
 
-interface APIDispatcher {
-    endpoint_identifier: APIEndpoints;
-
-    action(data: object, api_manager: APIManager): AxiosPromise;
-}
-
-
-class TaxonAutocompleteEndpoint implements APIDispatcher {
-    endpoint_identifier = APIEndpoints.taxon_name_autocomplete;
-
-    action(data: {search_term: string}, api_manager: APIManager) {
-        return api_manager.getTaxaAutocompletion(data.search_term);
-    }
-
-}
-
-class MakeSynonymOfEndpint implements APIDispatcher {
-    endpoint_identifier = APIEndpoints.make_taxon_synonym_of;
-
-    action(data: {taxon_id_1: number, taxon_id_2: number}, api_manager: APIManager) {
-        return api_manager.makeSynonymOf(data.taxon_id_1, data.taxon_id_2);
-    }
-}
-
-class UpdateTaxonEndpoint implements APIDispatcher {
-    endpoint_identifier = APIEndpoints.update_taxon;
-
-    action(data: {taxon_id: number}, api_manager: APIManager) {
-        return api_manager.updateTaxon(data.taxon_id, data);
-    }
-}
-
-
-class CreateNewSynonymEndpoint implements APIDispatcher {
-    endpoint_identifier = APIEndpoints.create_new_synonym;
-
-    action(data: object, api_manager: APIManager) {
-        return api_manager.createNewSynonym(data);
-    }
-}
-
-
-class DeleteSynonymEndpoint implements APIDispatcher {
-    endpoint_identifier = APIEndpoints.delete_synonym;
-
-    action(data: {synonym_id: number}, api_manager: APIManager) {
-        return api_manager.deleteSynonym(data.synonym_id);
-    }
-}
-
-class UpdateSynonymEndpoint implements APIDispatcher {
-    endpoint_identifier = APIEndpoints.update_synonym;
-
-    action(data: {synonym_id: number}, api_manager: APIManager) {
-        return api_manager.updateSynonym(data.synonym_id, data);
-    }
-}
-
-class UpdatechecklistRecordMappingEndpoint implements APIDispatcher {
-    endpoint_identifier= APIEndpoints.update_checklist_record_mapping;
-
-    action(data: {checklist_type: string, checklist_record_id: number, mapped_to_id: number}, api_manager: APIManager) {
-        return api_manager.updateChecklistRecordMappedTo(data.checklist_type, data.checklist_record_id, data.mapped_to_id);
-    }
-}
-
-class GetChecklistTaxa implements APIDispatcher {
-    endpoint_identifier = APIEndpoints.get_checklist_taxa;
-
-    action(data: {checklist_id: number}, api_manager: APIManager) {
-        return api_manager.getChecklistTaxa(data.checklist_id);
-    }
-}
-
-class CreateNewChecklistRecordNote implements APIDispatcher {
-    endpoint_identifier = APIEndpoints.create_new_checklist_record_note;
-
-    action(data: {checklist_record_id: number, checklist_record_type: string, note: string}, api_manager: APIManager) {
-        return api_manager.createNewChecklistRecordNote(data.checklist_record_id, data.checklist_record_type, data.note);
-    }
-}
-
-class DeleteChecklistRecordNote implements APIDispatcher {
-    endpoint_identifier = APIEndpoints.delete_checklist_record_note;
-
-    action(data: {note_id: number}, api_manager: APIManager) {
-        return api_manager.deleteChecklistRecordNote(data.note_id);
-    }
-}
-
-
-class UpdateChecklistRecordNote implements APIDispatcher {
-    endpoint_identifier = APIEndpoints.update_checklist_record_note;
-
-    action(data: {note_id: number, note: string}, api_manager: APIManager) {
-        return api_manager.updateChecklistRecordNote(data.note_id, data.note);
-    }
-}
-
-
-function execute(api_manager: APIManager, data: object, endpoint_identifier: APIEndpoints): AxiosPromise | undefined {
-    let all_endpoints = [
-      new TaxonAutocompleteEndpoint(),
-      new MakeSynonymOfEndpint(),
-      new UpdateTaxonEndpoint(),
-      new CreateNewSynonymEndpoint(),
-      new DeleteSynonymEndpoint(),
-      new UpdateSynonymEndpoint(),
-      new UpdatechecklistRecordMappingEndpoint(),
-      new GetChecklistTaxa(),
-      new CreateNewChecklistRecordNote(),
-      new DeleteChecklistRecordNote(),
-      new UpdateChecklistRecordNote()
-    ];
+function execute(api_manager: APIManager, data: object, endpoint_identifier: string): AxiosPromise | undefined { 
+    let all_endpoints: {[key: string]: APIEndpoint} = {
+        ...taxon_synonym_exported_endpoints, 
+        ...checklist_record_note_exported_endpoints,
+        ...checklist_exported_endpoints,
+        ...checklist_records_exported_endpoints,
+        ...life_cycle_exported_endpoints,
+        ...endemic_exported_endpoints,
+        ...introduced_exported_endpoints,
+        ...exported_taxon_endpoints
+    };
 
     let result;
 
-    all_endpoints.forEach((endpoint) => {
-        if (endpoint.endpoint_identifier == endpoint_identifier) {
-            result = endpoint.action(data, api_manager);
+    Object.keys(all_endpoints).forEach((unique_identifier) => {
+        if (unique_identifier == endpoint_identifier) {
+            result = all_endpoints[unique_identifier].action(api_manager, data);
         }
     });
 
@@ -145,10 +35,14 @@ function execute(api_manager: APIManager, data: object, endpoint_identifier: API
 
 }
 
-async function callExternalEndpoint(data: object, endpoint_identifier: APIEndpoints) {
+async function call(api_manager: APIManager, data: object, endpoint: APIEndpoint) {
+    return (await endpoint.action(api_manager, data)).data;
+}
+
+async function callExternalEndpoint(data: object, endpoint_identifier: string) {
     let url = "/api/externalAPIInterface/?endpoint_identifier=" + endpoint_identifier;
     return (await axios.post(url, data)).data;
 }
 
 
-export {APIEndpoints, execute, callExternalEndpoint}
+export {execute, call, callExternalEndpoint}

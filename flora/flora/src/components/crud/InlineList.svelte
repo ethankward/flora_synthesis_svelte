@@ -30,7 +30,7 @@
         }
 
         createAPIMethod(new_value).then(function (response) {
-            existing_values = [...existing_values, {value: response.synonym_id, display: new_value}];
+            existing_values = [...existing_values, {value: response.object_id, display: new_value}];
             creation_invalid = undefined;
             new_value = undefined;
         }).catch(function (error) {
