@@ -9,7 +9,7 @@
     {#if update_invalid[index] === true}
     Something went wrong
     {:else if update_invalid[index] === false}
-    Update successful
+    Update queued
     {:else}
     Update
     {/if}

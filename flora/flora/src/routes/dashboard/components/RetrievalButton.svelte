@@ -10,7 +10,7 @@
     {#if retrieval_invalid[index] === true}
     Something went wrong
     {:else if retrieval_invalid[index] === false}
-    Retrieval successful
+    Retrieval queued
     {:else}
     Retrieve
     {/if}
