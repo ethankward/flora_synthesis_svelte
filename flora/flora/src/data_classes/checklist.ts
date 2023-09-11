@@ -33,8 +33,8 @@ class GetChecklists implements APIEndpoint {
 class UpdateChecklist implements APIEndpoint {
     external_endpoint = "update_checklist"
 
-    action(api_manager: APIManager, data: {checklist_id: number}) {
-        return api_manager.post({checklist_id: data.checklist_id}, [this.external_endpoint]);
+    action(api_manager: APIManager, data: {checklist_id: number, page: number}) {
+        return api_manager.post({checklist_id: data.checklist_id, page: data.page}, [this.external_endpoint]);
     }
 }
 
