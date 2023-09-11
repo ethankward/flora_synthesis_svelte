@@ -69,13 +69,13 @@
 <div class="grid">
     <RetrievalButton retrieval_invalid={retrieval_invalid} retrieval_loading={retrieval_loading} index={i} submitRetrievalRequest={submitRetrievalRequest} n_records={n_records}/>
     <select bind:value={n_records}>
-        <option value={10}>1</option>
-        <option value={10}>5</option>
+        <option value={1}>1</option>
+        <option value={5}>5</option>
         <option value={10}>10</option>
         <option value={25}>25</option>
         <option value={50}>50</option>
-        <option value={10}>100</option>
-        <option value={10}>250</option>
+        <option value={100}>100</option>
+        <option value={250}>250</option>
     </select>
 </div>
 {/each}

@@ -22,5 +22,4 @@
     .success {
         background-color: green;
     }
-
 </style>

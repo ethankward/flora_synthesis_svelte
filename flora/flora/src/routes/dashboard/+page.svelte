@@ -1,11 +1,9 @@
 <script lang="ts">
     import type { ChecklistType, ChecklistStaleRecordCountType } from "../../data_classes/types";
 
-    import {ChecklistList} from "../../data_classes/checklist";
 	import {callExternalEndpoint} from "../../util/local_api_dispatch";
-    import UpdateButton from "../../routes/dashboard/components/UpdateButton.svelte";
-    import RetrievalButton from "../../routes/dashboard/components/RetrievalButton.svelte";
     import ChecklistController from "../../routes/dashboard/components/ChecklistController.svelte";
+    import ObservationDatesController from "../../routes/dashboard/components/ObservationDatesController.svelte";
 
     export let data;
     export let checklist_data: ChecklistType[] = data.checklist_data;
@@ -54,7 +52,5 @@
 
 <article>
     <header>Observation dates</header>
-    <form>
-        <button type="submit" value="Update Observation Dates">
-    </form>
+    <ObservationDatesController />
 </article>

@@ -294,6 +294,14 @@ class GetAllFamilies implements APIEndpoint {
     }
 }
 
+class UpdateObservationDatesEndpoint implements APIEndpoint {
+    external_endpoint = "update_observation_dates";
+
+    action(api_manager: APIManager, data: {}) {
+        return api_manager.get([this.external_endpoint]);
+    }
+}
+
 
 let exported_taxon_endpoints = {
     "get_taxa": new GetTaxa(),
@@ -306,6 +314,7 @@ let exported_taxon_endpoints = {
     "get_taxa_autocompletion": new GetTaxaAutocompletion(),
     "make_synonym_of": new MakeSynonymOf(),
     "get_all_families": new GetAllFamilies(),
+    "update_observation_dates": new UpdateObservationDatesEndpoint()
 };
 
 
