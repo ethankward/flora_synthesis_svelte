@@ -68,6 +68,11 @@
 			target="_blank">iNat</a
 		>]
 	{/if}
+	{#if taxon.primary_taxon}
+	<ins>Known from Rincons</ins>
+	{:else}
+	<mark>Not known from Rincons</mark>
+	{/if}
 	</header>
 	<ul>
 		<li>Taxon name:

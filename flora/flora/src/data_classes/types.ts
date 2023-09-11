@@ -8,7 +8,8 @@ type ChecklistType = {
     external_checklist_id: number,
     locality: string,
     latest_date_retrieved?: string,
-    earliest_year?: string
+    earliest_year?: string,
+    primary_checklist: boolean
 }
 
 
@@ -21,7 +22,8 @@ type ChecklistTaxonType = {
     rank: string,
     genus: string,
     checklist: number,
-    all_mapped_taxa: TaxonNameType[];
+    all_mapped_taxa: TaxonNameType[],
+    primary_checklist: boolean
 }
 
 

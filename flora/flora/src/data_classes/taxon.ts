@@ -34,6 +34,7 @@ class Taxon {
     life_cycle_display?: string;
     first_observation_date?: ObservationDateType
     last_observation_date?: ObservationDateType
+    primary_taxon: boolean;
 
     constructor(taxon_api_data?: TaxonType, checklist_taxon_api_data?: ChecklistTaxonType) {
         if (taxon_api_data) {
@@ -57,6 +58,7 @@ class Taxon {
             this.life_cycle_display = taxon_api_data.life_cycle_display;
             this.first_observation_date = taxon_api_data.first_observation_date;
             this.last_observation_date = taxon_api_data.last_observation_date;
+            this.primary_taxon = taxon_api_data.taxon_checklist_taxa.some((checklist_taxon) => checklist_taxon.primary_checklist)
 
         } else {
             if (checklist_taxon_api_data === undefined) {
@@ -71,9 +73,8 @@ class Taxon {
             this.all_mapped_taxa = checklist_taxon_api_data.all_mapped_taxa;
             this.synonyms = [];
             this.subtaxa = [];
-
+            this.primary_taxon = checklist_taxon_api_data.primary_checklist;
         }
-
     }
 }
 

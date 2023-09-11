@@ -24,7 +24,13 @@
         <li> <a href="/genus/{genus}">{genus}</a>
             <ul>
             {#each Object.values(genus_groups[genus]) as taxon}
-            <li><a href={"/taxon_detail/" + taxon.id} rel="external">{taxon.taxon_name}</a></li>
+            <li>
+                {#if !taxon.taxon_checklist_taxa.some((checklist_taxon) => checklist_taxon.primary_checklist)}
+                <del><a href={"/taxon_detail/" + taxon.id} rel="external">{taxon.taxon_name}</a></del>
+                {:else}
+                <a href={"/taxon_detail/" + taxon.id} rel="external">{taxon.taxon_name}</a>
+                {/if}
+            </li>
             {/each}
             </ul>
         </li>
