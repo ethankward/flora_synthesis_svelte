@@ -12,7 +12,10 @@ type ChecklistType = {
     primary_checklist: boolean
 }
 
-
+type ChecklistStaleRecordCountType = {
+    id: number,
+    stale_record_count: number
+}
 
 type ChecklistTaxonType = {
     id: number,
@@ -125,6 +128,7 @@ type IntroducedType = {
 
 export type {
     ChecklistType,
+    ChecklistStaleRecordCountType,
     ChecklistTaxonType, 
     TaxonNameType, 
     TaxonType, 

@@ -30,9 +30,38 @@ class GetChecklists implements APIEndpoint {
     }
 }
 
+class UpdateChecklist implements APIEndpoint {
+    external_endpoint = "update_checklist"
+
+    action(api_manager: APIManager, data: {checklist_id: number}) {
+        return api_manager.post({checklist_id: data.checklist_id}, [this.external_endpoint]);
+    }
+}
+
+class RetrieveChecklist implements APIEndpoint {
+    external_endpoint = "retrieve_checklist"
+
+    action(api_manager: APIManager, data: {checklist_id: number, n_records: number}) {
+        return api_manager.post({checklist_id: data.checklist_id, n_records: data.n_records}, [this.external_endpoint]);
+    }
+}
+
+
+
+class GetStaleRecordCounts implements APIEndpoint {
+    external_endpoint = "checklist_stale_record_counts"
+
+    action(api_manager: APIManager, data: {}) {
+        return api_manager.get([this.external_endpoint]);
+    }
+}
+
 
 let checklist_exported_endpoints = {
-    "get_checklists": new GetChecklists()   
+    "get_checklists": new GetChecklists(),
+    "update_checklist": new UpdateChecklist(),
+    "retrieve_checklist": new RetrieveChecklist(),
+    "get_stale_record_counts": new GetStaleRecordCounts()
 }
 
 export {ChecklistList, checklist_exported_endpoints}
