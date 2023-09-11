@@ -26,7 +26,7 @@
 	}
 
 	async function getSynonymAutocompletion(search_term: string) {
-		return await callExternalEndpoint({search_term: search_term}, "taxa_autocompletion");
+		return await callExternalEndpoint({search_term: search_term}, "get_taxa_autocompletion");
 	}
 
 	function submitMakeSynonymOf() {

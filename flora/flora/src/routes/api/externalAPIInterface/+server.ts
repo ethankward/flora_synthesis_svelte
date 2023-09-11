@@ -11,7 +11,6 @@ let external_api_manager = new APIManager(env.API_ENDPOINT);
 export async function POST({request, params, url}) {
     const data = await request.json();
     const endpoint_identifier = url.searchParams.get("endpoint_identifier");
-
     if (!endpoint_identifier) {
         throw new Error("Something went wrong");
     }

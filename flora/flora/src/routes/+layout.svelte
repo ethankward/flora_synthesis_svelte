@@ -1,5 +1,23 @@
 <script lang="ts">
+    import { goto } from '$app/navigation';
+  	import AutoComplete from "simple-svelte-autocomplete";
     import "@picocss/pico";
+    import {callExternalEndpoint} from "../util/local_api_dispatch";
+    import type {TaxonNameType} from "../data_classes/types";
+
+    let selectedTaxon: TaxonNameType | undefined;
+
+    async function getTaxonAutocompletion(search_term: string) {
+      return await callExternalEndpoint({search_term: search_term}, "get_taxa_autocompletion");
+    }
+
+    async function goToTaxon() {
+      if (selectedTaxon) {
+        await goto("/");
+        goto('/taxon_detail/' + selectedTaxon.id);
+      }
+    }
+
 </script>
 
 
@@ -15,6 +33,22 @@
           <li><strong><a href="/life_cycles">Life cycles</a></strong></li>
           <li><strong><a href="/observation_dates">Observation dates</a></strong></li>
           <li><strong>Collectors</strong></li>
+          <li>Go to taxon:
+            <form>
+            <AutoComplete
+            
+            searchFunction="{getTaxonAutocompletion}"
+            delay="200"
+            localFiltering={false}
+            labelFieldName="taxon_name"
+            valueFieldName="pk"
+            hideArrow={true}
+            required={true}
+            bind:selectedItem={selectedTaxon}
+            onChange={goToTaxon}
+            />
+          </form>
+          </li>
         </ul>
 
       </nav>

@@ -34,7 +34,6 @@
             creation_invalid = undefined;
             new_value = undefined;
         }).catch(function (error) {
-            console.log(error);
             creation_invalid = true;
         });
 
