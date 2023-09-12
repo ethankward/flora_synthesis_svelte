@@ -14,7 +14,6 @@
     let retrieval_invalid = new Array(checklists.length);
 
     let n_records = 10;
-    let page = 1;
 
     async function submitUpdateRequest(checklist_index: number) {
         let checklist = checklists[checklist_index];
@@ -22,7 +21,7 @@
         update_invalid = new Array(checklists.length).fill(undefined);
         update_loading[checklist_index] = true;
 
-		callExternalEndpoint({checklist_id: checklist.id, page: page}, "update_checklist").then((result) => {
+		callExternalEndpoint({checklist_id: checklist.id}, "update_checklist").then((result) => {
             update_invalid[checklist_index] = false;
             update_loading[checklist_index] = false;
         }).catch((error) => {
@@ -54,16 +53,6 @@
 <p>Last updated on: {checklist.latest_date_retrieved}</p>
 <div class="grid">
     <UpdateButton update_invalid={update_invalid} update_loading={update_loading} index={i} submitUpdateRequest={submitUpdateRequest}/>
-    {#if checklist.checklist_type == 's'}
-    <label>Page: 
-        <select bind:value={page}>
-            <option value={1}>1</option>
-            <option value={2}>2</option>
-            <option value={3}>3</option>
-        </select>
-    </label>
-
-    {/if}
 </div>
 <p>{stale_record_counts.filter((src) => src.id == checklist.id)[0].stale_record_count} records without metadata or older than 60 days</p>
 <div class="grid">

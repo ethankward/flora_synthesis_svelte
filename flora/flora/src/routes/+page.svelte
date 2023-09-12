@@ -6,7 +6,7 @@
 <p>what is this</p>
 <p>checklists summary</p>
 
-<article>
+<article data-sveltekit-preload-data="tap">
     <h4>Families</h4>
     {#each data.families as family, i}
         {#if i > 0}&nbsp;|&nbsp;{/if}
