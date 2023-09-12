@@ -12,7 +12,7 @@
     let mapped_to_choice: {id: number};
 
 	async function getTaxonNameAutocompletion(search_term: string) {
-		return await callExternalEndpoint({search_term: search_term}, "taxa_autocompletion");
+		return await callExternalEndpoint({search_term: search_term}, "get_taxa_autocompletion");
 	}
 	
 	function submitUpdateMapping() {
