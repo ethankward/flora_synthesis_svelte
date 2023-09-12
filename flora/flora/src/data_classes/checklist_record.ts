@@ -58,7 +58,7 @@ class UpdateChecklistRecord implements APIEndpoint {
 let checklist_records_exported_endpoints = {
     "get_taxon_checklist_records": new GetTaxonChecklistRecords(),
     "get_checklist_record": new GetChecklistRecord(),
-    "update_checklist_record": new UpdateChecklistRecord()
+    "update_checklist_record_mapping": new UpdateChecklistRecord()
 }
 
 export {ChecklistRecordList, checklist_records_exported_endpoints}
