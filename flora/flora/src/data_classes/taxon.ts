@@ -302,6 +302,26 @@ class UpdateObservationDatesEndpoint implements APIEndpoint {
     }
 }
 
+class getTaxonRankChoices implements APIEndpoint {
+    external_endpoint = "taxon_ranks";
+
+    action(api_manager: APIManager, data: {}) {
+        return api_manager.get([this.external_endpoint]);
+    }
+}
+
+
+class CreateNewTaxon implements APIEndpoint {
+    external_endpoint = "create_new_taxon";
+
+    action(api_manager: APIManager, data: {taxon_name: string, taxon_family: string}) {
+        return api_manager.post({
+            taxon_name: data.taxon_name,
+            taxon_family: data.taxon_family}, [this.external_endpoint]);
+    }
+
+}
+
 
 let exported_taxon_endpoints = {
     "get_taxa": new GetTaxa(),
@@ -314,7 +334,9 @@ let exported_taxon_endpoints = {
     "get_taxa_autocompletion": new GetTaxaAutocompletion(),
     "make_synonym_of": new MakeSynonymOf(),
     "get_all_families": new GetAllFamilies(),
-    "update_observation_dates": new UpdateObservationDatesEndpoint()
+    "get_taxon_rank_choices": new getTaxonRankChoices(),
+    "update_observation_dates": new UpdateObservationDatesEndpoint(),
+    "create_new_taxon": new CreateNewTaxon()
 };
 
 
