@@ -31,7 +31,7 @@
 
 	function submitMakeSynonymOf() {
 		let synonym_of_id: number = selectedSynonymOfChoice.id;
-		callExternalEndpoint({taxon_id_1: taxon.id, taxon_id_2: synonym_of_id}, "make_taxon_synonym_of").then(
+		callExternalEndpoint({taxon_id_1: taxon.id, taxon_id_2: synonym_of_id}, "make_synonym_of").then(
 			(result) => {
 				window.location.href = '/taxon_detail/' + synonym_of_id;
 			}
