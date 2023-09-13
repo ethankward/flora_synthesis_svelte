@@ -5,12 +5,17 @@
     export let submitUpdateRequest: (index: number) => void;
 </script>
 
-<button class:error={update_invalid[index] === true} class:success={update_invalid[index] === false} aria-busy={update_loading[index]} on:click={() => submitUpdateRequest(index)}>
+<button
+    class:error={update_invalid[index] === true}
+    class:success={update_invalid[index] === false}
+    aria-busy={update_loading[index]}
+    on:click={() => submitUpdateRequest(index)}
+>
     {#if update_invalid[index] === true}
-    Something went wrong
+        Something went wrong
     {:else if update_invalid[index] === false}
-    Update queued
+        Update queued
     {:else}
-    Update
+        Update
     {/if}
 </button>

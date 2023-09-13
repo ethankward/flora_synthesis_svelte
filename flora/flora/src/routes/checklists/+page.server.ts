@@ -1,12 +1,12 @@
-import { APIManager } from "../../util/api";
 import { env } from '$env/dynamic/private';
-import {call} from "../../util/local_api_dispatch";
-import { checklist_exported_endpoints } from "../../data_classes/checklist";
+import { GetChecklists } from '../../data_classes/checklist';
+import { APIManager } from "../../util/api";
 
-export async function load({ }) {
-    let api_manager = new APIManager(env.API_ENDPOINT);
+export async function load() {
+    const api_manager = new APIManager(env.API_ENDPOINT);
+    const get_checklists_endpoint = new GetChecklists();
 
     return {
-        checklist_data: (await call(api_manager, {}, checklist_exported_endpoints.get_checklists)),
+        checklist_data: (await get_checklists_endpoint.action(api_manager)).data,
     }
 }

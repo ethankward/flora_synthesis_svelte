@@ -5,8 +5,8 @@
 
     let taxa: MinimalTaxonType[] = data.taxon_data;
 
-    let groups: {[key: string]: MinimalTaxonType[];} = {};
-    let status_types: {[key: string]: string} = {};
+    let groups: { [key: string]: MinimalTaxonType[] } = {};
+    let status_types: { [key: string]: string } = {};
 
     taxa.forEach((taxon) => {
         let introduced_status = taxon.introduced.value;
@@ -18,20 +18,21 @@
             groups[introduced_status].push(taxon);
         }
     });
-
 </script>
 
 {#each Object.keys(groups) as introduced_status_type}
-<article>
-    <details>
-        <summary>{status_types[introduced_status_type]}</summary>
-        <ul>
-            {#each Object.values(groups[introduced_status_type]) as taxon}
-            <li><a href={"/taxon_detail/" + taxon.id} rel="external">{taxon.taxon_name}</a></li>
-            {/each}
-        </ul>
-    
-    </details>
-
-</article>
+    <article>
+        <details>
+            <summary>{status_types[introduced_status_type]}</summary>
+            <ul>
+                {#each Object.values(groups[introduced_status_type]) as taxon}
+                    <li>
+                        <a href={"/taxon_detail/" + taxon.id} rel="external"
+                            >{taxon.taxon_name}</a
+                        >
+                    </li>
+                {/each}
+            </ul>
+        </details>
+    </article>
 {/each}

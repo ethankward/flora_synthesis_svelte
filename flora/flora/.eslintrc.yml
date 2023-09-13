@@ -1,0 +1,50 @@
+env:
+  browser: true
+  es2021: true
+extends:
+  - eslint:recommended
+  - plugin:@typescript-eslint/recommended
+  - plugin:svelte/recommended
+parser: '@typescript-eslint/parser'
+parserOptions:
+  ecmaVersion: latest
+  sourceType: module
+plugins:
+  - '@typescript-eslint'
+rules: {
+  no-use-before-define: 1,
+  arrow-body-style: 1,
+  block-scoped-var: 1,
+  no-unreachable-loop: 1,
+  no-unused-private-class-members: 1,
+  complexity: 1,
+  consistent-return: 1,
+  curly: 1,
+  default-case: 1,
+  default-param-last: 1,
+  dot-notation: 1,
+  eqeqeq: 1,
+  func-name-matching: 1,
+  func-names: 1,
+  no-console: 1,
+  no-empty: 1,
+  no-empty-function: 1,
+  no-eq-null: 1,
+  no-extra-semi: 1,
+  no-implicit-coercion: 1,
+  no-implicit-globals: 1,
+  no-invalid-this: 1,
+  no-loop-func: 1,
+}
+overrides: [
+  {
+      files: ['*.svelte'],
+      parser: 'svelte-eslint-parser',
+      parserOptions: {
+        parser: '@typescript-eslint/parser'
+      }
+  }
+]
+ignorePatterns: [
+  "app.html"
+]

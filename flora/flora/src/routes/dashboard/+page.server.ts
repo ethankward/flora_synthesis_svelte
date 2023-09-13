@@ -1,13 +1,14 @@
-import { APIManager } from "../../util/api";
 import { env } from '$env/dynamic/private';
-import {call} from "../../util/local_api_dispatch";
-import { checklist_exported_endpoints } from "../../data_classes/checklist";
+import { GetChecklists, GetStaleRecordCounts } from '../../data_classes/checklist';
+import { APIManager } from "../../util/api";
 
-export async function load({ }) {
-    let api_manager = new APIManager(env.API_ENDPOINT);
+export async function load() {
+    const api_manager = new APIManager(env.API_ENDPOINT);
+    const get_checklists_endpoint = new GetChecklists();
+    const stale_record_counts_endpoint = new GetStaleRecordCounts();
 
     return {
-        checklist_data: (await call(api_manager, {}, checklist_exported_endpoints.get_checklists)),
-        stale_record_counts: (await call(api_manager, {}, checklist_exported_endpoints.get_stale_record_counts))
+        checklist_data: (await get_checklists_endpoint.action(api_manager)).data,
+        stale_record_counts: (await stale_record_counts_endpoint.action(api_manager)).data
     }
 }

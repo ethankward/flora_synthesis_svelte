@@ -1,9 +1,9 @@
 <script lang="ts">
-    import type { AxiosPromise } from 'axios';
-	import FakeLink from "../../components/common/FakeLink.svelte";
+    import type { AxiosPromise } from "axios";
+    import FakeLink from "../../components/common/FakeLink.svelte";
 
     type apiMethodType = (value: string) => AxiosPromise;
-    type choiceType = {value: string, display: string};
+    type choiceType = { value: string; display: string };
 
     export let id: string;
     export let display_value: string | undefined;
@@ -12,28 +12,23 @@
     export let choices: choiceType[] = [];
 
     let active = false;
-    let submission_invalid: boolean;
 
     function handleOnSubmit() {
         if (value === undefined) {
             return;
         }
 
-        apiMethod(value).then(function (response) {
-            if (value == "") {
+        apiMethod(value).then(() => {
+            if (value === "") {
                 display_value = "";
             } else {
                 choices.forEach((choice) => {
-                    if (choice.value == value) {
+                    if (choice.value === value) {
                         display_value = choice.display;
                     }
                 });
             }
-            submission_invalid = false;
-        }).catch(function (error) {
-            submission_invalid = true;
         });
-
     }
 
     function handleActiveToggle() {
@@ -42,9 +37,13 @@
 </script>
 
 {display_value}
-<sup on:click={handleActiveToggle}><FakeLink display="edit"/></sup>
+<sup
+    on:click={handleActiveToggle}
+    on:keypress={handleActiveToggle}
+    role={"text"}><FakeLink display="edit" /></sup
+>
 
-<form class:hide={!active} on:change={handleOnSubmit} id={id}>
+<form class:hide={!active} on:change={handleOnSubmit} {id}>
     <select bind:value>
         <option value="" />
         {#each choices as choice}

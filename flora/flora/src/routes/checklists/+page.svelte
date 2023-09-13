@@ -1,21 +1,24 @@
 <script lang="ts">
-    import {ChecklistList} from "../../data_classes/checklist";
-    import type {GroupedTaxa} from "../../data_classes/taxon";
+    import { ChecklistList } from "../../data_classes/checklist";
+    import type { GroupedTaxa } from "../../data_classes/taxon";
     import {
         GroupBy,
         TaxonList,
         loadTaxaFromAPIData,
     } from "../../data_classes/taxon";
 
-
     import type { ChecklistType } from "../../data_classes/types";
-    import type {selectedFieldsOptions} from "../../routes/checklists/types";
-	import {callExternalEndpoint} from "../../util/local_api_dispatch";
+    import type { selectedFieldsOptions } from "../../routes/checklists/types";
+    import { GetChecklistTaxa } from "../../data_classes/taxon";
 
-    import TaxaListOrTable from "../../components/routes/index/TaxaListOrTable.svelte";
+    import TaxaListOrTable from "../../routes/checklists/components/TaxaListOrTable.svelte";
 
     export let data;
 
+    let get_checklist_taxa_endpoint = new GetChecklistTaxa();
+
+    type checklistTaxaType = { [key: number]: TaxonList };
+    let checklists: ChecklistList = new ChecklistList(data.checklist_data);
 
     let formProperties = {
         selectedChecklistID: -1 as number,
@@ -30,16 +33,16 @@
             endemic: false,
             synonyms: true,
             first_observation_date: false,
-            last_observation_date: false
-            } as selectedFieldsOptions,
-        taxaGroupedBy: 0 as number ,
+            last_observation_date: false,
+        } as selectedFieldsOptions,
+        taxaGroupedBy: 0 as number,
         hideChecklistTaxa: true,
         hideComparisonTaxa: true,
         displayAsList: true,
         grouped_checklist_taxa: {} as GroupedTaxa,
         common_taxa: {} as GroupedTaxa,
         taxa_diff_1: {} as GroupedTaxa,
-        taxa_diff_2: {} as GroupedTaxa
+        taxa_diff_2: {} as GroupedTaxa,
     };
 
     class TaxonManager {
@@ -49,18 +52,21 @@
         constructor() {
             this.canonical_taxa = {};
             this.checklist_taxa = {};
-
         }
         async loadTaxonData(checklist_id: number) {
-            return callExternalEndpoint({checklist_id: checklist_id}, "get_checklist_taxa").then((response) => {
-                let [loaded_canonical_taxa, loaded_checklist_taxa] = loadTaxaFromAPIData(
-                    response
-                );
-                this.canonical_taxa[checklist_id] = loaded_canonical_taxa.deduplicate();
-                this.checklist_taxa[checklist_id] = loaded_checklist_taxa.filterByChecklist(checklist_id).deduplicate();
-            });
+            return get_checklist_taxa_endpoint
+                .callExternalEndpoint({ checklist_id: checklist_id })
+                .then((response) => {
+                    let [loaded_canonical_taxa, loaded_checklist_taxa] =
+                        loadTaxaFromAPIData(response.data);
+                    this.canonical_taxa[checklist_id] =
+                        loaded_canonical_taxa.deduplicate();
+                    this.checklist_taxa[checklist_id] = loaded_checklist_taxa
+                        .filterByChecklist(checklist_id)
+                        .deduplicate();
+                });
         }
-        
+
         async getCanonicalTaxa(checklistID: number) {
             if (!(checklistID in this.canonical_taxa)) {
                 await this.loadTaxonData(checklistID);
@@ -76,6 +82,8 @@
         }
     }
 
+    let taxonManager = new TaxonManager();
+
     async function getVisibleTaxa(checklist_id: number) {
         let result: TaxonList;
 
@@ -84,35 +92,42 @@
         } else {
             result = await taxonManager.getChecklistTaxa(checklist_id);
         }
-        result = result.filterByTaxonNameContains(formProperties.taxonNameFilter);
+        result = result.filterByTaxonNameContains(
+            formProperties.taxonNameFilter
+        );
         return result;
     }
 
-    function getSelectedChecklist() {
-        if (formProperties.selectedChecklistID != -1) {
-            return checklists.checklists[formProperties.selectedChecklistID];
+    function setSelectedChecklist() {
+        if (formProperties.selectedChecklistID !== -1) {
+            formProperties.selectedChecklist = checklists.checklists[formProperties.selectedChecklistID];
         }
     }
 
-    function getCompareToChecklist() {
-        if (formProperties.comparisonChecklistID != -1) {
-            return checklists.checklists[formProperties.comparisonChecklistID];
+    function setCompareToChecklist() {
+        if (formProperties.comparisonChecklistID !== -1) {
+            formProperties.comparisonChecklist = checklists.checklists[formProperties.comparisonChecklistID];
         }
     }
 
-    async function handleChecklistChange() {    
+    async function handleChecklistChange() {
         formProperties.hideChecklistTaxa = true;
         formProperties.hideComparisonTaxa = true;
 
         let visible_taxa = await getVisibleTaxa(
-            formProperties.selectedChecklistID,
+            formProperties.selectedChecklistID
         );
 
-        formProperties.selectedChecklist = getSelectedChecklist();
-        formProperties.comparisonChecklist = getCompareToChecklist();
+        setSelectedChecklist();
+        setCompareToChecklist();
 
-        if (formProperties.selectedChecklistID != -1 && formProperties.comparisonChecklistID != -1) {
-            let other_taxa = await getVisibleTaxa(formProperties.comparisonChecklistID);
+        if (
+            formProperties.selectedChecklistID !== -1 &&
+            formProperties.comparisonChecklistID !== -1
+        ) {
+            let other_taxa = await getVisibleTaxa(
+                formProperties.comparisonChecklistID
+            );
             formProperties.hideComparisonTaxa = false;
             formProperties.common_taxa = visible_taxa
                 .commonTaxa(other_taxa)
@@ -125,17 +140,16 @@
                 .getGrouped(formProperties.taxaGroupedBy);
         } else {
             formProperties.hideChecklistTaxa = false;
-            formProperties.grouped_checklist_taxa = visible_taxa.getGrouped(formProperties.taxaGroupedBy);
+            formProperties.grouped_checklist_taxa = visible_taxa.getGrouped(
+                formProperties.taxaGroupedBy
+            );
         }
     }
 
-    type checklistTaxaType = {[key: number]: TaxonList;};
-    let taxonManager = new TaxonManager();
-    let checklists: ChecklistList = new ChecklistList(data.checklist_data);
 </script>
 
 <svelte:head>
-    <title>Checklists</title> 
+    <title>Checklists</title>
 </svelte:head>
 
 <article>
@@ -149,7 +163,7 @@
                     on:change={handleChecklistChange}
                 >
                     <option value="-1" />
-                    {#each Object.entries(checklists.checklists) as [checklist_id, checklist]}
+                    {#each Object.values(checklists.checklists) as checklist}
                         <option value={checklist.id}
                             >{checklist.checklist_name}</option
                         >
@@ -165,7 +179,7 @@
                     on:change={handleChecklistChange}
                 >
                     <option value="-1" />
-                    {#each Object.entries(checklists.checklists) as [checklist_id, checklist]}
+                    {#each Object.values(checklists.checklists) as checklist}
                         <option value={checklist.id}
                             >{checklist.checklist_name}</option
                         >
@@ -185,13 +199,12 @@
                     <option value={GroupBy.alphabetic}>Alphabetic</option>
                 </select>
             </label>
-            
         </div>
 
-        <hr>
+        <hr />
         <details>
             <summary>More options</summary>
-            <hr>
+            <hr />
             <div class="grid">
                 <label>
                     Filter taxon name:
@@ -202,7 +215,7 @@
                     />
                 </label>
             </div>
-            <hr>
+            <hr />
             <div class="grid">
                 <label>
                     <input
@@ -243,99 +256,139 @@
                     Display as table
                 </label>
             </div>
-            <hr>
+            <hr />
             <h6>Show fields</h6>
             <div class="grid">
                 <label>
-                    <input type="checkbox" 
-                    bind:checked={formProperties.selectedFieldsOptions.lifecycle}
+                    <input
+                        type="checkbox"
+                        bind:checked={formProperties.selectedFieldsOptions
+                            .lifecycle}
                     />
                     Life cycle
                 </label>
                 <label>
-                    <input type="checkbox" 
-                    bind:checked={formProperties.selectedFieldsOptions.introduced}
+                    <input
+                        type="checkbox"
+                        bind:checked={formProperties.selectedFieldsOptions
+                            .introduced}
                     />
                     Introduced
                 </label>
                 <label>
-                    <input type="checkbox" 
-                    bind:checked={formProperties.selectedFieldsOptions.endemic}
+                    <input
+                        type="checkbox"
+                        bind:checked={formProperties.selectedFieldsOptions
+                            .endemic}
                     />
                     Endemic
                 </label>
                 <label>
-                    <input type="checkbox" 
-                    bind:checked={formProperties.selectedFieldsOptions.synonyms}/>
+                    <input
+                        type="checkbox"
+                        bind:checked={formProperties.selectedFieldsOptions
+                            .synonyms}
+                    />
                     Synonyms
                 </label>
                 <label>
-                    <input type="checkbox" 
-                    bind:checked={formProperties.selectedFieldsOptions.first_observation_date}/>
+                    <input
+                        type="checkbox"
+                        bind:checked={formProperties.selectedFieldsOptions
+                            .first_observation_date}
+                    />
                     First observation date
                 </label>
                 <label>
-                    <input type="checkbox" 
-                    bind:checked={formProperties.selectedFieldsOptions.last_observation_date}/>
+                    <input
+                        type="checkbox"
+                        bind:checked={formProperties.selectedFieldsOptions
+                            .last_observation_date}
+                    />
                     Last observation date
                 </label>
             </div>
-    
         </details>
-
     </form>
 </article>
 
-<article aria-busy="true" class:hide={!(formProperties.hideChecklistTaxa && formProperties.hideComparisonTaxa) || formProperties.selectedChecklistID == -1}>
-
-</article>
-<article class:hide={(formProperties.hideChecklistTaxa && formProperties.hideComparisonTaxa) || formProperties.selectedChecklistID == -1}>
-
-    <div id="single_checklist_div" class:hide={formProperties.hideChecklistTaxa}>
+<article
+    aria-busy="true"
+    class:hide={!(
+        formProperties.hideChecklistTaxa && formProperties.hideComparisonTaxa
+    ) || formProperties.selectedChecklistID === -1}
+/>
+<article
+    class:hide={(formProperties.hideChecklistTaxa &&
+        formProperties.hideComparisonTaxa) ||
+        formProperties.selectedChecklistID === -1}
+>
+    <div
+        id="single_checklist_div"
+        class:hide={formProperties.hideChecklistTaxa}
+    >
         <details open>
-            <summary>Checklist Taxa: <mark>{#if formProperties.selectedChecklist}{formProperties.selectedChecklist.checklist_name}{/if}</mark></summary>
+            <summary
+                >Checklist Taxa: <mark
+                    >{#if formProperties.selectedChecklist}{formProperties
+                            .selectedChecklist.checklist_name}{/if}</mark
+                ></summary
+            >
             <TaxaListOrTable
                 list={formProperties.displayAsList}
                 grouped_checklist_taxa={formProperties.grouped_checklist_taxa}
-                selectedFieldsOptions={formProperties.selectedFieldsOptions}
+                selectedFieldsOptionsValues={formProperties.selectedFieldsOptions}
             />
         </details>
     </div>
-    <div id="compare_checklist_div" class:hide={formProperties.hideComparisonTaxa}>
+    <div
+        id="compare_checklist_div"
+        class:hide={formProperties.hideComparisonTaxa}
+    >
         <details>
             <summary>Common Taxa</summary>
             <TaxaListOrTable
                 list={formProperties.displayAsList}
                 grouped_checklist_taxa={formProperties.common_taxa}
-                selectedFieldsOptions={formProperties.selectedFieldsOptions}
-            />
-        </details>
-        <details>
-            {#if formProperties.selectedChecklist && formProperties.comparisonChecklist}
-            <summary
-            >In <mark>{formProperties.selectedChecklist.checklist_name}</mark> but not
-            in
-            <mark>{formProperties.comparisonChecklist.checklist_name}</mark></summary
-            >
-            {/if}
-            <TaxaListOrTable
-                list={formProperties.displayAsList}
-                grouped_checklist_taxa={formProperties.taxa_diff_1}
-                selectedFieldsOptions={formProperties.selectedFieldsOptions}
+                selectedFieldsOptionsValues={formProperties.selectedFieldsOptions}
             />
         </details>
         <details>
             {#if formProperties.selectedChecklist && formProperties.comparisonChecklist}
                 <summary
-                    >In <mark>{formProperties.comparisonChecklist.checklist_name}</mark> but
-                    not in
-                    <mark>{formProperties.selectedChecklist.checklist_name}</mark></summary
+                    >In <mark
+                        >{formProperties.selectedChecklist.checklist_name}</mark
+                    >
+                    but not in
+                    <mark
+                        >{formProperties.comparisonChecklist
+                            .checklist_name}</mark
+                    ></summary
+                >
+            {/if}
+            <TaxaListOrTable
+                list={formProperties.displayAsList}
+                grouped_checklist_taxa={formProperties.taxa_diff_1}
+                selectedFieldsOptionsValues={formProperties.selectedFieldsOptions}
+            />
+        </details>
+        <details>
+            {#if formProperties.selectedChecklist && formProperties.comparisonChecklist}
+                <summary
+                    >In <mark
+                        >{formProperties.comparisonChecklist
+                            .checklist_name}</mark
+                    >
+                    but not in
+                    <mark
+                        >{formProperties.selectedChecklist.checklist_name}</mark
+                    ></summary
                 >
             {/if}
             <TaxaListOrTable
                 list={formProperties.displayAsList}
                 grouped_checklist_taxa={formProperties.taxa_diff_2}
-                selectedFieldsOptions={formProperties.selectedFieldsOptions}
+                selectedFieldsOptionsValues={formProperties.selectedFieldsOptions}
             />
         </details>
     </div>

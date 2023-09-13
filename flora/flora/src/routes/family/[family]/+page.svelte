@@ -5,7 +5,7 @@
 
     let taxa: TaxonType[] = data.taxon_data;
 
-    let genus_groups: {[key: string]: TaxonType[];} = {};
+    let genus_groups: { [key: string]: TaxonType[] } = {};
 
     taxa.forEach((taxon) => {
         let genus = taxon.genus;
@@ -14,28 +14,36 @@
         }
         genus_groups[genus].push(taxon);
     });
-
 </script>
-<h3>Family: <mark>{data.family}</mark></h3>
+
 <article>
-    
+    <header>
+        Family: <mark>{data.family}</mark>
+    </header>
     <ul>
         {#each Object.keys(genus_groups) as genus}
-        <li> <a href="/genus/{genus}">{genus}</a>
-            <ul>
-            {#each Object.values(genus_groups[genus]) as taxon}
             <li>
-                {#if !taxon.taxon_checklist_taxa.some((checklist_taxon) => checklist_taxon.primary_checklist)}
-                <del><a href={"/taxon_detail/" + taxon.id} rel="external">{taxon.taxon_name}</a></del>
-                {:else}
-                <a href={"/taxon_detail/" + taxon.id} rel="external">{taxon.taxon_name}</a>
-                {/if}
+                <a href="/genus/{genus}">{genus}</a>
+                <ul>
+                    {#each Object.values(genus_groups[genus]) as taxon}
+                        <li>
+                            {#if !taxon.taxon_checklist_taxa.some((checklist_taxon) => checklist_taxon.primary_checklist)}
+                                <del
+                                    ><a
+                                        href={"/taxon_detail/" + taxon.id}
+                                        rel="external">{taxon.taxon_name}</a
+                                    ></del
+                                >
+                            {:else}
+                                <a
+                                    href={"/taxon_detail/" + taxon.id}
+                                    rel="external">{taxon.taxon_name}</a
+                                >
+                            {/if}
+                        </li>
+                    {/each}
+                </ul>
             </li>
-            {/each}
-            </ul>
-        </li>
         {/each}
-
     </ul>
-    
 </article>

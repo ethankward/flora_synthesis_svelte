@@ -2,7 +2,7 @@ import type { ChecklistTaxonType } from "../data_classes/types";
 
 
 class ChecklistTaxonList {
-    checklist_taxa: {[key: number]: ChecklistTaxonType;};
+    checklist_taxa: { [key: number]: ChecklistTaxonType; };
 
     constructor(api_data: ChecklistTaxonType[]) {
         this.checklist_taxa = Object.fromEntries(api_data.map((ch) => [ch.id, ch]));
@@ -14,4 +14,5 @@ class ChecklistTaxonList {
 }
 
 
-export {ChecklistTaxonList}
+export { ChecklistTaxonList };
+

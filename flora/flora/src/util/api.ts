@@ -1,16 +1,12 @@
-import axios from "axios";
 import type { AxiosPromise } from "axios";
+
+import axios from "axios";
 
 import { env } from '$env/dynamic/private';
 
 
-axios.defaults.headers.common['Authorization'] = `Token ${env.API_AUTH_TOKEN}`;
+axios.defaults.headers.common.Authorization = `Token ${env.API_AUTH_TOKEN}`;
 
-
-interface APIEndpoint {
-    external_endpoint: string;
-    action(api_manager: APIManager, data: {}): AxiosPromise;
-}
 
 
 class APIManager {
@@ -20,8 +16,8 @@ class APIManager {
         this.api_url = new URL(api_url);
     }
 
-    getUrl(path: string[], params?: { [key: string]: string;}) {
-        let url = new URL(path.join('/'), this.api_url);
+    getUrl(path: string[], params?: { [key: string]: string; }) {
+        const url = new URL(path.join('/'), this.api_url);
         if (params) {
             for (const [key, value] of Object.entries(params)) {
                 url.searchParams.set(key, value);
@@ -38,23 +34,31 @@ class APIManager {
 
     }
 
-    get(path: string[], params?: { [key: string]: string;}) {
+    get(path: string[], params?: { [key: string]: string; }) {
         return axios.get(this.getUrl(path, params));
     }
 
-    patch(data: any, path: string[], params?: { [key: string]: string;}) {
+    patch(data: object, path: string[], params?: { [key: string]: string; }) {
         return axios.patch(this.getUrl(path, params), data);
     }
 
-    post(data: any, path: string[]) {
+    post(data: object, path: string[]) {
         return axios.post(this.getUrl(path), data);
     }
 
-    put(data: any, path: string[]) {
+    put(data: object, path: string[]) {
         return axios.put(this.getUrl(path), data);
     }
 
 }
 
-export {APIManager}
-export type {APIEndpoint}
+interface APIEndpoint {
+    external_endpoint: string;
+    unique_identifier: string;
+    action(api_manager: APIManager, data: object): AxiosPromise;
+}
+
+
+export { APIManager };
+export type { APIEndpoint };
+

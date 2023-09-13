@@ -1,15 +1,20 @@
 <script lang="ts">
-	import {callExternalEndpoint} from "../../util/local_api_dispatch";
+    import { CreateNewTaxon } from "../../data_classes/taxon";
 
     let taxon_name: string;
     let taxon_family: string;
+    let create_new_taxon_endpoint = new CreateNewTaxon();
 
     async function submitCreateNewTaxon() {
-		callExternalEndpoint({taxon_name: taxon_name, taxon_family: taxon_family}, "create_new_taxon").then((result) => {
-            window.location.href = '/taxon_detail/' + result.taxon_id;
-        });
+        create_new_taxon_endpoint
+            .callExternalEndpoint({
+                taxon_name: taxon_name,
+                taxon_family: taxon_family,
+            })
+            .then((result) => {
+                window.location.href = "/taxon_detail/" + result.data.taxon_id;
+            });
     }
-
 </script>
 
 <article>
@@ -18,15 +23,13 @@
     <form on:submit={submitCreateNewTaxon}>
         <label>
             Taxon name:
-            <input type="text" bind:value={taxon_name} required>
+            <input type="text" bind:value={taxon_name} required />
         </label>
         <label>
             Family:
-            <input type="text" bind:value={taxon_family} required>
+            <input type="text" bind:value={taxon_family} required />
         </label>
 
-        <input type="submit" value="Create">
-        
+        <input type="submit" value="Create" />
     </form>
-
 </article>

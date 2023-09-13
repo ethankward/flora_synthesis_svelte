@@ -1,11 +1,8 @@
-import type { TaxonType, TaxonSynonymType, TaxonNameType, ChecklistTaxonType, ObservationDateType} from "../data_classes/types";
-import type {ValueDisplayType} from "../types"
-import type { APIManager, APIEndpoint } from "../util/api";
-
-type GroupedTaxa = {
-    [key: string]: Taxon[];
-};
-
+import type { ChecklistTaxonType, ObservationDateType, TaxonNameType, TaxonType } from "../data_classes/types";
+import type { ValueDisplayType } from "../types";
+import type { APIEndpoint, APIManager } from "../util/api";
+import axios from "axios";
+import type { AxiosPromise } from "axios";
 
 enum GroupBy {
     family,
@@ -78,6 +75,11 @@ class Taxon {
     }
 }
 
+type GroupedTaxa = {
+    [key: string]: Taxon[];
+};
+
+
 class TaxonList {
     taxa: Taxon[];
 
@@ -94,7 +96,7 @@ class TaxonList {
     }
 
     deduplicate() {
-        let taxon_ids: {
+        const taxon_ids: {
             [key: number]: Taxon;
         } = {};
         this.taxa.forEach((taxon) => {
@@ -122,14 +124,16 @@ class TaxonList {
                 return taxon.genus;
             case GroupBy.alphabetic:
                 return taxon.taxon_name.charAt(0);
+            default:
+                return "";
         }
     }
 
     getGrouped(grouped_by: number) {
-        let result: GroupedTaxa = {};
+        const result: GroupedTaxa = {};
 
         this.taxa.forEach((taxon) => {
-            let group_key = this.getGroupKey(taxon, grouped_by);
+            const group_key = this.getGroupKey(taxon, grouped_by);
             if (!(group_key in result)) {
                 result[group_key] = [];
             }
@@ -142,7 +146,7 @@ class TaxonList {
     }
 
     getTaxonIds() {
-        let result = new Set();
+        const result = new Set();
         this.taxa.forEach((taxon) => {
             if (taxon.primary) {
                 result.add(taxon.id);
@@ -155,9 +159,9 @@ class TaxonList {
     }
 
     commonTaxa(otherList: TaxonList) {
-        let this_taxon_ids = this.getTaxonIds();
-        let other_taxon_ids = otherList.getTaxonIds();
-        let common_taxon_ids = new Set(
+        const this_taxon_ids = this.getTaxonIds();
+        const other_taxon_ids = otherList.getTaxonIds();
+        const common_taxon_ids = new Set(
             [...this_taxon_ids].filter((x) => other_taxon_ids.has(x))
         );
 
@@ -173,9 +177,9 @@ class TaxonList {
     }
 
     differingTaxa(otherList: TaxonList) {
-        let this_taxon_ids = this.getTaxonIds();
-        let other_taxon_ids = otherList.getTaxonIds();
-        let diff_ids = new Set(
+        const this_taxon_ids = this.getTaxonIds();
+        const other_taxon_ids = otherList.getTaxonIds();
+        const diff_ids = new Set(
             [...this_taxon_ids].filter((x) => !other_taxon_ids.has(x))
         );
 
@@ -186,7 +190,7 @@ class TaxonList {
                 } else {
                     return taxon.all_mapped_taxa.filter((i) => diff_ids.has(i.id)).length > 0;
                 }
-                
+
             })
         );
     }
@@ -195,8 +199,8 @@ class TaxonList {
 
 function loadTaxaFromAPIData(api_data: TaxonType[]) {
 
-    let canonical_taxa = new TaxonList([]);
-    let checklist_taxa = new TaxonList([]);
+    const canonical_taxa = new TaxonList([]);
+    const checklist_taxa = new TaxonList([]);
 
     api_data.forEach((taxon) => {
         canonical_taxa.taxa.push(new Taxon(taxon, undefined));
@@ -211,16 +215,18 @@ function loadTaxaFromAPIData(api_data: TaxonType[]) {
 
 class GetTaxa implements APIEndpoint {
     external_endpoint = "taxa";
+    unique_identifier = "get_taxa";
 
-    action(api_manager: APIManager, data: {}) {
+    action(api_manager: APIManager) {
         return api_manager.get([this.external_endpoint]);
     }
 }
 
 class GetTaxon implements APIEndpoint {
     external_endpoint = "taxa";
+    unique_identifier = "get_taxon";
 
-    action(api_manager: APIManager, data: {taxon_id: number}) {
+    action(api_manager: APIManager, data: { taxon_id: number }) {
         return api_manager.get([this.external_endpoint, data.taxon_id.toString()]);
     }
 }
@@ -228,117 +234,213 @@ class GetTaxon implements APIEndpoint {
 
 class GetPrimaryChecklistTaxa implements APIEndpoint {
     external_endpoint = "primary_taxa";
-    
-    action(api_manager: APIManager, data: {}) {
+    unique_identifier = "get_primary_checklist_taxa";
+
+    action(api_manager: APIManager) {
         return api_manager.get([this.external_endpoint]);
     }
 }
 
+type get_checklist_taxa_data_type = { checklist_id: number };
+
 class GetChecklistTaxa implements APIEndpoint {
     external_endpoint = "taxa";
+    unique_identifier = "get_checklist_taxa";
 
-    action(api_manager: APIManager, data: {checklist_id: number}) {
-        return api_manager.get([this.external_endpoint], {"checklist": data.checklist_id.toString()});
+    action(api_manager: APIManager, data: get_checklist_taxa_data_type) {
+        return api_manager.get([this.external_endpoint], { "checklist": data.checklist_id.toString() });
+    }
+
+    async callExternalEndpoint(data: get_checklist_taxa_data_type): AxiosPromise {
+        const url = "/api/externalAPIInterface/?endpoint_identifier=" + this.unique_identifier;
+        return axios.post(url, data);
     }
 }
 
+
 class GetGenusTaxa implements APIEndpoint {
     external_endpoint = "taxa";
+    unique_identifier = "get_genus_taxa";
 
-    action(api_manager: APIManager, data: {genus: string}) {
-        return api_manager.get([this.external_endpoint], {"genus": data.genus});
+    action(api_manager: APIManager, data: { genus: string }) {
+        return api_manager.get([this.external_endpoint], { "genus": data.genus });
     }
 
 }
 class GetFamilyTaxa implements APIEndpoint {
     external_endpoint = "taxa";
+    unique_identifier = "get_family_taxa";
 
-    action(api_manager: APIManager, data: {family: string}) {
-        return api_manager.get([this.external_endpoint], {"family": data.family});
+    action(api_manager: APIManager, data: { family: string }) {
+        return api_manager.get([this.external_endpoint], { "family": data.family });
     }
 
 }
+
+type update_taxon_data_type = {
+    taxon_id: number,
+    taxon_name?: string,
+    family?: string,
+    seinet_id?: string,
+    inat_id?: string,
+    introduced?: string,
+    endemic?: string,
+    life_cycle?: string
+};
 
 class UpdateTaxon implements APIEndpoint {
     external_endpoint = "taxa";
+    unique_identifier = "update_taxon";
 
-    action(api_manager: APIManager, data: {taxon_id: number}) {
+    action(api_manager: APIManager, data: update_taxon_data_type) {
         return api_manager.patch(data, [this.external_endpoint, data.taxon_id.toString()]);
     }
 
+    async callExternalEndpoint(data: update_taxon_data_type): AxiosPromise {
+        const url = "/api/externalAPIInterface/?endpoint_identifier=" + this.unique_identifier;
+        return axios.post(url, data);
+    }
+
 }
 
+
+type get_taxa_autocompletion_type = { search_term: string };
 
 class GetTaxaAutocompletion implements APIEndpoint {
     external_endpoint = "taxa_autocomplete";
-    
-    action(api_manager: APIManager, data: {search_term: string}) {
-        return api_manager.get([this.external_endpoint], {"search_term": data.search_term});
+    unique_identifier = "taxa_autocomplete";
+
+    action(api_manager: APIManager, data: get_taxa_autocompletion_type) {
+        return api_manager.get([this.external_endpoint], { "search_term": data.search_term });
+    }
+
+    async callExternalEndpoint(data: get_taxa_autocompletion_type): AxiosPromise {
+        const url = "/api/externalAPIInterface/?endpoint_identifier=" + this.unique_identifier;
+        return axios.post(url, data);
     }
 
 }
 
+type make_synonym_of_type = { taxon_id_1: number, taxon_id_2: number };
+
 class MakeSynonymOf implements APIEndpoint {
     external_endpoint = "make_synonym_of";
+    unique_identifier = "make_synonym_of";
 
-    action(api_manager: APIManager, data: {taxon_id_1: number, taxon_id_2: number}) {
-        return api_manager.post({"taxon_id_1": data.taxon_id_1, "taxon_id_2": data.taxon_id_2}, [this.external_endpoint]);
+    action(api_manager: APIManager, data: make_synonym_of_type) {
+        return api_manager.post({ "taxon_id_1": data.taxon_id_1, "taxon_id_2": data.taxon_id_2 }, [this.external_endpoint]);
     }
+
+    async callExternalEndpoint(data: make_synonym_of_type): AxiosPromise {
+        const url = "/api/externalAPIInterface/?endpoint_identifier=" + this.unique_identifier;
+        return axios.post(url, data);
+    }
+
 }
 
 class GetAllFamilies implements APIEndpoint {
     external_endpoint = "taxon_families"
+    unique_identifier = "taxon_families";
 
-    action(api_manager: APIManager, data: {}) {
-        return api_manager.get([this.external_endpoint], data);
+    action(api_manager: APIManager) {
+        return api_manager.get([this.external_endpoint]);
     }
 }
 
 class UpdateObservationDatesEndpoint implements APIEndpoint {
     external_endpoint = "update_observation_dates";
+    unique_identifier = "update_observation_dates";
 
-    action(api_manager: APIManager, data: {}) {
+    action(api_manager: APIManager) {
         return api_manager.get([this.external_endpoint]);
     }
 }
 
 class getTaxonRankChoices implements APIEndpoint {
     external_endpoint = "taxon_ranks";
+    unique_identifier = "taxon_ranks";
 
-    action(api_manager: APIManager, data: {}) {
+    action(api_manager: APIManager) {
         return api_manager.get([this.external_endpoint]);
     }
 }
 
 
+type create_new_taxon_data_type = { taxon_name: string, taxon_family: string };
+
 class CreateNewTaxon implements APIEndpoint {
     external_endpoint = "create_new_taxon";
+    unique_identifier = "create_new_taxon";
 
-    action(api_manager: APIManager, data: {taxon_name: string, taxon_family: string}) {
+    action(api_manager: APIManager, data: create_new_taxon_data_type) {
         return api_manager.post({
             taxon_name: data.taxon_name,
-            taxon_family: data.taxon_family}, [this.external_endpoint]);
+            taxon_family: data.taxon_family
+        }, [this.external_endpoint]);
+    }
+
+    async callExternalEndpoint(data: create_new_taxon_data_type): AxiosPromise {
+        const url = "/api/externalAPIInterface/?endpoint_identifier=" + this.unique_identifier;
+        return axios.post(url, data);
     }
 
 }
 
+class GetEndemicChoices implements APIEndpoint {
+    external_endpoint = "endemic";
+    unique_identifier = "endemic";
 
-let exported_taxon_endpoints = {
-    "get_taxa": new GetTaxa(),
-    "get_taxon": new GetTaxon(),
-    "get_primary_checklist_taxa": new GetPrimaryChecklistTaxa(),
-    "get_checklist_taxa": new GetChecklistTaxa(),
-    "get_genus_taxa": new GetGenusTaxa(),
-    "get_family_taxa": new GetFamilyTaxa(),
-    "update_taxon": new UpdateTaxon(),
-    "get_taxa_autocompletion": new GetTaxaAutocompletion(),
-    "make_synonym_of": new MakeSynonymOf(),
-    "get_all_families": new GetAllFamilies(),
-    "get_taxon_rank_choices": new getTaxonRankChoices(),
-    "update_observation_dates": new UpdateObservationDatesEndpoint(),
-    "create_new_taxon": new CreateNewTaxon()
+    action(api_manager: APIManager) {
+        return api_manager.get([this.external_endpoint]);
+    }
+}
+
+class GetIntroducedChoices implements APIEndpoint {
+    external_endpoint = "introduced";
+    unique_identifier = "introduced";
+
+    action(api_manager: APIManager) {
+        return api_manager.get([this.external_endpoint]);
+    }
+}
+
+class GetLifeCycleChoices implements APIEndpoint {
+    external_endpoint = "life_cycles";
+    unique_identifier = "life_cycle";
+
+    action(api_manager: APIManager) {
+        return api_manager.get([this.external_endpoint]);
+    }
+}
+
+const exported_taxon_endpoints = [
+    new GetTaxa(),
+    new GetTaxon(),
+    new GetPrimaryChecklistTaxa(),
+    new GetChecklistTaxa(),
+    new GetGenusTaxa(),
+    new GetFamilyTaxa(),
+    new UpdateTaxon(),
+    new GetTaxaAutocompletion(),
+    new MakeSynonymOf(),
+    new GetAllFamilies(),
+    new getTaxonRankChoices(),
+    new UpdateObservationDatesEndpoint(),
+    new CreateNewTaxon(),
+    new GetEndemicChoices(),
+    new GetIntroducedChoices(),
+    new GetLifeCycleChoices()
+];
+
+
+export {
+    GroupBy, Taxon, TaxonList, loadTaxaFromAPIData,
+    exported_taxon_endpoints,
+    CreateNewTaxon, GetTaxaAutocompletion, GetAllFamilies,
+    GetTaxon, GetLifeCycleChoices, GetEndemicChoices,
+    GetIntroducedChoices, GetPrimaryChecklistTaxa,
+    GetGenusTaxa, GetFamilyTaxa, MakeSynonymOf, UpdateTaxon,
+    GetChecklistTaxa
 };
 
-
-export {Taxon, TaxonList, GroupBy, loadTaxaFromAPIData, exported_taxon_endpoints}
-export type { GroupedTaxa, GetTaxon };
+export type { GroupedTaxa };

@@ -7,4 +7,4 @@ type selectedFieldsOptions = {
     last_observation_date: boolean
 }
 
-export type {selectedFieldsOptions}
+export type { selectedFieldsOptions }

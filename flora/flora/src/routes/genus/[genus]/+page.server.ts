@@ -1,15 +1,15 @@
-import { APIManager } from "../../../util/api";
 import { env } from '$env/dynamic/private';
-import {call} from "../../../util/local_api_dispatch";
-import { exported_taxon_endpoints } from "../../../data_classes/taxon";
+import { GetGenusTaxa } from '../../../data_classes/taxon';
+import { APIManager } from "../../../util/api";
 
 export async function load({ params }) {
-    let api_manager = new APIManager(env.API_ENDPOINT);
+    const api_manager = new APIManager(env.API_ENDPOINT);
 
-    let genus = params.genus;
+    const genus = params.genus;
+    const genus_taxa_endpoint = new GetGenusTaxa();
 
     return {
         genus: genus,
-        taxon_data: (await call(api_manager, {genus: genus}, exported_taxon_endpoints.get_genus_taxa)),
+        taxon_data: (await genus_taxa_endpoint.action(api_manager, { genus: genus })).data,
     }
 }

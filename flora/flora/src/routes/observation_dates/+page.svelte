@@ -5,11 +5,11 @@
 
     let taxa: MinimalTaxonType[] = data.taxon_data;
 
-    let first_years: {[key: number]: MinimalTaxonType[];} = {};
-    let last_years: {[key: number]: MinimalTaxonType[];} = {};
+    let first_years: { [key: number]: MinimalTaxonType[] } = {};
+    let last_years: { [key: number]: MinimalTaxonType[] } = {};
 
     function getYear(datestr: string) {
-        return parseInt(datestr.split('-')[0])
+        return parseInt(datestr.split("-")[0]);
     }
 
     taxa.forEach((taxon) => {
@@ -27,38 +27,37 @@
             }
             last_years[last_year].push(taxon);
         }
-
     });
-
 </script>
 
 <article>
     <details>
         <summary>First observed on</summary>
         {#each Object.keys(first_years) as first_year}
-        <h4>{first_year}</h4>
-        <ul>
-            {#each first_years[parseInt(first_year)].sort((a, b) => ((a.first_observation_date.date) > (b.first_observation_date.date)) ? 1 : -1) as taxon}
-            <li>{taxon.first_observation_date.date}: {taxon.taxon_name}</li>
-            {/each}
-        </ul>
+            <h4>{first_year}</h4>
+            <ul>
+                {#each first_years[parseInt(first_year)].sort( (a, b) => (a.first_observation_date.date > b.first_observation_date.date ? 1 : -1) ) as taxon}
+                    <li>
+                        {taxon.first_observation_date.date}: {taxon.taxon_name}
+                    </li>
+                {/each}
+            </ul>
         {/each}
     </details>
-
 </article>
-
 
 <article>
     <details>
         <summary>Last observed on</summary>
         {#each Object.keys(last_years) as last_year}
-        <h4>{last_year}</h4>
-        <ul>
-            {#each last_years[parseInt(last_year)].sort((a, b) => ((a.last_observation_date.date) > (b.last_observation_date.date)) ? 1 : -1) as taxon}
-            <li>{taxon.last_observation_date.date}: {taxon.taxon_name}</li>
-            {/each}
-        </ul>
+            <h4>{last_year}</h4>
+            <ul>
+                {#each last_years[parseInt(last_year)].sort( (a, b) => (a.last_observation_date.date > b.last_observation_date.date ? 1 : -1) ) as taxon}
+                    <li>
+                        {taxon.last_observation_date.date}: {taxon.taxon_name}
+                    </li>
+                {/each}
+            </ul>
         {/each}
     </details>
-    
 </article>

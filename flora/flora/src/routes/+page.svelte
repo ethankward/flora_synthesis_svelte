@@ -1,6 +1,5 @@
 <script lang="ts">
     export let data;
-
 </script>
 
 <p>what is this</p>
@@ -13,5 +12,3 @@
         <small><a href="/family/{family.family}">{family.family}</a></small>
     {/each}
 </article>
-
-<p>create new taxon</p>

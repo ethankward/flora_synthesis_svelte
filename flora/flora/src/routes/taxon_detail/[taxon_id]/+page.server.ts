@@ -1,24 +1,28 @@
-import { APIManager } from "../../../util/api";
-import {call} from "../../../util/local_api_dispatch";
-import {exported_taxon_endpoints} from "../../../data_classes/taxon";
-import { life_cycle_exported_endpoints } from "../../../data_classes/life_cycle";
-import { endemic_exported_endpoints } from "../../../data_classes/endemic";
-import { introduced_exported_endpoints } from "../../../data_classes/introduced";
-import { checklist_records_exported_endpoints } from "../../../data_classes/checklist_record";
 import { env } from '$env/dynamic/private';
 
-let api_manager = new APIManager(env.API_ENDPOINT);
+import { APIManager } from "../../../util/api";
+
+import { GetTaxonChecklistRecords } from '../../../data_classes/checklist_record';
+import { GetEndemicChoices, GetIntroducedChoices, GetLifeCycleChoices, GetTaxon } from '../../../data_classes/taxon';
 
 
 export async function load({ params }) {
-    let taxon_id = parseInt(params.taxon_id);
+    const apiManager = new APIManager(env.API_ENDPOINT);
+
+    const taxonID = parseInt(params.taxon_id);
+
+    const getTaxonEndpoint = new GetTaxon();
+    const getLifecycleChoicesEndpoint = new GetLifeCycleChoices();
+    const getIntroducedEndpoint = new GetIntroducedChoices();
+    const getEndemicEndpoint = new GetEndemicChoices();
+    const getTaxonChecklistRecordsEndpoint = new GetTaxonChecklistRecords();
 
     return {
-        taxon_id: taxon_id,
-        taxon_data: (await call(api_manager, {taxon_id: taxon_id}, exported_taxon_endpoints.get_taxon)),
-        life_cycle_data: (await call(api_manager, {}, life_cycle_exported_endpoints.get_life_cycles)),
-        endemic_data: (await call(api_manager, {}, endemic_exported_endpoints.get_endemic_choices)),
-        introduced_data: (await call(api_manager, {}, introduced_exported_endpoints.get_introduced_choices)),
-        checklist_records: (await call(api_manager, {taxon_id: taxon_id}, checklist_records_exported_endpoints.get_taxon_checklist_records))
+        taxon_id: taxonID,
+        taxon_data: (await getTaxonEndpoint.action(apiManager, { taxon_id: taxonID })).data,
+        life_cycle_data: (await getLifecycleChoicesEndpoint.action(apiManager)).data,
+        endemic_data: (await getEndemicEndpoint.action(apiManager)).data,
+        introduced_data: (await getIntroducedEndpoint.action(apiManager)).data,
+        checklist_records: (await getTaxonChecklistRecordsEndpoint.action(apiManager, { taxon_id: taxonID })).data
     }
 }

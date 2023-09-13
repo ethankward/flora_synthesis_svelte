@@ -1,5 +1,5 @@
-import type { Handle } from "@sveltejs/kit";
 import { HTTP_AUTH_LOGIN } from "$env/static/private";
+import type { Handle } from "@sveltejs/kit";
 
 export const handle: Handle = async ({ event, resolve }) => {
 

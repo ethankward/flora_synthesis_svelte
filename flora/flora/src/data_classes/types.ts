@@ -17,6 +17,11 @@ type ChecklistStaleRecordCountType = {
     stale_record_count: number
 }
 
+type TaxonNameType = {
+    id: number,
+    taxon_name: string
+}
+
 type ChecklistTaxonType = {
     id: number,
     taxon_name: string,
@@ -28,14 +33,6 @@ type ChecklistTaxonType = {
     all_mapped_taxa: TaxonNameType[],
     primary_checklist: boolean
 }
-
-
-
-type TaxonNameType = {
-    id: number,
-    taxon_name: string
-}
-
 
 type ObservationDateType = {
     date: string,
@@ -127,16 +124,6 @@ type IntroducedType = {
 }
 
 export type {
-    ChecklistType,
-    ChecklistStaleRecordCountType,
-    ChecklistTaxonType, 
-    TaxonNameType, 
-    TaxonType, 
-    MinimalTaxonType, 
-    ChecklistRecordType, 
-    TaxonSynonymType, 
-    EndemicType, 
-    LifeCycleType, 
-    IntroducedType,
-    ObservationDateType
-}
+    ChecklistRecordType, ChecklistStaleRecordCountType,
+    ChecklistTaxonType, ChecklistType, EndemicType, IntroducedType, LifeCycleType, MinimalTaxonType, ObservationDateType, TaxonNameType, TaxonSynonymType, TaxonType
+};
