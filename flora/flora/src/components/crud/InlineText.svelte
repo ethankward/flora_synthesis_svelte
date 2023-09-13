@@ -42,9 +42,3 @@
 <form class:hide={!active} on:change={handleOnSubmit} id={id}>
     <input type="text" bind:value aria-invalid={submission_invalid}/>
 </form>
-
-<style>
-    .hide {
-        display: none !important;
-    }
-</style>

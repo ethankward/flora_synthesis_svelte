@@ -340,9 +340,3 @@
         </details>
     </div>
 </article>
-
-<style>
-    .hide {
-        display: none !important;
-    }
-</style>

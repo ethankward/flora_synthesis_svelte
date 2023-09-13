@@ -52,9 +52,3 @@
         {/each}
     </select>
 </form>
-
-<style>
-    .hide {
-        display: none !important;
-    }
-</style>

@@ -17,9 +17,3 @@
 <div class:hide={list}>
     <TaxaTable grouped_checklist_taxa={grouped_checklist_taxa} selectedFieldsOptions={selectedFieldsOptions}/>
 </div>
-
-<style>
-    .hide {
-        display: none !important;
-    }
-</style>

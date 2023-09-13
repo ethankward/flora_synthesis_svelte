@@ -98,9 +98,3 @@
     </ul>
     
 </div>
-
-<style>
-    .hide {
-        display: none !important;
-    }
-</style>

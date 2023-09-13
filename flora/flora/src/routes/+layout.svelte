@@ -58,3 +58,23 @@
       <slot />
 
 </main>
+
+
+<style>
+  :global(.error) {
+      background-color: red;
+  }
+  :global(.success) {
+      background-color: green;
+  }
+  :global(.fake-link) {
+    color: #1095c1;
+    cursor: pointer;
+  }
+  :global(.fake-link:hover) {
+      text-decoration: underline;
+  }
+  :global(.hide) {
+        display: none !important;
+    }
+</style>

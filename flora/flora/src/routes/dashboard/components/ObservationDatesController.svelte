@@ -29,13 +29,3 @@
     Update
     {/if}
 </button>
-
-
-<style>
-    .error {
-        background-color: red;
-    }
-    .success {
-        background-color: green;
-    }
-</style>
