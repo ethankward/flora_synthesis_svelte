@@ -100,13 +100,19 @@
 
     function setSelectedChecklist() {
         if (formProperties.selectedChecklistID !== -1) {
-            formProperties.selectedChecklist = checklists.checklists[formProperties.selectedChecklistID];
+            formProperties.selectedChecklist =
+                checklists.checklists[formProperties.selectedChecklistID];
+        } else {
+            formProperties.selectedChecklist = undefined;
         }
     }
 
     function setCompareToChecklist() {
         if (formProperties.comparisonChecklistID !== -1) {
-            formProperties.comparisonChecklist = checklists.checklists[formProperties.comparisonChecklistID];
+            formProperties.comparisonChecklist =
+                checklists.checklists[formProperties.comparisonChecklistID];
+        } else {
+            formProperties.comparisonChecklist = undefined;
         }
     }
 
@@ -145,7 +151,6 @@
             );
         }
     }
-
 </script>
 
 <svelte:head>
@@ -162,7 +167,7 @@
                     bind:value={formProperties.selectedChecklistID}
                     on:change={handleChecklistChange}
                 >
-                    <option value="-1" />
+                    <option value={-1} />
                     {#each Object.values(checklists.checklists) as checklist}
                         <option value={checklist.id}
                             >{checklist.checklist_name}</option
@@ -178,7 +183,7 @@
                     bind:value={formProperties.comparisonChecklistID}
                     on:change={handleChecklistChange}
                 >
-                    <option value="-1" />
+                    <option value={-1} />
                     {#each Object.values(checklists.checklists) as checklist}
                         <option value={checklist.id}
                             >{checklist.checklist_name}</option
