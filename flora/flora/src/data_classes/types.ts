@@ -145,6 +145,7 @@ type PersonalCollectionRecordType = {
     habitat?: string,
     associated_collectors?: string,
     associated_species?: string,
+    identification_notes?: string
 }
 
 export type {

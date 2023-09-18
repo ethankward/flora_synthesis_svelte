@@ -121,6 +121,12 @@
             Habitat: <input type="text" bind:value={data.habitat} />
         </label>
     </div>
+    <div class="grid">
+        <label>
+            Identification notes:
+            <textarea bind:value={data.identification_notes} />
+        </label>
+    </div>
     <div id="specific_taxon_div">
         Specific taxon determination:
         {#if create_or_edit == "edit"}
