@@ -27,6 +27,12 @@
         <strong><a href="/observation_dates">Observation dates</a></strong>
       </li>
       <li><strong>Collectors</strong></li>
+      <li>
+        <strong
+          ><a href="/personal_collection_records">Personal collection records</a
+          ></strong
+        >
+      </li>
     </ul>
     <ul>
       <li>
@@ -34,6 +40,7 @@
           <TaxonNameAutocompletion
             bind:selectedItem={selectedTaxon}
             onChangeFunction={goToTaxon}
+            placeholder_text={"Search taxa"}
           />
         </div>
       </li>
@@ -42,10 +49,21 @@
 </div>
 
 <main class="container-fluid" data-theme="dark">
-  <slot />
+  <div class="content-div">
+    <slot />
+  </div>
 </main>
 
 <style>
+  main {
+    background-color: rgb(246, 246, 246);
+    border: 1px solid rgb(207, 221, 228);
+  }
+
+  .content-div {
+    margin: 50px;
+  }
+
   .nav-container {
     background-color: #20303f;
   }

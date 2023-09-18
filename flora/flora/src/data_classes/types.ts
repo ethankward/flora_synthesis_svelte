@@ -123,7 +123,34 @@ type IntroducedType = {
     display: string
 }
 
+type PersonalCollectionRecordType = {
+    id?: number,
+
+    collection_number?: number
+    date?: string,
+    family?: string,
+    status?: string,
+    status_display?: string,
+    preliminary_taxon?: string,
+
+    time?: string,
+    inat_record_id?: number,
+    seinet_record_id?: number,
+    specific_taxon?: number | null,
+    specific_taxon_name?: string,
+    latitude?: number,
+    longitude?: number,
+    elevation_ft?: number,
+    locality?: string,
+    habitat?: string,
+    associated_collectors?: string,
+    associated_species?: string,
+}
+
 export type {
     ChecklistRecordType, ChecklistStaleRecordCountType,
-    ChecklistTaxonType, ChecklistType, EndemicType, IntroducedType, LifeCycleType, MinimalTaxonType, ObservationDateType, TaxonNameType, TaxonSynonymType, TaxonType
+    ChecklistTaxonType, ChecklistType, EndemicType,
+    IntroducedType, LifeCycleType, MinimalTaxonType,
+    ObservationDateType, TaxonNameType, TaxonSynonymType,
+    TaxonType, PersonalCollectionRecordType
 };

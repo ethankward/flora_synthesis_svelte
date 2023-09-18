@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { TaxonType } from "../../../data_classes/types";
+    import FNALink from "../../../components/common/FNALink.svelte";
 
     export let data;
 
@@ -16,9 +17,14 @@
     });
 </script>
 
+<svelte:head>
+    <title>{data.family}</title>
+</svelte:head>
+
 <article>
     <header>
         Family: <mark>{data.family}</mark>
+        <FNALink target={data.family} />
     </header>
     <ul>
         {#each Object.keys(genus_groups) as genus}

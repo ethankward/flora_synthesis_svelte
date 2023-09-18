@@ -1,12 +1,18 @@
 <script lang="ts">
+	import FakeLink from "../../../components/common/FakeLink.svelte";
 	import { ChecklistRecordList } from "../../../data_classes/checklist_record";
 	import {
 		MakeSynonymOf,
 		Taxon,
 		UpdateTaxon,
 	} from "../../../data_classes/taxon";
-	import FakeLink from "../../../components/common/FakeLink.svelte";
 	import type { TaxonNameType } from "../../../data_classes/types";
+
+	import FNALink from "../../../components/common/FNALink.svelte";
+	import InatLink from "../../../components/common/InatLink.svelte";
+	import SEINETLink from "../../../components/common/SEINETLink.svelte";
+	import SEINETMapLink from "../../../components/common/SEINETMapLink.svelte";
+	import POWOLink from "../../../components/common/POWOLink.svelte";
 
 	import TaxonNameAutocompletion from "../../../components/common/TaxonNameAutocompletion.svelte";
 	import TaxonNameLink from "../../../components/common/TaxonNameLink.svelte";
@@ -70,20 +76,14 @@
 		>
 
 		{#if taxon.seinet_id}
-			[<a
-				href="https://swbiodiversity.org/seinet/taxa/index.php?taxon={taxon.seinet_id}"
-				target="_blank">SEINet</a
-			>] [<a
-				href="https://swbiodiversity.org/seinet/collections/map/googlemap.php?taxa={taxon.seinet_id}"
-				target="_blank">Map</a
-			>]
+			<SEINETLink seinet_id={taxon.seinet_id} />
+			<SEINETMapLink seinet_id={taxon.seinet_id} />
 		{/if}
 		{#if taxon.inat_id}
-			[<a
-				href="https://www.inaturalist.org/taxa/{taxon.inat_id}"
-				target="_blank">iNat</a
-			>]
+			<InatLink inat_id={taxon.inat_id} />
 		{/if}
+		<FNALink target={taxon.taxon_name} />
+		<POWOLink taxon_name={taxon.taxon_name} />
 		{#if taxon.primary_taxon}
 			<ins>Known from Rincons</ins>
 		{:else}

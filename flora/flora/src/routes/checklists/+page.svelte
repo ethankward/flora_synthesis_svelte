@@ -43,6 +43,7 @@
         common_taxa: {} as GroupedTaxa,
         taxa_diff_1: {} as GroupedTaxa,
         taxa_diff_2: {} as GroupedTaxa,
+        displayAllRanks: true,
     };
 
     class TaxonManager {
@@ -95,6 +96,10 @@
         result = result.filterByTaxonNameContains(
             formProperties.taxonNameFilter
         );
+        console.log(formProperties.displayAllRanks);
+        if (!formProperties.displayAllRanks) {
+            result = result.filterSpeciesOnly();
+        }
         return result;
     }
 
@@ -248,6 +253,7 @@
                         bind:group={formProperties.displayAsList}
                         name="list_display"
                         value={true}
+                        on:change={handleChecklistChange}
                     />
                     Display as list
                 </label>
@@ -257,8 +263,29 @@
                         bind:group={formProperties.displayAsList}
                         name="table_display"
                         value={false}
+                        on:change={handleChecklistChange}
                     />
                     Display as table
+                </label>
+                <label>
+                    <input
+                        type="radio"
+                        bind:group={formProperties.displayAllRanks}
+                        name="all_ranks_display"
+                        value={true}
+                        on:change={handleChecklistChange}
+                    />
+                    All ranks
+                </label>
+                <label>
+                    <input
+                        type="radio"
+                        bind:group={formProperties.displayAllRanks}
+                        name="species_only_display"
+                        value={false}
+                        on:change={handleChecklistChange}
+                    />
+                    Species only
                 </label>
             </div>
             <hr />

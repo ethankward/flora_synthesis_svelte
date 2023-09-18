@@ -21,6 +21,13 @@ class ChecklistList {
             (checklist) => ({ value: checklist.id.toString(), display: checklist.checklist_name }));
     }
 
+    filterByType(checklist_type: string) {
+        return new ChecklistList(
+            Object.values(this.checklists).filter(
+                (checklist) => checklist.checklist_type === checklist_type
+            )
+        );
+    }
 }
 
 class GetChecklists implements APIEndpoint {
@@ -29,6 +36,15 @@ class GetChecklists implements APIEndpoint {
 
     action(api_manager: APIManager) {
         return api_manager.get([this.external_endpoint]);
+    }
+}
+
+class GetChecklist implements APIEndpoint {
+    external_endpoint = "checklists";
+    unique_identifier = "get_checklist";
+
+    action(api_manager: APIManager, data: { checklist_id: number }) {
+        return api_manager.get([this.external_endpoint, data.checklist_id.toString()]);
     }
 }
 
@@ -86,6 +102,6 @@ const checklist_exported_endpoints = [
 
 export {
     ChecklistList, checklist_exported_endpoints,
-    GetChecklists, GetStaleRecordCounts, UpdateChecklist, RetrieveChecklist
+    GetChecklists, GetStaleRecordCounts, UpdateChecklist, RetrieveChecklist, GetChecklist
 };
 
