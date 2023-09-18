@@ -93,6 +93,11 @@
                         Description: {personal_collection_record.description}
                     </li>
                 {/if}
+                {#if personal_collection_record.land_ownership}
+                    <li>
+                        Land ownership: {personal_collection_record.land_ownership}
+                    </li>
+                {/if}
                 {#if personal_collection_record.identification_notes}
                     <li>
                         Identification notes: <pre>{personal_collection_record.identification_notes}</pre>
