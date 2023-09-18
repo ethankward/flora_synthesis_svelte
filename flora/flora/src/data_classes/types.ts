@@ -9,7 +9,9 @@ type ChecklistType = {
     locality: string,
     latest_date_retrieved?: string,
     earliest_year?: string,
-    primary_checklist: boolean
+    primary_checklist: boolean,
+    citation: string,
+    citation_url: string
 }
 
 type ChecklistStaleRecordCountType = {
