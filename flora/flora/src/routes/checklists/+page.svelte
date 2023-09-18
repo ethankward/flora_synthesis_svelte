@@ -7,9 +7,10 @@
         loadTaxaFromAPIData,
     } from "../../data_classes/taxon";
 
+    import { onMount } from 'svelte';
+    import { GetChecklistTaxa } from "../../data_classes/taxon";
     import type { ChecklistType } from "../../data_classes/types";
     import type { selectedFieldsOptions } from "../../routes/checklists/types";
-    import { GetChecklistTaxa } from "../../data_classes/taxon";
 
     import TaxaListOrTable from "../../routes/checklists/components/TaxaListOrTable.svelte";
 
@@ -19,6 +20,7 @@
 
     type checklistTaxaType = { [key: number]: TaxonList };
     let checklists: ChecklistList = new ChecklistList(data.checklist_data);
+    let primary_checklist_id = data.primary_checklist_id;
 
     let formProperties = {
         selectedChecklistID: -1 as number,
@@ -45,6 +47,14 @@
         taxa_diff_2: {} as GroupedTaxa,
         displayAllRanks: true,
     };
+
+    onMount(async () => {
+        if (primary_checklist_id !== null) {
+            formProperties.selectedChecklistID = parseInt(primary_checklist_id);
+            primary_checklist_id = null;
+            await handleChecklistChange();
+        }
+    });
 
     class TaxonManager {
         canonical_taxa: checklistTaxaType;
