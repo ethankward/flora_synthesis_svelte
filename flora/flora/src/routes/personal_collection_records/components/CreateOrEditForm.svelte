@@ -91,14 +91,14 @@
         <label>
             Latitude: <input
                 type="number"
-                step="0.000000001"
+                step="0.000000000001"
                 bind:value={data.latitude}
             />
         </label>
         <label>
             Longitude: <input
                 type="number"
-                step="0.000000001"
+                step="0.000000000001"
                 bind:value={data.longitude}
             />
         </label>
@@ -111,12 +111,7 @@
         <label>
             Locality: <input type="text" bind:value={data.locality} />
         </label>
-        <label>
-            Associated species: <input
-                type="text"
-                bind:value={data.associated_species}
-            />
-        </label>
+
         <label>
             Habitat: <input type="text" bind:value={data.habitat} />
         </label>
@@ -126,22 +121,35 @@
     </div>
     <div class="grid">
         <label>
+            Associated species: <input
+                type="text"
+                bind:value={data.associated_species}
+            />
+        </label>
+        <label>
+            Land ownership: <input
+                type="text"
+                bind:value={data.land_ownership}
+            />
+        </label>
+    </div>
+    <div class="grid">
+        <label>
             Identification notes:
             <textarea bind:value={data.identification_notes} />
         </label>
     </div>
+
     <div id="specific_taxon_div">
         Specific taxon determination:
-        {#if create_or_edit == "edit"}
-            <div class="grid">
-                <TaxonNameAutocompletion
-                    placeholder_text={"Specific taxon"}
-                    bind:selectedItem={selectedSpecificTaxon}
-                    required={false}
-                    show_clear={true}
-                />
-            </div>
-        {/if}
+        <div class="grid">
+            <TaxonNameAutocompletion
+                placeholder_text={"Specific taxon"}
+                bind:selectedItem={selectedSpecificTaxon}
+                required={false}
+                show_clear={true}
+            />
+        </div>
     </div>
 
     <input type="submit" value={submit_text} />

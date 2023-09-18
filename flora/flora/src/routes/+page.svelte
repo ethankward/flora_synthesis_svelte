@@ -2,8 +2,10 @@
     export let data;
 </script>
 
-<p>what is this</p>
-<p>checklists summary</p>
+<article>
+    <h4>Data sources</h4>
+    <p>This website uses data from the following sources:</p>
+</article>
 
 <article data-sveltekit-preload-data="tap">
     <h4>Families</h4>

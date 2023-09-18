@@ -146,7 +146,8 @@ type PersonalCollectionRecordType = {
     associated_collectors?: string,
     associated_species?: string,
     identification_notes?: string,
-    description?: string
+    description?: string,
+    land_ownership?: string
 }
 
 export type {
