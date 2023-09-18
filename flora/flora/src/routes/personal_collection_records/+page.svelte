@@ -88,6 +88,11 @@
                         Associated species: {personal_collection_record.associated_species}
                     </li>
                 {/if}
+                {#if personal_collection_record.description}
+                    <li>
+                        Description: {personal_collection_record.description}
+                    </li>
+                {/if}
                 {#if personal_collection_record.identification_notes}
                     <li>
                         Identification notes: <pre>{personal_collection_record.identification_notes}</pre>

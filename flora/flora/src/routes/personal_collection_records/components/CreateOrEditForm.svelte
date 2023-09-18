@@ -120,6 +120,9 @@
         <label>
             Habitat: <input type="text" bind:value={data.habitat} />
         </label>
+        <label>
+            Description: <input type="text" bind:value={data.description} />
+        </label>
     </div>
     <div class="grid">
         <label>
