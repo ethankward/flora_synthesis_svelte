@@ -12,16 +12,26 @@
         return parseInt(datestr.split("-")[0]);
     }
 
+    function compareDates(d1?: string, d2?: string) {
+        if (d1 === undefined || d2 === undefined) {
+            return 0;
+        }
+        if (d1 > d2) {
+            return 1;
+        }
+        return -1;
+    }
+
     taxa.forEach((taxon) => {
         if (taxon.first_observation_date) {
-            let first_year = getYear(taxon.first_observation_date.date);
+            let first_year = getYear(taxon.first_observation_date);
             if (!(first_year in first_years)) {
                 first_years[first_year] = [];
             }
             first_years[first_year].push(taxon);
         }
         if (taxon.last_observation_date) {
-            let last_year = getYear(taxon.last_observation_date.date);
+            let last_year = getYear(taxon.last_observation_date);
             if (!(last_year in last_years)) {
                 last_years[last_year] = [];
             }
@@ -36,9 +46,9 @@
         {#each Object.keys(first_years) as first_year}
             <h4>{first_year}</h4>
             <ul>
-                {#each first_years[parseInt(first_year)].sort( (a, b) => (a.first_observation_date.date > b.first_observation_date.date ? 1 : -1) ) as taxon}
+                {#each first_years[parseInt(first_year)].sort( (a, b) => compareDates(a.first_observation_date, b.first_observation_date) ) as taxon}
                     <li>
-                        {taxon.first_observation_date.date}: {taxon.taxon_name}
+                        {taxon.first_observation_date}: {taxon.taxon_name}
                     </li>
                 {/each}
             </ul>
@@ -52,9 +62,9 @@
         {#each Object.keys(last_years) as last_year}
             <h4>{last_year}</h4>
             <ul>
-                {#each last_years[parseInt(last_year)].sort( (a, b) => (a.last_observation_date.date > b.last_observation_date.date ? 1 : -1) ) as taxon}
+                {#each last_years[parseInt(last_year)].sort( (a, b) => compareDates(a.last_observation_date, b.last_observation_date) ) as taxon}
                     <li>
-                        {taxon.last_observation_date.date}: {taxon.taxon_name}
+                        {taxon.last_observation_date}: {taxon.taxon_name}
                     </li>
                 {/each}
             </ul>

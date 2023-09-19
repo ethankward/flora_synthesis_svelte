@@ -1,4 +1,4 @@
-import type { ChecklistTaxonType, ObservationDateType, TaxonNameType, TaxonType } from "../data_classes/types";
+import type { ChecklistTaxonType, TaxonNameType, TaxonType } from "../data_classes/types";
 import type { ValueDisplayType } from "../types";
 import type { APIEndpoint, APIManager } from "../util/api";
 import axios from "axios";
@@ -29,8 +29,8 @@ class Taxon {
     endemic_display?: string;
     life_cycle?: string;
     life_cycle_display?: string;
-    first_observation_date?: ObservationDateType
-    last_observation_date?: ObservationDateType
+    first_observation_date?: string
+    last_observation_date?: string
     primary_taxon: boolean;
 
     constructor(taxon_api_data?: TaxonType, checklist_taxon_api_data?: ChecklistTaxonType) {
