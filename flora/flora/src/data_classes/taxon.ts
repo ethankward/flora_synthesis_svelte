@@ -31,6 +31,8 @@ class Taxon {
     life_cycle_display?: string;
     first_observation_date?: string
     last_observation_date?: string
+    first_observation_date_url?: string
+    last_observation_date_url?: string
     primary_taxon: boolean;
 
     constructor(taxon_api_data?: TaxonType, checklist_taxon_api_data?: ChecklistTaxonType) {
@@ -55,6 +57,8 @@ class Taxon {
             this.life_cycle_display = taxon_api_data.life_cycle_display;
             this.first_observation_date = taxon_api_data.first_observation_date;
             this.last_observation_date = taxon_api_data.last_observation_date;
+            this.first_observation_date_url = taxon_api_data.first_observation_date_url;
+            this.last_observation_date_url = taxon_api_data.last_observation_date_url;
             this.primary_taxon = taxon_api_data.taxon_checklist_taxa.some((checklist_taxon) => checklist_taxon.primary_checklist)
 
         } else {

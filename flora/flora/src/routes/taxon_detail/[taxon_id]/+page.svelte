@@ -220,8 +220,8 @@
 		{#if taxon.first_observation_date}
 			<li>
 				First observed in Rincons on <a
-					href={taxon.first_observation_date.url}
-					>{taxon.first_observation_date.date}</a
+					href={taxon.first_observation_date_url}
+					>{taxon.first_observation_date}</a
 				>
 			</li>
 		{/if}
@@ -229,8 +229,8 @@
 		{#if taxon.last_observation_date}
 			<li>
 				Last observed in Rincons on <a
-					href={taxon.last_observation_date.url}
-					>{taxon.last_observation_date.date}</a
+					href={taxon.last_observation_date_url}
+					>{taxon.last_observation_date}</a
 				>
 			</li>
 		{/if}

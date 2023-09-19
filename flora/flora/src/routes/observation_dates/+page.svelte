@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { MinimalTaxonType } from "../../data_classes/types";
+    import TaxonNameLink from "../../components/common/TaxonNameLink.svelte";
 
     export let data;
 
@@ -48,7 +49,10 @@
             <ul>
                 {#each first_years[parseInt(first_year)].sort( (a, b) => compareDates(a.first_observation_date, b.first_observation_date) ) as taxon}
                     <li>
-                        {taxon.first_observation_date}: {taxon.taxon_name}
+                        {taxon.first_observation_date}: <TaxonNameLink
+                            {taxon}
+                        />
+                        <a href={taxon.first_observation_date_url}>→</a>
                     </li>
                 {/each}
             </ul>
@@ -64,7 +68,8 @@
             <ul>
                 {#each last_years[parseInt(last_year)].sort( (a, b) => compareDates(a.last_observation_date, b.last_observation_date) ) as taxon}
                     <li>
-                        {taxon.last_observation_date}: {taxon.taxon_name}
+                        {taxon.last_observation_date}: <TaxonNameLink {taxon} />
+                        <a href={taxon.last_observation_date_url}>→</a>
                     </li>
                 {/each}
             </ul>

@@ -61,8 +61,10 @@ type TaxonType = {
     endemic_display: string,
     life_cycle: string
     life_cycle_display: string,
-    first_observation_date: string,
-    last_observation_date: string,
+    first_observation_date?: string,
+    first_observation_date_url?: string,
+    last_observation_date?: string,
+    last_observation_date_url?: string
 }
 
 
@@ -78,7 +80,9 @@ type MinimalTaxonType = {
     seinet_id?: number,
     inat_id?: number,
     first_observation_date?: string,
+    first_observation_date_url?: string,
     last_observation_date?: string,
+    last_observation_date_url?: string
 }
 
 
