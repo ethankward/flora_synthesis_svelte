@@ -354,6 +354,12 @@ class UpdateObservationDatesEndpoint implements APIEndpoint {
     action(api_manager: APIManager) {
         return api_manager.get([this.external_endpoint]);
     }
+
+    async callExternalEndpoint(): AxiosPromise {
+        const url = "/api/externalAPIInterface/?endpoint_identifier=" + this.unique_identifier;
+        return axios.post(url, {});
+    }
+
 }
 
 class getTaxonRankChoices implements APIEndpoint {
@@ -429,7 +435,7 @@ const exported_taxon_endpoints = [
     new CreateNewTaxon(),
     new GetEndemicChoices(),
     new GetIntroducedChoices(),
-    new GetLifeCycleChoices()
+    new GetLifeCycleChoices(),
 ];
 
 
@@ -440,7 +446,7 @@ export {
     GetTaxon, GetLifeCycleChoices, GetEndemicChoices,
     GetIntroducedChoices, GetPrimaryChecklistTaxa,
     GetGenusTaxa, GetFamilyTaxa, MakeSynonymOf, UpdateTaxon,
-    GetChecklistTaxa
+    GetChecklistTaxa, UpdateObservationDatesEndpoint
 };
 
 export type { GroupedTaxa };
