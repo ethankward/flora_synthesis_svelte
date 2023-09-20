@@ -24,19 +24,21 @@
     }
 
     taxa.forEach((taxon) => {
-        if (taxon.first_observation_date) {
-            let first_year = getYear(taxon.first_observation_date);
-            if (!(first_year in first_years)) {
-                first_years[first_year] = [];
+        if (taxon.rank == "S") {
+            if (taxon.first_observation_date) {
+                let first_year = getYear(taxon.first_observation_date);
+                if (!(first_year in first_years)) {
+                    first_years[first_year] = [];
+                }
+                first_years[first_year].push(taxon);
             }
-            first_years[first_year].push(taxon);
-        }
-        if (taxon.last_observation_date) {
-            let last_year = getYear(taxon.last_observation_date);
-            if (!(last_year in last_years)) {
-                last_years[last_year] = [];
+            if (taxon.last_observation_date) {
+                let last_year = getYear(taxon.last_observation_date);
+                if (!(last_year in last_years)) {
+                    last_years[last_year] = [];
+                }
+                last_years[last_year].push(taxon);
             }
-            last_years[last_year].push(taxon);
         }
     });
 </script>
