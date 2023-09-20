@@ -17,6 +17,9 @@
     }
 </script>
 
+<svelte:head>
+    <title>Create new taxon</title>
+</svelte:head>
 <article>
     <header>Create New Taxon</header>
 

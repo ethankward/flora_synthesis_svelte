@@ -41,6 +41,10 @@
     });
 </script>
 
+<svelte:head>
+    <title>Observation dates</title>
+</svelte:head>
+
 <article>
     <details>
         <summary>First observed on</summary>

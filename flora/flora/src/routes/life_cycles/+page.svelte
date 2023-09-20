@@ -20,6 +20,10 @@
     });
 </script>
 
+<svelte:head>
+    <title>Life cycles</title>
+</svelte:head>
+
 {#each Object.keys(groups) as life_cycle_status_type}
     <article>
         <details>

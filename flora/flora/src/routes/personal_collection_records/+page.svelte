@@ -11,6 +11,10 @@
         data.personal_collection_record_data;
 </script>
 
+<svelte:head>
+    <title>Personal collection records</title>
+</svelte:head>
+
 <article>
     <details open>
         <summary>Add new record</summary>

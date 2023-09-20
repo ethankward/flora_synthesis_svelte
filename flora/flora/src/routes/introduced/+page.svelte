@@ -20,6 +20,10 @@
     });
 </script>
 
+<svelte:head>
+    <title>Introduced taxa</title>
+</svelte:head>
+
 {#each Object.keys(groups) as introduced_status_type}
     <article>
         <details>

@@ -8,6 +8,10 @@
         data.personal_collection_record;
 </script>
 
+<svelte:head>
+    <title>Edit record data</title>
+</svelte:head>
+
 <article>
     <header>Edit record data</header>
     <CreateOrEditForm

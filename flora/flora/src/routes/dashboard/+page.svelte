@@ -13,6 +13,10 @@
         data.stale_record_counts;
 </script>
 
+<svelte:head>
+    <title>Dashboard</title>
+</svelte:head>
+
 <article>
     <header>SEINet checklists</header>
     <ChecklistController

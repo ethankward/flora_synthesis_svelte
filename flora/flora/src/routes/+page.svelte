@@ -6,6 +6,10 @@
     const checklists: ChecklistType[] = data.checklists;
 </script>
 
+<svelte:head>
+    <title>Plants of the Rincon Mountains</title>
+</svelte:head>
+
 <article>
     <h4>Data sources</h4>
     <p>This website uses data from the following sources:</p>

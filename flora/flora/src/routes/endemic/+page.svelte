@@ -19,6 +19,10 @@
     });
 </script>
 
+<svelte:head>
+    <title>Endemic taxa</title>
+</svelte:head>
+
 {#each Object.keys(groups) as endemic_status_type}
     <article>
         <details>
