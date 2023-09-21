@@ -78,6 +78,7 @@
             <select bind:value={data.status}>
                 <option value="p">Personal collection</option>
                 <option value="h">Herbarium</option>
+                <option value="t">Thrown out</option>
             </select>
         </label>
     </div>

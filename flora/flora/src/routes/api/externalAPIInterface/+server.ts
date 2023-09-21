@@ -11,7 +11,7 @@ import { exported_pcr_endpoints } from "../../../data_classes/personal_collectio
 import { APIManager } from "../../../util/api";
 
 
-function execute(api_manager: APIManager, data: object, endpoint_identifier: string): AxiosPromise | undefined {
+function execute(api_manager: APIManager, data: any, endpoint_identifier: string): AxiosPromise | undefined {
     const all_endpoints = [
         ...taxon_synonym_exported_endpoints,
         ...checklist_record_note_exported_endpoints,
@@ -40,7 +40,6 @@ export async function POST({ request, url }) {
 
     const data = await request.json();
     const endpoint_identifier = url.searchParams.get("endpoint_identifier");
-    console.log(endpoint_identifier);
     if (!endpoint_identifier) {
         throw new Error("Something went wrong");
     }

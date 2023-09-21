@@ -6,13 +6,22 @@ import type { APIManager } from "./api";
 
 type allowedActions = "GET" | "POST" | "PATCH" | "PUT";
 
+interface APIEndpoint<DataType> {
+    external_endpoint: string;
+    unique_identifier: string;
+    getPath: (data: DataType) => string[];
+    action: (api_manager: APIManager, data: DataType) => AxiosPromise;
+    callExternal: (data?: DataType) => AxiosPromise;
+}
+
+
 function createNewEndpoint<DataType extends object>(
     action: allowedActions,
     external_endpoint: string,
     unique_identifier: string,
     create_path?: (data: DataType) => string[]
 ) {
-    class Endpoint {
+    class Endpoint implements APIEndpoint<DataType> {
         external_endpoint = external_endpoint;
         unique_identifier = unique_identifier;
 
@@ -40,7 +49,7 @@ function createNewEndpoint<DataType extends object>(
             }
         }
 
-        callExternal(data?: DataType): AxiosPromise {
+        callExternal(data?: DataType) {
             const url = "/api/externalAPIInterface/?endpoint_identifier=" + this.unique_identifier;
             return axios.post(url, data);
         }
