@@ -7,7 +7,7 @@
 
     async function submitCreateNewTaxon() {
         create_new_taxon_endpoint
-            .callExternalEndpoint({
+            .callExternal({
                 taxon_name: taxon_name,
                 taxon_family: taxon_family,
             })

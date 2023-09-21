@@ -1,4 +1,3 @@
-import type { AxiosPromise } from "axios";
 
 import axios from "axios";
 
@@ -16,7 +15,7 @@ class APIManager {
         this.api_url = new URL(api_url);
     }
 
-    getUrl(path: string[], params?: { [key: string]: string; }) {
+    getUrl(path: string[], params?: object) {
         const url = new URL(path.join('/'), this.api_url);
         if (params) {
             for (const [key, value] of Object.entries(params)) {
@@ -34,7 +33,7 @@ class APIManager {
 
     }
 
-    get(path: string[], params?: { [key: string]: string; }) {
+    get(path: string[], params?: object) {
         return axios.get(this.getUrl(path, params));
     }
 
@@ -52,13 +51,6 @@ class APIManager {
 
 }
 
-interface APIEndpoint {
-    external_endpoint: string;
-    unique_identifier: string;
-    action(api_manager: APIManager, data: object): AxiosPromise;
-}
-
 
 export { APIManager };
-export type { APIEndpoint };
 

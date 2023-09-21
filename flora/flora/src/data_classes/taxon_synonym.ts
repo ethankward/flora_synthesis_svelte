@@ -1,7 +1,6 @@
 import type { TaxonSynonymType } from "../data_classes/types";
-import type { APIEndpoint, APIManager } from "../util/api";
-import axios from "axios";
-import type { AxiosPromise } from "axios";
+import { createNewEndpoint } from "../util/api_util";
+
 
 
 class TaxonSynonymList {
@@ -17,56 +16,15 @@ class TaxonSynonymList {
 
 }
 
-type create_new_taxon_synonym_data_type = { taxon_id: number, synonym: string };
-
-class CreateNewTaxonSynonym implements APIEndpoint {
-    external_endpoint = "create_new_taxon_synonym";
-    unique_identifier = "create_new_taxon_synonym";
-
-    action(api_manager: APIManager, data: create_new_taxon_synonym_data_type) {
-        return api_manager.put({ taxon_id: data.taxon_id, synonym: data.synonym }, [this.external_endpoint]);
-    }
-
-    async callExternalEndpoint(data: create_new_taxon_synonym_data_type): AxiosPromise {
-        const url = "/api/externalAPIInterface/?endpoint_identifier=" + this.unique_identifier;
-        return axios.post(url, data);
-    }
-
-}
-
-type update_taxon_synonym_data_type = { synonym_id: number, synonym: string };
-
-class UpdateTaxonSynonym implements APIEndpoint {
-    external_endpoint = "update_taxon_synonym";
-    unique_identifier = "update_taxon_synonym";
-
-    action(api_manager: APIManager, data: update_taxon_synonym_data_type) {
-        return api_manager.post({ object_id: data.synonym_id, synonym: data.synonym }, [this.external_endpoint]);
-    }
-
-    async callExternalEndpoint(data: update_taxon_synonym_data_type): AxiosPromise {
-        const url = "/api/externalAPIInterface/?endpoint_identifier=" + this.unique_identifier;
-        return axios.post(url, data);
-    }
-}
-
-
-type delete_taxon_synonym_data_type = { synonym_id: number };
-
-class DeleteTaxonSynonym implements APIEndpoint {
-    external_endpoint = "delete_taxon_synonym";
-    unique_identifier = "delete_taxon_synonym";
-
-    action(api_manager: APIManager, data: delete_taxon_synonym_data_type) {
-        return api_manager.post({ object_id: data.synonym_id }, [this.external_endpoint])
-    }
-
-    async callExternalEndpoint(data: delete_taxon_synonym_data_type): AxiosPromise {
-        const url = "/api/externalAPIInterface/?endpoint_identifier=" + this.unique_identifier;
-        return axios.post(url, data);
-    }
-
-}
+const CreateNewTaxonSynonym = createNewEndpoint<{ taxon_id: string, synonym: string }>(
+    "PUT", "create_new_taxon_synonym", "create_new_taxon_synonym"
+)
+const UpdateTaxonSynonym = createNewEndpoint<{ object_id: string, synonym: string }>(
+    "POST", "update_taxon_synonym", "update_taxon_synonym"
+);
+const DeleteTaxonSynonym = createNewEndpoint<{ object_id: string }>(
+    "POST", "delete_taxon_synonym", "delete_taxon_synonym"
+);
 
 
 const taxon_synonym_exported_endpoints = [
@@ -76,7 +34,6 @@ const taxon_synonym_exported_endpoints = [
 ]
 
 export {
-    TaxonSynonymList, taxon_synonym_exported_endpoints,
-    CreateNewTaxonSynonym, UpdateTaxonSynonym, DeleteTaxonSynonym
+    CreateNewTaxonSynonym, DeleteTaxonSynonym, TaxonSynonymList, UpdateTaxonSynonym, taxon_synonym_exported_endpoints
 };
 

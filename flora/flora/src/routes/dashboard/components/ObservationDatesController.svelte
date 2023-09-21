@@ -11,7 +11,7 @@
         loading = true;
 
         update_endpoint
-            .callExternalEndpoint()
+            .callExternal()
             .then(() => {
                 invalid = false;
                 loading = false;

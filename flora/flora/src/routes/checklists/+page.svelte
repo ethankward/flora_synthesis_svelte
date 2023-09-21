@@ -66,7 +66,7 @@
         }
         async loadTaxonData(checklist_id: number) {
             return get_checklist_taxa_endpoint
-                .callExternalEndpoint({ checklist_id: checklist_id })
+                .callExternal({ checklist: checklist_id.toString() })
                 .then((response) => {
                     let [loaded_canonical_taxa, loaded_checklist_taxa] =
                         loadTaxaFromAPIData(response.data);

@@ -16,26 +16,28 @@
 
     let submit_text: string;
     let submit_url: string;
-    let endpoint: CreatePersonalCollectionRecord | EditPersonalCollectionRecord;
 
     if (create_or_edit == "create") {
         submit_text = "Create new record";
         submit_url = "/personal_collection_records";
-        endpoint = new CreatePersonalCollectionRecord();
     } else {
         submit_text = "Edit record";
         submit_url = "/personal_collection_records/" + record_id;
-        endpoint = new EditPersonalCollectionRecord();
     }
 
     function createNewRecord() {
-        console.log(selectedSpecificTaxon);
         if (selectedSpecificTaxon !== undefined) {
             data.specific_taxon = selectedSpecificTaxon.id;
         } else {
             data.specific_taxon = null;
         }
-        endpoint.callExternalEndpoint(data).then((result) => {
+        let endpoint;
+        if (create_or_edit == "create") {
+            endpoint = new CreatePersonalCollectionRecord();
+        } else {
+            endpoint = new EditPersonalCollectionRecord();
+        }
+        endpoint.callExternal(data).then(() => {
             window.location.href = submit_url;
         });
     }

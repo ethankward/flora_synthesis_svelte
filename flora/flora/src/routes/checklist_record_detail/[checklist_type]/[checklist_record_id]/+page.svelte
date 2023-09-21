@@ -23,7 +23,7 @@
 
     function submitUpdateMapping() {
         update_record_endpoint
-            .callExternalEndpoint({
+            .callExternal({
                 checklist_type: data.checklist_type,
                 checklist_record_id: checklist_record.id,
                 mapped_to_id: mapped_to_choice.id,
@@ -66,18 +66,18 @@
             display: note.note,
         }))}
         createAPIMethod={(value) =>
-            create_crn_endpoint.callExternalEndpoint({
+            create_crn_endpoint.callExternal({
                 checklist_record_id: checklist_record.id,
                 checklist_record_type: data.checklist_type,
                 note: value,
             })}
         deleteAPIMethod={(note_id) =>
-            delete_crn_endpoint.callExternalEndpoint({
-                note_id: parseInt(note_id),
+            delete_crn_endpoint.callExternal({
+                object_id: parseInt(note_id),
             })}
         updateAPIMethod={(note_id, value) =>
-            update_crn_endpoint.callExternalEndpoint({
-                note_id: parseInt(note_id),
+            update_crn_endpoint.callExternal({
+                object_id: parseInt(note_id),
                 note: value,
             })}
     />

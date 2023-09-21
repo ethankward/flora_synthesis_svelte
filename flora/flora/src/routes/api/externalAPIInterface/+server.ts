@@ -40,6 +40,7 @@ export async function POST({ request, url }) {
 
     const data = await request.json();
     const endpoint_identifier = url.searchParams.get("endpoint_identifier");
+    console.log(endpoint_identifier);
     if (!endpoint_identifier) {
         throw new Error("Something went wrong");
     }

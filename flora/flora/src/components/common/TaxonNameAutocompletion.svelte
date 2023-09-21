@@ -13,7 +13,7 @@
 
     async function getTaxonAutocompletion(search_term: string) {
         return (
-            await taxa_autocompletion_endpoint.callExternalEndpoint({
+            await taxa_autocompletion_endpoint.callExternal({
                 search_term: search_term,
             })
         ).data;

@@ -52,7 +52,7 @@
 	function submitMakeSynonymOf() {
 		let synonym_of_id: number = selectedSynonymOfChoice.id;
 		let data = { taxon_id_1: taxon.id, taxon_id_2: synonym_of_id };
-		make_synonym_of_endpoint.callExternalEndpoint(data).then(() => {
+		make_synonym_of_endpoint.callExternal(data).then(() => {
 			window.location.href = "/taxon_detail/" + synonym_of_id;
 		});
 	}
@@ -97,7 +97,7 @@
 				id="taxon_name_editor"
 				display_value={taxon.taxon_name}
 				apiMethod={(value) =>
-					update_taxon_endpoint.callExternalEndpoint({
+					update_taxon_endpoint.callExternal({
 						taxon_id: taxon.id,
 						taxon_name: value,
 					})}
@@ -111,7 +111,7 @@
 				display_value={taxon.family}
 				create_link={(value) => "/family/" + value}
 				apiMethod={(value) =>
-					update_taxon_endpoint.callExternalEndpoint({
+					update_taxon_endpoint.callExternal({
 						taxon_id: taxon.id,
 						family: value,
 					})}
@@ -122,17 +122,17 @@
 			<InlineList
 				existing_values={taxon.synonyms}
 				createAPIMethod={(value) =>
-					create_taxon_synonym_endpoint.callExternalEndpoint({
-						taxon_id: taxon.id,
+					create_taxon_synonym_endpoint.callExternal({
+						taxon_id: taxon.id.toString(),
 						synonym: value,
 					})}
 				deleteAPIMethod={(synonym_id) =>
-					delete_taxon_synonym_endpoint.callExternalEndpoint({
-						synonym_id: parseInt(synonym_id),
+					delete_taxon_synonym_endpoint.callExternal({
+						object_id: synonym_id,
 					})}
 				updateAPIMethod={(synonym_id, value) =>
-					update_taxon_synonym_endpoint.callExternalEndpoint({
-						synonym_id: parseInt(synonym_id),
+					update_taxon_synonym_endpoint.callExternal({
+						object_id: synonym_id,
 						synonym: value,
 					})}
 			/>
@@ -144,7 +144,7 @@
 				id="seinet_id_editor"
 				display_value={taxon.seinet_id?.toString()}
 				apiMethod={(value) =>
-					update_taxon_endpoint.callExternalEndpoint({
+					update_taxon_endpoint.callExternal({
 						taxon_id: taxon.id,
 						seinet_id: value,
 					})}
@@ -156,7 +156,7 @@
 				id="inat_id_editor"
 				display_value={taxon.inat_id?.toString()}
 				apiMethod={(value) =>
-					update_taxon_endpoint.callExternalEndpoint({
+					update_taxon_endpoint.callExternal({
 						taxon_id: taxon.id,
 						inat_id: value,
 					})}
@@ -170,7 +170,7 @@
 				value={taxon.introduced}
 				choices={introduced_choices}
 				apiMethod={(value) =>
-					update_taxon_endpoint.callExternalEndpoint({
+					update_taxon_endpoint.callExternal({
 						taxon_id: taxon.id,
 						introduced: value,
 					})}
@@ -184,7 +184,7 @@
 				value={taxon.endemic}
 				choices={endemic_choices}
 				apiMethod={(value) =>
-					update_taxon_endpoint.callExternalEndpoint({
+					update_taxon_endpoint.callExternal({
 						taxon_id: taxon.id,
 						endemic: value,
 					})}
@@ -198,7 +198,7 @@
 				value={taxon.life_cycle}
 				choices={life_cycle_choices}
 				apiMethod={(value) =>
-					update_taxon_endpoint.callExternalEndpoint({
+					update_taxon_endpoint.callExternal({
 						taxon_id: taxon.id,
 						life_cycle: value,
 					})}

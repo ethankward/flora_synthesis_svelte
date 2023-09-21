@@ -130,7 +130,7 @@ type IntroducedType = {
 }
 
 type PersonalCollectionRecordType = {
-    id?: number,
+    id: number,
 
     collection_number?: number
     date?: string,
