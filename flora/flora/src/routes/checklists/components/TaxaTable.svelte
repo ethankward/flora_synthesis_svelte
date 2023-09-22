@@ -1,10 +1,10 @@
 <script lang="ts">
     import TaxonLink from "../../../components/common/TaxonLink.svelte";
 
-    import type { GroupedTaxa2 } from "../../../data_classes/taxon";
+    import type { GroupedTaxa } from "../../../data_classes/taxon";
     import type { selectedFieldsOptions } from "../types";
 
-    export let grouped_checklist_taxa: GroupedTaxa2;
+    export let grouped_checklist_taxa: GroupedTaxa;
     export let selectedFieldsOptionsValues: selectedFieldsOptions;
 </script>
 

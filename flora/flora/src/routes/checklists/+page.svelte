@@ -1,9 +1,9 @@
 <script lang="ts">
     import { ChecklistList } from "../../data_classes/checklist";
-    import type { GroupedTaxa2 } from "../../data_classes/taxon";
+    import type { GroupedTaxa } from "../../data_classes/taxon";
     import {
         GroupBy,
-        TaxonList2,
+        TaxonList,
         loadTaxaFromAPIData,
     } from "../../data_classes/taxon";
 
@@ -18,7 +18,7 @@
 
     let get_checklist_taxa_endpoint = new GetChecklistTaxa();
 
-    type checklistTaxaType = { [key: number]: TaxonList2 };
+    type checklistTaxaType = { [key: number]: TaxonList };
     let checklists: ChecklistList = new ChecklistList(data.checklist_data);
     let primary_checklist_id = data.primary_checklist_id;
 
@@ -41,10 +41,10 @@
         hideChecklistTaxa: true,
         hideComparisonTaxa: true,
         displayAsList: true,
-        grouped_checklist_taxa: {} as GroupedTaxa2,
-        common_taxa: {} as GroupedTaxa2,
-        taxa_diff_1: {} as GroupedTaxa2,
-        taxa_diff_2: {} as GroupedTaxa2,
+        grouped_checklist_taxa: {} as GroupedTaxa,
+        common_taxa: {} as GroupedTaxa,
+        taxa_diff_1: {} as GroupedTaxa,
+        taxa_diff_2: {} as GroupedTaxa,
         displayAllRanks: true,
     };
 
@@ -93,7 +93,7 @@
     let taxonManager = new TaxonManager();
 
     async function getVisibleTaxa(checklist_id: number) {
-        let result: TaxonList2;
+        let result: TaxonList;
 
         if (formProperties.useCanonicalTaxa) {
             result = await taxonManager.getCanonicalTaxa(checklist_id);
