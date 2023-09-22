@@ -228,10 +228,8 @@ function loadTaxaFromAPIData(api_data: TaxonType[], checklist_id: number) {
     api_data.forEach((taxon) => {
         canonical_taxa.taxa.push(new TaxonOrChecklistTaxon(false, taxon));
         taxon.taxon_checklist_taxa
-            .filter((checklist_taxon) => checklist_taxon.checklists.includes(checklist_id))
             .forEach((checklist_taxon) => {
                 if (!checklist_taxa_seen.has(checklist_taxon.taxon_name)) {
-                    console.log(checklist_taxon.taxon_name);
                     checklist_taxa_seen.add(checklist_taxon.taxon_name);
                     checklist_taxa.taxa.push(new TaxonOrChecklistTaxon(true, checklist_taxon, taxon));
                 }
