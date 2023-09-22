@@ -63,6 +63,10 @@ class TaxonOrChecklistTaxon {
         return this.getValueAlwaysPresent<number>("id");
     }
 
+    is_species() {
+        return this.canonical_taxon_api_data.rank === 'Species';
+    }
+
     all_mapped_taxa() {
         const result = this.getValue<TaxonNameType[]>("all_mapped_taxa");
         if (result === undefined) {
@@ -130,6 +134,20 @@ class TaxonList {
                 this.taxa.filter((taxon) => taxon.taxon_name().toLowerCase().includes(taxon_name_filter.toLowerCase()))
             );
         }
+    }
+
+    filterByTaxonFamilyContains(taxon_family_filter?: string) {
+        if (!taxon_family_filter) {
+            return this;
+        } else {
+            return new TaxonList(
+                this.taxa.filter((taxon) => taxon.family().toLowerCase().includes(taxon_family_filter.toLowerCase()))
+            );
+        }
+    }
+
+    filterByIsSpecies() {
+        return new TaxonList(this.taxa.filter((taxon) => taxon.is_species()));
     }
 
     getGroupKey(taxon: TaxonOrChecklistTaxon, grouped_by: GroupBy) {

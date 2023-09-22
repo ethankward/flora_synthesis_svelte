@@ -28,6 +28,7 @@
         selectedChecklist: undefined as ChecklistType | undefined,
         comparisonChecklist: undefined as ChecklistType | undefined,
         taxonNameFilter: undefined as string | undefined,
+        taxonFamilyFilter: undefined as string | undefined,
         useCanonicalTaxa: true as boolean,
         all_fields: all_field_types.map((field_type) => new field_type()),
         taxaGroupedBy: 0 as number,
@@ -96,10 +97,14 @@
         result = result.filterByTaxonNameContains(
             formProperties.taxonNameFilter
         );
-        // console.log(formProperties.displayAllRanks);
-        // if (!formProperties.displayAllRanks) {
-        //     result = result.filterSpeciesOnly();
-        // }
+        result = result.filterByTaxonFamilyContains(
+            formProperties.taxonFamilyFilter
+        );
+        if (!formProperties.displayAllRanks) {
+            result = result.filterByIsSpecies();
+        }
+        console.log("here");
+        console.log(result);
         return result;
     }
 
@@ -196,24 +201,57 @@
                     {/each}
                 </select>
             </label>
-
-            <label for="group_taxa_selection">
-                Group Taxa By
-                <select
-                    bind:value={formProperties.taxaGroupedBy}
-                    on:change={handleChecklistChange}
-                    id="group_taxa_selection"
-                >
-                    <option value={GroupBy.family}>Family</option>
-                    <option value={GroupBy.genus}>Genus</option>
-                    <option value={GroupBy.alphabetic}>Alphabetic</option>
-                </select>
-            </label>
         </div>
 
         <hr />
         <details>
             <summary>More options</summary>
+
+            <hr />
+            <div class="grid">
+                <label>
+                    Primary taxa:
+                    <select
+                        bind:value={formProperties.useCanonicalTaxa}
+                        on:change={handleChecklistChange}
+                    >
+                        <option value={true}>Mapped taxa</option>
+                        <option value={false}>Checklist taxa</option>
+                    </select>
+                </label>
+                <label>
+                    Display as:
+                    <select
+                        bind:value={formProperties.displayAsList}
+                        on:change={handleChecklistChange}
+                    >
+                        <option value={true}>List</option>
+                        <option value={false}>Table</option>
+                    </select>
+                </label>
+                <label>
+                    Taxon ranks:
+                    <select
+                        bind:value={formProperties.displayAllRanks}
+                        on:change={handleChecklistChange}
+                    >
+                        <option value={true}>All ranks</option>
+                        <option value={false}>Species only</option>
+                    </select>
+                </label>
+                <label for="group_taxa_selection">
+                    Group Taxa By
+                    <select
+                        bind:value={formProperties.taxaGroupedBy}
+                        on:change={handleChecklistChange}
+                        id="group_taxa_selection"
+                    >
+                        <option value={GroupBy.family}>Family</option>
+                        <option value={GroupBy.genus}>Genus</option>
+                        <option value={GroupBy.alphabetic}>Alphabetic</option>
+                    </select>
+                </label>
+            </div>
             <hr />
             <div class="grid">
                 <label>
@@ -224,51 +262,17 @@
                         on:keyup={handleChecklistChange}
                     />
                 </label>
-            </div>
-            <hr />
-            <div class="grid">
                 <label>
+                    Filter taxon family:
                     <input
-                        type="radio"
-                        bind:group={formProperties.useCanonicalTaxa}
-                        name="taxon_source"
-                        value={true}
-                        on:change={handleChecklistChange}
+                        type="text"
+                        bind:value={formProperties.taxonFamilyFilter}
+                        on:keyup={handleChecklistChange}
                     />
-                    Display mapped taxa
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        bind:group={formProperties.useCanonicalTaxa}
-                        name="taxon_source"
-                        value={false}
-                        on:change={handleChecklistChange}
-                    />
-                    Display checklist taxa
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        bind:group={formProperties.displayAsList}
-                        name="list_display"
-                        value={true}
-                        on:change={handleChecklistChange}
-                    />
-                    Display as list
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        bind:group={formProperties.displayAsList}
-                        name="table_display"
-                        value={false}
-                        on:change={handleChecklistChange}
-                    />
-                    Display as table
                 </label>
             </div>
             <hr />
+
             <h6>Show fields</h6>
             <div class="container-fluid">
                 {#each formProperties.all_fields as field}
