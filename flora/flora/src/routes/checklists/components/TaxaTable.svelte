@@ -1,70 +1,66 @@
 <script lang="ts">
-    import TaxonLink from "../../../components/common/TaxonLink.svelte";
-
-    import type { GroupedTaxa } from "../../../data_classes/taxon";
-    import type { selectedFieldsOptions } from "../types";
+    
+    import type {
+        GroupedTaxa,
+        TaxonOrChecklistTaxon,
+    } from "../../../data_classes/taxon";
+    import type { DisplayedField } from "../types";
 
     export let grouped_checklist_taxa: GroupedTaxa;
-    export let selectedFieldsOptionsValues: selectedFieldsOptions;
+    export let all_fields: DisplayedField[];
+
+    let sort_arrows = Array(all_fields.length).fill("");
+    let sorting_by_field: DisplayedField = all_fields[0];
+
+    function getUnpackedTaxa() {
+        let result: TaxonOrChecklistTaxon[] = [];
+        Object.entries(grouped_checklist_taxa)
+            .sort()
+            .forEach(([title, taxa], index) => {
+                taxa.forEach((taxon) => {
+                    result.push(taxon);
+                });
+            });
+
+        result.sort((t1, t2) => sorting_by_field.compare(t1, t2));
+
+        return result;
+    }
+
+    function setSortColumn(field: DisplayedField, index: number) {
+        field.update_sort_direction();
+        sort_arrows.fill("");
+        sort_arrows[index] = field.sort_arrow;
+        sorting_by_field = field;
+        unpacked_taxa = () => getUnpackedTaxa();
+    }
+
+    let unpacked_taxa = () => getUnpackedTaxa();
 </script>
 
 <table>
     <thead>
         <tr>
-            <th scope="col">Taxon Name</th>
-            <th scope="col">Family</th>
-            {#if selectedFieldsOptionsValues.synonyms}
-                <th scope="col">Synonyms</th>
-            {/if}
-            {#if selectedFieldsOptionsValues.lifecycle}
-                <th scope="col">Life cycle</th>
-            {/if}
-            {#if selectedFieldsOptionsValues.introduced}
-                <th scope="col">Introduced status</th>
-            {/if}
-            {#if selectedFieldsOptionsValues.endemic}
-                <th scope="col">Endemic status</th>
-            {/if}
-            {#if selectedFieldsOptionsValues.first_observation_date}
-                <th scope="col">First observed on</th>
-            {/if}
-            {#if selectedFieldsOptionsValues.last_observation_date}
-                <th scope="col">Last observed on</th>
-            {/if}
+            {#each all_fields as field, index}
+                {#if field.visible}
+                    <th scope="col" on:click={() => setSortColumn(field, index)}
+                        >{field.title} {sort_arrows[index]}</th
+                    >
+                {/if}
+            {/each}
         </tr>
     </thead>
     <tbody>
-        {#each Object.entries(grouped_checklist_taxa).sort() as [group_title, group_taxa]}
-            {#each group_taxa as taxon}
-                <tr>
-                    <td><TaxonLink {taxon} /></td>
-                    <td>{taxon.family()}</td>
-                    {#if selectedFieldsOptionsValues.synonyms}
-                        <td
-                            >{#each taxon.synonyms() as taxon_synonym, i}{#if i > 0},&nbsp;{/if}{taxon_synonym.display}{/each}</td
-                        >
+        {#each unpacked_taxa() as taxon}
+            <tr>
+                {#each all_fields as field}
+                    {#if field.visible}
+                        <td>
+                            {field.get_display(taxon)}
+                        </td>
                     {/if}
-                    {#if selectedFieldsOptionsValues.lifecycle}
-                        <td>{taxon.life_cycle_display()}</td>
-                    {/if}
-                    {#if selectedFieldsOptionsValues.introduced}
-                        <td>{taxon.introduced_display()}</td>
-                    {/if}
-                    {#if selectedFieldsOptionsValues.endemic}
-                        <td>{taxon.endemic_display()}</td>
-                    {/if}
-                    {#if selectedFieldsOptionsValues.first_observation_date}
-                        <td
-                            >{#if taxon.first_observation_date()}{taxon.first_observation_date()}{/if}</td
-                        >
-                    {/if}
-                    {#if selectedFieldsOptionsValues.last_observation_date}
-                        <td
-                            >{#if taxon.last_observation_date()}{taxon.last_observation_date()}{/if}</td
-                        >
-                    {/if}
-                </tr>
-            {/each}
+                {/each}
+            </tr>
         {/each}
     </tbody>
 </table>

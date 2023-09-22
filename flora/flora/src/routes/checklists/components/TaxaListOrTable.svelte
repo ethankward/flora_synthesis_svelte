@@ -3,16 +3,22 @@
     import TaxaTable from "../components/TaxaTable.svelte";
 
     import type { GroupedTaxa } from "../../../data_classes/taxon";
-    import type { selectedFieldsOptions } from "../types";
+    import type { DisplayedField } from "../types";
 
     export let grouped_checklist_taxa: GroupedTaxa;
     export let list: boolean;
-    export let selectedFieldsOptionsValues: selectedFieldsOptions;
+    export let all_fields: DisplayedField[];
 </script>
 
 <div class:hide={!list}>
-    <TaxaList {grouped_checklist_taxa} {selectedFieldsOptionsValues} />
+    <TaxaList
+        bind:grouped_checklist_taxa
+        bind:all_fields
+    />
 </div>
 <div class:hide={list}>
-    <TaxaTable {grouped_checklist_taxa} {selectedFieldsOptionsValues} />
+    <TaxaTable
+        bind:grouped_checklist_taxa
+        bind:all_fields
+    />
 </div>

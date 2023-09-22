@@ -10,7 +10,7 @@
     import { onMount } from "svelte";
     import { GetChecklistTaxa } from "../../data_classes/taxon";
     import type { ChecklistType } from "../../data_classes/types";
-    import type { selectedFieldsOptions } from "../../routes/checklists/types";
+    import { all_field_types } from "../../routes/checklists/types";
 
     import TaxaListOrTable from "../../routes/checklists/components/TaxaListOrTable.svelte";
 
@@ -29,14 +29,7 @@
         comparisonChecklist: undefined as ChecklistType | undefined,
         taxonNameFilter: undefined as string | undefined,
         useCanonicalTaxa: true as boolean,
-        selectedFieldsOptions: {
-            lifecycle: false,
-            introduced: false,
-            endemic: false,
-            synonyms: true,
-            first_observation_date: false,
-            last_observation_date: false,
-        } as selectedFieldsOptions,
+        all_fields: all_field_types.map((field_type) => new field_type()),
         taxaGroupedBy: 0 as number,
         hideChecklistTaxa: true,
         hideComparisonTaxa: true,
@@ -274,78 +267,21 @@
                     />
                     Display as table
                 </label>
-                <label>
-                    <input
-                        type="radio"
-                        bind:group={formProperties.displayAllRanks}
-                        name="all_ranks_display"
-                        value={true}
-                        on:change={handleChecklistChange}
-                    />
-                    All ranks
-                </label>
-                <label>
-                    <input
-                        type="radio"
-                        bind:group={formProperties.displayAllRanks}
-                        name="species_only_display"
-                        value={false}
-                        on:change={handleChecklistChange}
-                    />
-                    Species only
-                </label>
             </div>
             <hr />
             <h6>Show fields</h6>
-            <div class="grid">
-                <label>
-                    <input
-                        type="checkbox"
-                        bind:checked={formProperties.selectedFieldsOptions
-                            .lifecycle}
-                    />
-                    Life cycle
-                </label>
-                <label>
-                    <input
-                        type="checkbox"
-                        bind:checked={formProperties.selectedFieldsOptions
-                            .introduced}
-                    />
-                    Introduced
-                </label>
-                <label>
-                    <input
-                        type="checkbox"
-                        bind:checked={formProperties.selectedFieldsOptions
-                            .endemic}
-                    />
-                    Endemic
-                </label>
-                <label>
-                    <input
-                        type="checkbox"
-                        bind:checked={formProperties.selectedFieldsOptions
-                            .synonyms}
-                    />
-                    Synonyms
-                </label>
-                <label>
-                    <input
-                        type="checkbox"
-                        bind:checked={formProperties.selectedFieldsOptions
-                            .first_observation_date}
-                    />
-                    First observation date
-                </label>
-                <label>
-                    <input
-                        type="checkbox"
-                        bind:checked={formProperties.selectedFieldsOptions
-                            .last_observation_date}
-                    />
-                    Last observation date
-                </label>
+            <div class="container-fluid">
+                {#each formProperties.all_fields as field}
+                    {#if field.is_toggleable}
+                        <span>
+                            <input
+                                type="checkbox"
+                                bind:checked={field.visible}
+                            />
+                            {field.title}
+                        </span>
+                    {/if}
+                {/each}
             </div>
         </details>
     </form>
@@ -374,9 +310,9 @@
                 ></summary
             >
             <TaxaListOrTable
-                list={formProperties.displayAsList}
-                grouped_checklist_taxa={formProperties.grouped_checklist_taxa}
-                selectedFieldsOptionsValues={formProperties.selectedFieldsOptions}
+                bind:list={formProperties.displayAsList}
+                bind:grouped_checklist_taxa={formProperties.grouped_checklist_taxa}
+                bind:all_fields={formProperties.all_fields}
             />
         </details>
     </div>
@@ -387,9 +323,9 @@
         <details>
             <summary>Common Taxa</summary>
             <TaxaListOrTable
-                list={formProperties.displayAsList}
-                grouped_checklist_taxa={formProperties.common_taxa}
-                selectedFieldsOptionsValues={formProperties.selectedFieldsOptions}
+                bind:list={formProperties.displayAsList}
+                bind:grouped_checklist_taxa={formProperties.common_taxa}
+                bind:all_fields={formProperties.all_fields}
             />
         </details>
         <details>
@@ -406,9 +342,9 @@
                 >
             {/if}
             <TaxaListOrTable
-                list={formProperties.displayAsList}
-                grouped_checklist_taxa={formProperties.taxa_diff_1}
-                selectedFieldsOptionsValues={formProperties.selectedFieldsOptions}
+                bind:list={formProperties.displayAsList}
+                bind:grouped_checklist_taxa={formProperties.taxa_diff_1}
+                bind:all_fields={formProperties.all_fields}
             />
         </details>
         <details>
@@ -425,9 +361,9 @@
                 >
             {/if}
             <TaxaListOrTable
-                list={formProperties.displayAsList}
-                grouped_checklist_taxa={formProperties.taxa_diff_2}
-                selectedFieldsOptionsValues={formProperties.selectedFieldsOptions}
+                bind:list={formProperties.displayAsList}
+                bind:grouped_checklist_taxa={formProperties.taxa_diff_2}
+                bind:all_fields={formProperties.all_fields}
             />
         </details>
     </div>
