@@ -1,5 +1,5 @@
 <script lang="ts">
-    
+    import TaxonLink from "../../../components/common/TaxonLink.svelte";
     import type {
         GroupedTaxa,
         TaxonOrChecklistTaxon,
@@ -41,8 +41,11 @@
 <table>
     <thead>
         <tr>
+            <th scope="col" on:click={() => setSortColumn(all_fields[0], 0)}
+                >Taxon name {sort_arrows[0]}</th
+            >
             {#each all_fields as field, index}
-                {#if field.visible}
+                {#if field.visible && field.visible_in_table_format()}
                     <th scope="col" on:click={() => setSortColumn(field, index)}
                         >{field.title} {sort_arrows[index]}</th
                     >
@@ -53,8 +56,10 @@
     <tbody>
         {#each unpacked_taxa() as taxon}
             <tr>
+                <td><TaxonLink {taxon} /></td>
+
                 {#each all_fields as field}
-                    {#if field.visible}
+                    {#if field.visible && field.visible_in_table_format()}
                         <td>
                             {field.get_display(taxon)}
                         </td>

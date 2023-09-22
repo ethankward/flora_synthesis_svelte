@@ -19,6 +19,10 @@ class DisplayedField {
         return this.visible;
     }
 
+    visible_in_table_format() {
+        return true;
+    }
+
     update_sort_direction() {
         if (this.sort_direction == "asc") {
             this.sort_direction = "desc";
@@ -58,6 +62,9 @@ class TaxonNameField extends DisplayedField {
         return false;
     }
 
+    visible_in_table_format() {
+        return false;
+    }
 }
 
 
