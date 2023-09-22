@@ -8,6 +8,6 @@ export async function load() {
     const primary_checklist_taxa_endpoint = new GetPrimaryChecklistTaxa()
 
     return {
-        taxon_data: (await primary_checklist_taxa_endpoint.action(api_manager)).data,
+        taxon_data: (await primary_checklist_taxa_endpoint.action(api_manager, {})).data,
     }
 }

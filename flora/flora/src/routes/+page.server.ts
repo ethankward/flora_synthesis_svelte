@@ -11,7 +11,7 @@ export async function load() {
     const checklistsEndpoint = new GetChecklists();
 
     return {
-        families: (await familiesEndpoint.action(apiManager)).data,
-        checklists: (await checklistsEndpoint.action(apiManager)).data
+        families: (await familiesEndpoint.action(apiManager, {})).data,
+        checklists: (await checklistsEndpoint.action(apiManager, {})).data
     }
 }

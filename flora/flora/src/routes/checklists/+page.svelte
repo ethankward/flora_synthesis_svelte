@@ -1,9 +1,9 @@
 <script lang="ts">
     import { ChecklistList } from "../../data_classes/checklist";
-    import type { GroupedTaxa } from "../../data_classes/taxon";
+    import type { GroupedTaxa2 } from "../../data_classes/taxon";
     import {
         GroupBy,
-        TaxonList,
+        TaxonList2,
         loadTaxaFromAPIData,
     } from "../../data_classes/taxon";
 
@@ -18,7 +18,7 @@
 
     let get_checklist_taxa_endpoint = new GetChecklistTaxa();
 
-    type checklistTaxaType = { [key: number]: TaxonList };
+    type checklistTaxaType = { [key: number]: TaxonList2 };
     let checklists: ChecklistList = new ChecklistList(data.checklist_data);
     let primary_checklist_id = data.primary_checklist_id;
 
@@ -41,10 +41,10 @@
         hideChecklistTaxa: true,
         hideComparisonTaxa: true,
         displayAsList: true,
-        grouped_checklist_taxa: {} as GroupedTaxa,
-        common_taxa: {} as GroupedTaxa,
-        taxa_diff_1: {} as GroupedTaxa,
-        taxa_diff_2: {} as GroupedTaxa,
+        grouped_checklist_taxa: {} as GroupedTaxa2,
+        common_taxa: {} as GroupedTaxa2,
+        taxa_diff_1: {} as GroupedTaxa2,
+        taxa_diff_2: {} as GroupedTaxa2,
         displayAllRanks: true,
     };
 
@@ -71,10 +71,8 @@
                     let [loaded_canonical_taxa, loaded_checklist_taxa] =
                         loadTaxaFromAPIData(response.data);
                     this.canonical_taxa[checklist_id] =
-                        loaded_canonical_taxa.deduplicate();
-                    this.checklist_taxa[checklist_id] = loaded_checklist_taxa
-                        .filterByChecklist(checklist_id)
-                        .deduplicate();
+                        loaded_canonical_taxa;
+                    this.checklist_taxa[checklist_id] = loaded_checklist_taxa;
                 });
         }
 
@@ -96,7 +94,7 @@
     let taxonManager = new TaxonManager();
 
     async function getVisibleTaxa(checklist_id: number) {
-        let result: TaxonList;
+        let result: TaxonList2;
 
         if (formProperties.useCanonicalTaxa) {
             result = await taxonManager.getCanonicalTaxa(checklist_id);
@@ -106,10 +104,10 @@
         result = result.filterByTaxonNameContains(
             formProperties.taxonNameFilter
         );
-        console.log(formProperties.displayAllRanks);
-        if (!formProperties.displayAllRanks) {
-            result = result.filterSpeciesOnly();
-        }
+        // console.log(formProperties.displayAllRanks);
+        // if (!formProperties.displayAllRanks) {
+        //     result = result.filterSpeciesOnly();
+        // }
         return result;
     }
 

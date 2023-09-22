@@ -24,17 +24,17 @@ type TaxonNameType = {
     taxon_name: string
 }
 
-type ChecklistTaxonType = {
-    id: number,
-    taxon_name: string,
-    family: string,
-    external_id: number,
-    rank: string,
-    genus: string,
-    checklist: number,
-    all_mapped_taxa: TaxonNameType[],
-    primary_checklist: boolean
-}
+// type ChecklistTaxonType = {
+//     id: number,
+//     taxon_name: string,
+//     family: string,
+//     external_id: number,
+//     rank: string,
+//     genus: string,
+//     checklist: number,
+//     all_mapped_taxa: TaxonNameType[],
+//     primary_checklist: boolean
+// }
 
 type ObservationDateType = {
     date: string,
@@ -50,7 +50,7 @@ type TaxonType = {
     family: string,
     seinet_id?: number,
     inat_id?: number,
-    taxon_checklist_taxa: ChecklistTaxonType[],
+    taxon_checklist_taxa: TaxonType[],
     synonyms: ValueDisplayType[],
     parent_species?: TaxonNameType
     subtaxa: TaxonNameType[],
@@ -64,7 +64,12 @@ type TaxonType = {
     first_observation_date?: string,
     first_observation_date_url?: string,
     last_observation_date?: string,
-    last_observation_date_url?: string
+    last_observation_date_url?: string,
+
+    all_mapped_taxa?: TaxonNameType[],
+    external_id?: number,
+    primary_checklist: boolean
+
 }
 
 
@@ -130,7 +135,7 @@ type IntroducedType = {
 }
 
 type PersonalCollectionRecordType = {
-    id: number,
+    id?: number,
 
     collection_number?: number
     date?: string,
@@ -158,8 +163,8 @@ type PersonalCollectionRecordType = {
 
 export type {
     ChecklistRecordType, ChecklistStaleRecordCountType,
-    ChecklistTaxonType, ChecklistType, EndemicType,
+    ChecklistType, EndemicType,
     IntroducedType, LifeCycleType, MinimalTaxonType,
     ObservationDateType, TaxonNameType, TaxonSynonymType,
-    TaxonType, PersonalCollectionRecordType
+    TaxonType, PersonalCollectionRecordType, ValueDisplayType
 };

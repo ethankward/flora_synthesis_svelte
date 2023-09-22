@@ -20,9 +20,9 @@ export async function load({ params }) {
     return {
         taxon_id: taxonID,
         taxon_data: (await getTaxonEndpoint.action(apiManager, { taxon_id: taxonID })).data,
-        life_cycle_data: (await getLifecycleChoicesEndpoint.action(apiManager)).data,
-        endemic_data: (await getEndemicEndpoint.action(apiManager)).data,
-        introduced_data: (await getIntroducedEndpoint.action(apiManager)).data,
+        life_cycle_data: (await getLifecycleChoicesEndpoint.action(apiManager, {})).data,
+        endemic_data: (await getEndemicEndpoint.action(apiManager, {})).data,
+        introduced_data: (await getIntroducedEndpoint.action(apiManager, {})).data,
         checklist_records: (await getTaxonChecklistRecordsEndpoint.action(apiManager, { taxon_id: taxonID })).data
     }
 }

@@ -1,16 +1,16 @@
 <script lang="ts">
-    import type { Taxon } from "../../data_classes/taxon";
+    import type { TaxonOrChecklistTaxon } from "../../data_classes/taxon";
 
-    export let taxon: Taxon;
+    export let taxon: TaxonOrChecklistTaxon;
     export let new_tab: boolean = true;
 </script>
 
-{#if taxon.primary}
+{#if !taxon.is_checklist_taxon}
     <a
-        href={"/taxon_detail/" + taxon.id}
+        href={"/taxon_detail/" + taxon.id()}
         target={new_tab ? "_blank" : ""}
-        rel="external">{taxon.taxon_name}</a
+        rel="external">{taxon.taxon_name()}</a
     >
 {:else}
-    {taxon.taxon_name}
+    {taxon.taxon_name()}
 {/if}

@@ -7,6 +7,6 @@ export async function load() {
     const get_personal_collections_endpoint = new GetPersonalCollectionRecords();
 
     return {
-        personal_collection_record_data: (await get_personal_collections_endpoint.action(api_manager)).data,
+        personal_collection_record_data: (await get_personal_collections_endpoint.action(api_manager, {})).data,
     }
 }

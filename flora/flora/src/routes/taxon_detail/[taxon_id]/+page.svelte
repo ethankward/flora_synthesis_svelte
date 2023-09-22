@@ -3,10 +3,9 @@
 	import { ChecklistRecordList } from "../../../data_classes/checklist_record";
 	import {
 		MakeSynonymOf,
-		Taxon,
 		UpdateTaxon,
 	} from "../../../data_classes/taxon";
-	import type { TaxonNameType } from "../../../data_classes/types";
+	import type { TaxonNameType, TaxonType } from "../../../data_classes/types";
 
 	import FNALink from "../../../components/common/FNALink.svelte";
 	import InatLink from "../../../components/common/InatLink.svelte";
@@ -33,7 +32,7 @@
 
 	export let data;
 
-	let taxon = new Taxon(data.taxon_data);
+	let taxon: TaxonType = data.taxon_data;
 	let life_cycle_choices: LifeCycleType[] = data.life_cycle_data;
 	let endemic_choices: EndemicType[] = data.endemic_data;
 	let introduced_choices: IntroducedType[] = data.introduced_data;
@@ -75,7 +74,7 @@
 			></small
 		>
 
-		{#if taxon.seinet_id}
+		{#if taxon.seinet_id !== undefined}
 			<SEINETLink seinet_id={taxon.seinet_id} />
 			<SEINETMapLink seinet_id={taxon.seinet_id} />
 		{/if}
@@ -84,7 +83,7 @@
 		{/if}
 		<FNALink target={taxon.taxon_name} />
 		<POWOLink taxon_name={taxon.taxon_name} />
-		{#if taxon.primary_taxon}
+		{#if taxon.primary_checklist}
 			<ins>Known from Rincons</ins>
 		{:else}
 			<mark>Not known from Rincons</mark>

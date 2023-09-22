@@ -8,7 +8,7 @@ export async function load() {
     const stale_record_counts_endpoint = new GetStaleRecordCounts();
 
     return {
-        checklist_data: (await get_checklists_endpoint.action(api_manager)).data,
-        stale_record_counts: (await stale_record_counts_endpoint.action(api_manager)).data
+        checklist_data: (await get_checklists_endpoint.action(api_manager, {})).data,
+        stale_record_counts: (await stale_record_counts_endpoint.action(api_manager, {})).data
     }
 }
