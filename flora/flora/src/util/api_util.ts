@@ -49,7 +49,7 @@ function createNewEndpoint<DataType extends object>(
             }
         }
 
-        callExternal(data?: DataType) {
+        async callExternal(data?: DataType) {
             const url = "/api/externalAPIInterface/?endpoint_identifier=" + this.unique_identifier;
             return axios.post(url, data);
         }

@@ -31,7 +31,7 @@
         update_loading[checklist_index] = true;
 
         updateChecklistEndpoint
-            .callExternalEndpoint({ checklist_id: checklist.id })
+            .callExternal({ checklist_id: checklist.id })
             .then(() => {
                 update_invalid[checklist_index] = false;
                 update_loading[checklist_index] = false;
@@ -52,7 +52,7 @@
         retrieval_loading[checklist_index] = true;
 
         retrievechecklistEndpoint
-            .callExternalEndpoint({
+            .callExternal({
                 checklist_id: checklist.id,
                 n_records: n_records,
             })
