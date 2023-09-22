@@ -74,7 +74,7 @@
 			></small
 		>
 
-		{#if taxon.seinet_id !== undefined}
+		{#if taxon.seinet_id}
 			<SEINETLink seinet_id={taxon.seinet_id} />
 			<SEINETMapLink seinet_id={taxon.seinet_id} />
 		{/if}
