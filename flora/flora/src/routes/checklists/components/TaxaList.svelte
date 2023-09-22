@@ -18,7 +18,7 @@
             <li>
                 <TaxonLink {taxon} />
                 <TaxonExternalLinks {taxon} />
-                {#if taxon.all_mapped_taxa.length > 0}
+                {#if taxon.all_mapped_taxa().length > 0}
                     → {#each taxon.all_mapped_taxa() as mapped_taxon, i}{#if i > 0},&nbsp;{/if}<TaxonNameLink
                             taxon={mapped_taxon}
                         />{/each}

@@ -7,7 +7,7 @@
         loadTaxaFromAPIData,
     } from "../../data_classes/taxon";
 
-    import { onMount } from 'svelte';
+    import { onMount } from "svelte";
     import { GetChecklistTaxa } from "../../data_classes/taxon";
     import type { ChecklistType } from "../../data_classes/types";
     import type { selectedFieldsOptions } from "../../routes/checklists/types";
@@ -69,9 +69,8 @@
                 .callExternal({ checklist: checklist_id.toString() })
                 .then((response) => {
                     let [loaded_canonical_taxa, loaded_checklist_taxa] =
-                        loadTaxaFromAPIData(response.data);
-                    this.canonical_taxa[checklist_id] =
-                        loaded_canonical_taxa;
+                        loadTaxaFromAPIData(response.data, checklist_id);
+                    this.canonical_taxa[checklist_id] = loaded_canonical_taxa;
                     this.checklist_taxa[checklist_id] = loaded_checklist_taxa;
                 });
         }
