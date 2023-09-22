@@ -183,10 +183,11 @@ class TaxonList {
             [...this_taxon_ids].filter((x) => other_taxon_ids.has(x))
         );
 
+
         return new TaxonList(
             this.taxa.filter((taxon) => {
                 if (!taxon.is_checklist_taxon) {
-                    return common_taxon_ids.has(taxon.id)
+                    return common_taxon_ids.has(taxon.id())
                 } else {
                     return taxon.all_mapped_taxa().some((mt) => common_taxon_ids.has(mt.id))
                 }
@@ -205,7 +206,7 @@ class TaxonList {
         return new TaxonList(
             this.taxa.filter((taxon) => {
                 if (!taxon.is_checklist_taxon) {
-                    return diff_ids.has(taxon.id);
+                    return diff_ids.has(taxon.id());
                 } else {
                     return taxon.all_mapped_taxa().filter((i) => diff_ids.has(i.id)).length > 0;
                 }
@@ -218,7 +219,7 @@ class TaxonList {
 }
 
 
-function loadTaxaFromAPIData(api_data: TaxonType[], checklist_id: number) {
+function loadTaxaFromAPIData(api_data: TaxonType[]) {
 
     const canonical_taxa = new TaxonList([]);
     const checklist_taxa = new TaxonList([]);

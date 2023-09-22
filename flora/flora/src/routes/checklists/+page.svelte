@@ -69,7 +69,7 @@
                 .callExternal({ checklist: checklist_id.toString() })
                 .then((response) => {
                     let [loaded_canonical_taxa, loaded_checklist_taxa] =
-                        loadTaxaFromAPIData(response.data, checklist_id);
+                        loadTaxaFromAPIData(response.data);
                     this.canonical_taxa[checklist_id] = loaded_canonical_taxa;
                     this.checklist_taxa[checklist_id] = loaded_checklist_taxa;
                 });
