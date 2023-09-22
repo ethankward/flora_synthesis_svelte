@@ -1,10 +1,10 @@
 <script lang="ts">
-    import { UpdateObservationDatesEndpoint } from "../../../data_classes/taxon";
+    import { UpdateComputedValuesEndpoint } from "../../../data_classes/taxon";
 
     let invalid: boolean | undefined;
     let loading = false;
 
-    let update_endpoint = new UpdateObservationDatesEndpoint();
+    let update_endpoint = new UpdateComputedValuesEndpoint();
 
     function submitUpdateRequest() {
         invalid = undefined;

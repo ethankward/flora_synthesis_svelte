@@ -169,11 +169,24 @@ class LastObservationDateField extends DisplayedField {
     }
 }
 
+class HasCollectionsField extends DisplayedField {
+    title = "Has collections";
+    visible = false;
+
+    get_display(taxon: TaxonOrChecklistTaxon): string {
+        const result = taxon.has_collections();
+        if (result) {
+            return "Yes";
+        } else {
+            return "No";
+        }
+    }
+}
 
 const all_field_types: (typeof DisplayedField)[] = [
     TaxonNameField, MappedToField, FamilyField, SynonymsField,
     LifeCycleField, IntroducedField, EndemicField,
-    FirstObservationDateField, LastObservationDateField
+    FirstObservationDateField, LastObservationDateField, HasCollectionsField
 ];
 
 export {

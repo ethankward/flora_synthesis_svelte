@@ -29,6 +29,7 @@
         comparisonChecklist: undefined as ChecklistType | undefined,
         taxonNameFilter: undefined as string | undefined,
         taxonFamilyFilter: undefined as string | undefined,
+        hasCollectionsFilter: undefined as boolean | undefined,
         useCanonicalTaxa: true as boolean,
         all_fields: all_field_types.map((field_type) => new field_type()),
         taxaGroupedBy: 0 as number,
@@ -100,6 +101,7 @@
         result = result.filterByTaxonFamilyContains(
             formProperties.taxonFamilyFilter
         );
+        result = result.filterByHasCollections(formProperties.hasCollectionsFilter);
         if (!formProperties.displayAllRanks) {
             result = result.filterByIsSpecies();
         }
@@ -187,7 +189,7 @@
             </label>
 
             <label for="compare_checklist_selection">
-                Compare With
+                Compare with
                 <select
                     id="compare_checklist_selection"
                     bind:value={formProperties.comparisonChecklistID}
@@ -210,7 +212,7 @@
             <hr />
             <div class="grid">
                 <label>
-                    Primary taxa:
+                    Primary taxa
                     <select
                         bind:value={formProperties.useCanonicalTaxa}
                         on:change={handleChecklistChange}
@@ -220,7 +222,7 @@
                     </select>
                 </label>
                 <label>
-                    Display as:
+                    Display as
                     <select
                         bind:value={formProperties.displayAsList}
                         on:change={handleChecklistChange}
@@ -230,7 +232,7 @@
                     </select>
                 </label>
                 <label>
-                    Taxon ranks:
+                    Taxon ranks
                     <select
                         bind:value={formProperties.displayAllRanks}
                         on:change={handleChecklistChange}
@@ -240,7 +242,7 @@
                     </select>
                 </label>
                 <label for="group_taxa_selection">
-                    Group Taxa By
+                    Group by
                     <select
                         bind:value={formProperties.taxaGroupedBy}
                         on:change={handleChecklistChange}
@@ -251,11 +253,22 @@
                         <option value={GroupBy.alphabetic}>Alphabetic</option>
                     </select>
                 </label>
+                <label>
+                    Has collections
+                    <select
+                        bind:value={formProperties.hasCollectionsFilter}
+                        on:change={handleChecklistChange}
+                    >
+                        <option value={undefined} />
+                        <option value={true}>Yes</option>
+                        <option value={false}>No</option>
+                    </select>
+                </label>
             </div>
             <hr />
             <div class="grid">
                 <label>
-                    Filter taxon name:
+                    Filter taxon name
                     <input
                         type="text"
                         bind:value={formProperties.taxonNameFilter}
@@ -263,7 +276,7 @@
                     />
                 </label>
                 <label>
-                    Filter taxon family:
+                    Filter taxon family
                     <input
                         type="text"
                         bind:value={formProperties.taxonFamilyFilter}
@@ -273,7 +286,7 @@
             </div>
             <hr />
 
-            <h6>Show fields</h6>
+            <h6>Display fields</h6>
             <div class="container-fluid">
                 {#each formProperties.all_fields as field}
                     {#if field.is_toggleable}
@@ -283,7 +296,7 @@
                                 bind:checked={field.visible}
                             />
                             {field.title}
-                        </span>
+                        </span> &nbsp;&nbsp;
                     {/if}
                 {/each}
             </div>

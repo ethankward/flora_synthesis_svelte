@@ -5,7 +5,7 @@
     } from "../../data_classes/types";
 
     import ChecklistController from "../../routes/dashboard/components/ChecklistController.svelte";
-    import ObservationDatesController from "../../routes/dashboard/components/ObservationDatesController.svelte";
+    import ComputedValuesController from "./components/ComputedValuesController.svelte";
 
     export let data;
     export let checklist_data: ChecklistType[] = data.checklist_data;
@@ -38,6 +38,6 @@
 </article>
 
 <article>
-    <header>Observation dates</header>
-    <ObservationDatesController />
+    <header>Computed values</header>
+    <ComputedValuesController />
 </article>

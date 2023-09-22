@@ -108,9 +108,12 @@ class TaxonOrChecklistTaxon {
         return this.getValue<string>("first_observation_date");
     }
 
-
     last_observation_date() {
         return this.getValue<string>("last_observation_date");
+    }
+
+    has_collections() {
+        return this.getValue<boolean>("has_collections");
     }
 
 }
@@ -148,6 +151,17 @@ class TaxonList {
 
     filterByIsSpecies() {
         return new TaxonList(this.taxa.filter((taxon) => taxon.is_species()));
+    }
+
+    filterByHasCollections(has_collections: boolean | undefined) {
+        if (has_collections === undefined) {
+            return this;
+        }
+        if (has_collections) {
+            return new TaxonList(this.taxa.filter((taxon) => taxon.has_collections()));
+        } else {
+            return new TaxonList(this.taxa.filter((taxon) => !taxon.has_collections()));
+        }
     }
 
     getGroupKey(taxon: TaxonOrChecklistTaxon, grouped_by: GroupBy) {
@@ -283,7 +297,7 @@ const GetFamilyTaxa = createNewEndpoint<{ family: string }>("GET", "taxa", "get_
 const GetTaxaAutocompletion = createNewEndpoint<{ search_term: string }>("GET", "taxa_autocomplete", "taxa_autocomplete");
 const GetAllFamilies = createNewEndpoint("GET", "taxon_families", "taxon_families");
 const getTaxonRankChoices = createNewEndpoint("GET", "taxon_ranks", "taxon_ranks");
-const UpdateObservationDatesEndpoint = createNewEndpoint("GET", "update_observation_dates", "update_observation_dates")
+const UpdateComputedValuesEndpoint = createNewEndpoint("GET", "update_computed_values", "update_computed_values")
 const GetEndemicChoices = createNewEndpoint("GET", "endemic", "endemic");
 const GetIntroducedChoices = createNewEndpoint("GET", "introduced", "introduced");
 const GetLifeCycleChoices = createNewEndpoint("GET", "life_cycles", "life_cycles");
@@ -303,7 +317,7 @@ const exported_taxon_endpoints = [
     new MakeSynonymOf(),
     new GetAllFamilies(),
     new getTaxonRankChoices(),
-    new UpdateObservationDatesEndpoint(),
+    new UpdateComputedValuesEndpoint(),
     new CreateNewTaxon(),
     new GetEndemicChoices(),
     new GetIntroducedChoices(),
@@ -312,7 +326,7 @@ const exported_taxon_endpoints = [
 
 
 export {
-    CreateNewTaxon, GetAllFamilies, GetChecklistTaxa, GetEndemicChoices, GetFamilyTaxa, GetGenusTaxa, GetIntroducedChoices, GetLifeCycleChoices, GetPrimaryChecklistTaxa, GetTaxaAutocompletion, GetTaxon, GroupBy, MakeSynonymOf, TaxonOrChecklistTaxon, TaxonList, UpdateObservationDatesEndpoint, UpdateTaxon, exported_taxon_endpoints, loadTaxaFromAPIData
+    CreateNewTaxon, GetAllFamilies, GetChecklistTaxa, GetEndemicChoices, GetFamilyTaxa, GetGenusTaxa, GetIntroducedChoices, GetLifeCycleChoices, GetPrimaryChecklistTaxa, GetTaxaAutocompletion, GetTaxon, GroupBy, MakeSynonymOf, TaxonOrChecklistTaxon, TaxonList, UpdateComputedValuesEndpoint, UpdateTaxon, exported_taxon_endpoints, loadTaxaFromAPIData
 };
 
 export type { GroupedTaxa };

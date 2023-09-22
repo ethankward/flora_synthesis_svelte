@@ -66,6 +66,8 @@ type TaxonType = {
     last_observation_date?: string,
     last_observation_date_url?: string,
 
+    has_collections?: boolean;
+
     all_mapped_taxa?: TaxonNameType[],
     external_id?: number,
     primary_checklist: boolean
