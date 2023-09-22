@@ -34,7 +34,7 @@
         </tr>
     </thead>
     <tbody>
-        {#each Object.values(grouped_checklist_taxa).sort() as group_taxa}
+        {#each Object.entries(grouped_checklist_taxa).sort() as [group_title, group_taxa]}
             {#each group_taxa as taxon}
                 <tr>
                     <td><TaxonLink {taxon} /></td>
