@@ -1,10 +1,7 @@
 <script lang="ts">
 	import FakeLink from "../../../components/common/FakeLink.svelte";
 	import { ChecklistRecordList } from "../../../data_classes/checklist_record";
-	import {
-		MakeSynonymOf,
-		UpdateTaxon,
-	} from "../../../data_classes/taxon";
+	import { MakeSynonymOf, UpdateTaxon } from "../../../data_classes/taxon";
 	import type { TaxonNameType, TaxonType } from "../../../data_classes/types";
 
 	import FNALink from "../../../components/common/FNALink.svelte";
@@ -233,6 +230,40 @@
 				>
 			</li>
 		{/if}
+
+		<li>
+			Rincons population at edge of range (strictly furthest):
+			<label class="inline">
+				<input
+					type="checkbox"
+					value=""
+					checked={taxon.local_population_strict_northern_range_limit}
+				/>North
+			</label>
+			<label class="inline">
+				<input
+					type="checkbox"
+					value=""
+					checked={taxon.local_population_strict_southern_range_limit}
+				/>South
+			</label>
+			<label class="inline">
+				<input
+					type="checkbox"
+					value=""
+					checked={taxon.local_population_strict_eastern_range_limit}
+				/>East
+			</label>
+			<label class="inline">
+				<input
+					type="checkbox"
+					value=""
+					checked={taxon.local_population_strict_western_range_limit}
+				/>West
+			</label>
+		</li>
+		<li>Rincons population at edge of range (non-strict):</li>
+		<li>Rincons population disjunct:</li>
 	</ul>
 </article>
 
@@ -306,3 +337,10 @@
 		<input type="submit" value="Make synonym" />
 	</form>
 </article>
+
+<style>
+	.inline {
+		position: relative;
+		display: inline-block;
+	}
+</style>

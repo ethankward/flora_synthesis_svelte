@@ -6,7 +6,7 @@
 
     import ChecklistController from "../../routes/dashboard/components/ChecklistController.svelte";
     import ComputedValuesController from "./components/ComputedValuesController.svelte";
-
+    import ImportInatObsController from "./components/ImportInatObsController.svelte";
     export let data;
     export let checklist_data: ChecklistType[] = data.checklist_data;
     export let stale_record_counts: ChecklistStaleRecordCountType[] =
@@ -40,4 +40,13 @@
 <article>
     <header>Computed values</header>
     <ComputedValuesController />
+</article>
+
+<article>
+    <header>Import iNaturalist observation</header>
+    <ImportInatObsController 
+    checklists={checklist_data.filter(
+        (checklist) => checklist.checklist_type === "i"
+    )}
+    />
 </article>

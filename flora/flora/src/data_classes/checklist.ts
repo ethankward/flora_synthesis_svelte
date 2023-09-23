@@ -33,16 +33,19 @@ const GetChecklist = createNewEndpoint("GET", "checklists", "get_checklist");
 const UpdateChecklist = createNewEndpoint<{ checklist_id: number }>("POST", "update_checklist", "update_checklist");
 const RetrieveChecklist = createNewEndpoint<{ checklist_id: number, n_records: number }>("POST", "retrieve_checklist", "retrieve_checklist");
 const GetStaleRecordCounts = createNewEndpoint("GET", "checklist_stale_record_counts", "checklist_stale_record_counts");
+const ImportInatObservation = createNewEndpoint<{ checklist_id: number, observation_id: number }>("POST", "import_inat_observation", "import_inat_observation");
 
 
 const checklist_exported_endpoints = [
     new GetChecklists(),
     new UpdateChecklist(),
     new RetrieveChecklist(),
-    new GetStaleRecordCounts()
+    new GetStaleRecordCounts(),
+    new ImportInatObservation()
 ]
 
 export {
-    ChecklistList, GetChecklist, GetChecklists, GetStaleRecordCounts, RetrieveChecklist, UpdateChecklist, checklist_exported_endpoints
+    ChecklistList, GetChecklist, GetChecklists, GetStaleRecordCounts, RetrieveChecklist, ImportInatObservation,
+    UpdateChecklist, checklist_exported_endpoints
 };
 

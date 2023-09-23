@@ -70,7 +70,12 @@ type TaxonType = {
 
     all_mapped_taxa?: TaxonNameType[],
     external_id?: number,
-    primary_checklist: boolean
+    primary_checklist: boolean,
+
+    local_population_strict_northern_range_limit?: boolean,
+    local_population_strict_southern_range_limit?: boolean,
+    local_population_strict_eastern_range_limit?: boolean,
+    local_population_strict_western_range_limit?: boolean,
 
 }
 
