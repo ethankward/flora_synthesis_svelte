@@ -6,11 +6,11 @@ const CreateNewChecklistRecordNote = createNewEndpoint<{ checklist_record_id: nu
     "PUT", "create_new_checklist_record_note", "create_new_checklist_record_note"
 )
 
-const UpdateChecklistRecordNote = createNewEndpoint<{ object_id: number, note: string }>(
+const UpdateChecklistRecordNote = createNewEndpoint<{ id: number, note: string }>(
     "POST", "update_checklist_record_note", "update_checklist_record_note"
 );
 
-const DeleteChecklistRecordNote = createNewEndpoint<{ object_id: number }>(
+const DeleteChecklistRecordNote = createNewEndpoint<{ id: number }>(
     "POST", "delete_checklist_record_note", "delete_checklist_record_note"
 );
 

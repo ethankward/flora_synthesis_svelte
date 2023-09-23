@@ -173,5 +173,5 @@ export type {
     ChecklistType, EndemicType,
     IntroducedType, LifeCycleType, MinimalTaxonType,
     ObservationDateType, TaxonNameType, TaxonSynonymType,
-    TaxonType, PersonalCollectionRecordType, ValueDisplayType
+    TaxonType, PersonalCollectionRecordType, ValueDisplayType, ChecklistRecordNoteType
 };

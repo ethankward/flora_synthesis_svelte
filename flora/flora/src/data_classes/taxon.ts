@@ -274,21 +274,8 @@ function loadTaxaFromAPIData(api_data: TaxonType[]) {
 }
 
 
-const GetTaxon = createNewEndpoint<{ taxon_id: number }>("GET", "taxa", "get_taxon", (data) => [data.taxon_id.toString()])
-const UpdateTaxon = createNewEndpoint<{
-    taxon_id: number,
-    taxon_name?: string,
-    family?: string,
-    seinet_id?: string,
-    inat_id?: string,
-    introduced?: string,
-    endemic?: string,
-    life_cycle?: string
-}>("PATCH",
-    "taxa",
-    "update_taxon",
-    (data) => [data.taxon_id.toString()]
-)
+const GetTaxon = createNewEndpoint<{ taxon_id: number }>("GET", "taxa", "get_taxon", (data) => [data.taxon_id.toString()]);
+const UpdateTaxon = createNewEndpoint<Pick<TaxonType, "id"> & Partial<TaxonType>>("PATCH", "taxa", "update_taxon", (data) => [data.id.toString()]);
 const GetTaxa = createNewEndpoint("GET", "taxa", "get_taxa");
 const GetPrimaryChecklistTaxa = createNewEndpoint("GET", "primary_taxa", "get_primary_checklist_taxa")
 const GetChecklistTaxa = createNewEndpoint<{ checklist: string }>("GET", "taxa", "get_checklist_taxa");
@@ -303,7 +290,7 @@ const GetIntroducedChoices = createNewEndpoint("GET", "introduced", "introduced"
 const GetLifeCycleChoices = createNewEndpoint("GET", "life_cycles", "life_cycles");
 
 const MakeSynonymOf = createNewEndpoint<{ taxon_id_1: number, taxon_id_2: number }>("POST", "make_synonym_of", "make_synonym_of");
-const CreateNewTaxon = createNewEndpoint<{ taxon_name: string, taxon_family: string }>("POST", "create_new_taxon", "create_new_taxon")
+const CreateNewTaxon = createNewEndpoint<Partial<TaxonType>>("POST", "taxa", "create_new_taxon")
 
 const exported_taxon_endpoints = [
     new GetTaxa(),

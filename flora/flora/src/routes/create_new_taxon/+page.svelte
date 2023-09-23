@@ -9,10 +9,10 @@
         create_new_taxon_endpoint
             .callExternal({
                 taxon_name: taxon_name,
-                taxon_family: taxon_family,
+                family: taxon_family,
             })
             .then((result) => {
-                window.location.href = "/taxon_detail/" + result.data.taxon_id;
+                window.location.href = "/taxon_detail/" + result.data.id;
             });
     }
 </script>

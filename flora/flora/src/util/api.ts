@@ -49,6 +49,10 @@ class APIManager {
         return axios.put(this.getUrl(path), data);
     }
 
+    delete(path: string[]) {
+        return axios.delete(this.getUrl(path));
+    }
+
 }
 
 

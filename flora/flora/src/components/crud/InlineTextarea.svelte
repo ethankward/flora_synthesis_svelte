@@ -78,40 +78,34 @@
 >
 
 <div class:hide={active}>
-    <ul>
-        {#each existing_values as existing_value}
-            <li>{existing_value.display}</li>
-        {/each}
-    </ul>
+    {#each existing_values as existing_value}
+        <hr />
+        <p>{existing_value.display}</p>
+    {/each}
 </div>
 <div class:hide={!active}>
-    <ul>
-        {#each existing_values as existing_value, i}
-            <li>
-                <div class="grid">
-                    <input
-                        type="text"
-                        bind:value={existing_value.display}
-                        aria-invalid={update_invalid[i]}
-                    />
-                    <button class="secondary" on:click={() => handleUpdate(i)}
-                        >update</button
-                    >
-                    <button class="contrast" on:click={() => handleDelete(i)}
-                        >delete</button
-                    >
-                </div>
-            </li>
-        {/each}
-        <li>
-            <div class="grid">
-                <input
-                    type="text"
-                    bind:value={new_value}
-                    aria-invalid={creation_invalid}
-                />
-                <button on:click={handleCreate}>add new</button>
-            </div>
-        </li>
-    </ul>
+    {#each existing_values as existing_value, i}
+        <div class="grid">
+            <textarea
+                bind:value={existing_value.display}
+                aria-invalid={update_invalid[i]}
+            />
+            <button class="secondary" on:click={() => handleUpdate(i)}
+                >update</button
+            >
+            <button class="contrast" on:click={() => handleDelete(i)}
+                >delete</button
+            >
+        </div>
+    {/each}
+    <div class="grid">
+        <textarea bind:value={new_value} aria-invalid={creation_invalid} />
+        <button on:click={handleCreate}>add new</button>
+    </div>
 </div>
+
+<style>
+    p {
+        white-space: pre-line;
+    }
+</style>

@@ -1,6 +1,7 @@
 import type { TaxonSynonymType } from "../data_classes/types";
 import { createNewEndpoint } from "../util/api_util";
 
+import type { Optional } from "../util/api_util";
 
 
 class TaxonSynonymList {
@@ -16,14 +17,14 @@ class TaxonSynonymList {
 
 }
 
-const CreateNewTaxonSynonym = createNewEndpoint<{ taxon_id: string, synonym: string }>(
-    "PUT", "create_new_taxon_synonym", "create_new_taxon_synonym"
+const CreateNewTaxonSynonym = createNewEndpoint<Optional<TaxonSynonymType, 'id'>>(
+    "POST", "taxon_synonyms", "create_new_taxon_synonym"
 )
-const UpdateTaxonSynonym = createNewEndpoint<{ object_id: string, synonym: string }>(
-    "POST", "update_taxon_synonym", "update_taxon_synonym"
+const UpdateTaxonSynonym = createNewEndpoint<TaxonSynonymType>(
+    "PUT", "taxon_synonyms", "update_taxon_synonym", (taxon_synonym) => [taxon_synonym.id.toString()]
 );
-const DeleteTaxonSynonym = createNewEndpoint<{ object_id: string }>(
-    "POST", "delete_taxon_synonym", "delete_taxon_synonym"
+const DeleteTaxonSynonym = createNewEndpoint<{id: number}>(
+    "DELETE", "taxon_synonyms", "delete_taxon_synonym", (taxon_synonym) => [taxon_synonym.id.toString()]
 );
 
 

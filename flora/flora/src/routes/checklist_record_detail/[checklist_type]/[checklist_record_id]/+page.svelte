@@ -3,7 +3,7 @@
     import TaxonNameAutocompletion from "../../../../components/common/TaxonNameAutocompletion.svelte";
     import type { TaxonNameType } from "../../../../data_classes/types";
 
-    import InlineList from "../../../../components/crud/InlineList.svelte";
+    import InlineTextarea from "../../../../components/crud/InlineTextarea.svelte";
     import DisplayChecklistRecord from "../../components/DisplayChecklistRecord.svelte";
     import { UpdateChecklistRecord } from "../../../../data_classes/checklist_record";
     import {
@@ -60,7 +60,7 @@
 <article>
     <header>Notes for this record</header>
 
-    <InlineList
+    <InlineTextarea
         existing_values={checklist_record.notes.map((note) => ({
             value: note.id.toString(),
             display: note.note,
@@ -73,11 +73,11 @@
             })}
         deleteAPIMethod={(note_id) =>
             delete_crn_endpoint.callExternal({
-                object_id: parseInt(note_id),
+                id: parseInt(note_id),
             })}
         updateAPIMethod={(note_id, value) =>
             update_crn_endpoint.callExternal({
-                object_id: parseInt(note_id),
+                id: parseInt(note_id),
                 note: value,
             })}
     />

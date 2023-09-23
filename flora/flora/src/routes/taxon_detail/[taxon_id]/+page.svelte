@@ -15,6 +15,7 @@
 	import InlineList from "../../../components/crud/InlineList.svelte";
 	import InlineSelect from "../../../components/crud/InlineSelect.svelte";
 	import InlineText from "../../../components/crud/InlineText.svelte";
+	import InlineCheckbox from "../../../components/crud/InlineCheckbox.svelte";
 	import {
 		CreateNewTaxonSynonym,
 		DeleteTaxonSynonym,
@@ -91,11 +92,12 @@
 			Taxon name:
 			<InlineText
 				id="taxon_name_editor"
-				display_value={taxon.taxon_name}
+				bind:display_value={taxon.taxon_name}
+				bind:value={taxon.taxon_name}
 				apiMethod={(value) =>
 					update_taxon_endpoint.callExternal({
-						taxon_id: taxon.id,
 						taxon_name: value,
+						id: taxon.id,
 					})}
 			/>
 		</li>
@@ -104,13 +106,10 @@
 			Family:
 			<InlineText
 				id="taxon_family_editor"
-				display_value={taxon.family}
+				bind:display_value={taxon.family}
+				bind:value={taxon.family}
 				create_link={(value) => "/family/" + value}
-				apiMethod={(value) =>
-					update_taxon_endpoint.callExternal({
-						taxon_id: taxon.id,
-						family: value,
-					})}
+				apiMethod={(value) => update_taxon_endpoint.callExternal(taxon)}
 			/>
 		</li>
 		<li>
@@ -119,16 +118,17 @@
 				existing_values={taxon.synonyms}
 				createAPIMethod={(value) =>
 					create_taxon_synonym_endpoint.callExternal({
-						taxon_id: taxon.id.toString(),
+						taxon: taxon.id,
 						synonym: value,
 					})}
-				deleteAPIMethod={(synonym_id) =>
+				deleteAPIMethod={(value) =>
 					delete_taxon_synonym_endpoint.callExternal({
-						object_id: synonym_id,
+						id: parseInt(value),
 					})}
 				updateAPIMethod={(synonym_id, value) =>
 					update_taxon_synonym_endpoint.callExternal({
-						object_id: synonym_id,
+						id: parseInt(synonym_id),
+						taxon: taxon.id,
 						synonym: value,
 					})}
 			/>
@@ -141,8 +141,8 @@
 				display_value={taxon.seinet_id?.toString()}
 				apiMethod={(value) =>
 					update_taxon_endpoint.callExternal({
-						taxon_id: taxon.id,
-						seinet_id: value,
+						id: taxon.id,
+						seinet_id: parseInt(value),
 					})}
 			/>
 		</li>
@@ -153,8 +153,8 @@
 				display_value={taxon.inat_id?.toString()}
 				apiMethod={(value) =>
 					update_taxon_endpoint.callExternal({
-						taxon_id: taxon.id,
-						inat_id: value,
+						id: taxon.id,
+						inat_id: parseInt(value),
 					})}
 			/>
 		</li>
@@ -167,7 +167,7 @@
 				choices={introduced_choices}
 				apiMethod={(value) =>
 					update_taxon_endpoint.callExternal({
-						taxon_id: taxon.id,
+						id: taxon.id,
 						introduced: value,
 					})}
 			/>
@@ -181,7 +181,7 @@
 				choices={endemic_choices}
 				apiMethod={(value) =>
 					update_taxon_endpoint.callExternal({
-						taxon_id: taxon.id,
+						id: taxon.id,
 						endemic: value,
 					})}
 			/>
@@ -195,7 +195,7 @@
 				choices={life_cycle_choices}
 				apiMethod={(value) =>
 					update_taxon_endpoint.callExternal({
-						taxon_id: taxon.id,
+						id: taxon.id,
 						life_cycle: value,
 					})}
 			/>
@@ -233,37 +233,23 @@
 
 		<li>
 			Rincons population at edge of range (strictly furthest):
-			<label class="inline">
-				<input
-					type="checkbox"
-					value=""
-					checked={taxon.local_population_strict_northern_range_limit}
-				/>North
-			</label>
-			<label class="inline">
-				<input
-					type="checkbox"
-					value=""
-					checked={taxon.local_population_strict_southern_range_limit}
-				/>South
-			</label>
-			<label class="inline">
-				<input
-					type="checkbox"
-					value=""
-					checked={taxon.local_population_strict_eastern_range_limit}
-				/>East
-			</label>
-			<label class="inline">
-				<input
-					type="checkbox"
-					value=""
-					checked={taxon.local_population_strict_western_range_limit}
-				/>West
-			</label>
+			<InlineCheckbox
+				label="North"
+				bind:value={taxon.local_population_strict_northern_range_limit}
+			/>
+			<InlineCheckbox
+				label="South"
+				bind:value={taxon.local_population_strict_southern_range_limit}
+			/>
+			<InlineCheckbox
+				label="West"
+				bind:value={taxon.local_population_strict_western_range_limit}
+			/>
+			<InlineCheckbox
+				label="East"
+				bind:value={taxon.local_population_strict_eastern_range_limit}
+			/>
 		</li>
-		<li>Rincons population at edge of range (non-strict):</li>
-		<li>Rincons population disjunct:</li>
 	</ul>
 </article>
 
@@ -337,10 +323,3 @@
 		<input type="submit" value="Make synonym" />
 	</form>
 </article>
-
-<style>
-	.inline {
-		position: relative;
-		display: inline-block;
-	}
-</style>

@@ -4,7 +4,10 @@ import axios from "axios";
 import type { APIManager } from "./api";
 
 
-type allowedActions = "GET" | "POST" | "PATCH" | "PUT";
+type Optional<T, K extends keyof T> = Pick<Partial<T>, K> & Omit<T, K>;
+
+
+type allowedActions = "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
 
 interface APIEndpoint<DataType> {
     external_endpoint: string;
@@ -44,6 +47,8 @@ function createNewEndpoint<DataType extends object>(
                     return api_manager.patch(data, path);
                 case "PUT":
                     return api_manager.put(data, path);
+                case "DELETE":
+                    return api_manager.delete(path);
                 default:
                     throw new Error();
             }
@@ -63,3 +68,4 @@ function createNewEndpoint<DataType extends object>(
 
 export { createNewEndpoint };
 
+export type { Optional }
