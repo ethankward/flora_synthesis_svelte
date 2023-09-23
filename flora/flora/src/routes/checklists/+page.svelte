@@ -35,7 +35,7 @@
         taxaGroupedBy: 0 as number,
         hideChecklistTaxa: true,
         hideComparisonTaxa: true,
-        displayAsList: true,
+        displayAsList: false,
         grouped_checklist_taxa: {} as GroupedTaxa,
         common_taxa: {} as GroupedTaxa,
         taxa_diff_1: {} as GroupedTaxa,

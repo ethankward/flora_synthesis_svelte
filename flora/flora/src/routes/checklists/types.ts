@@ -111,7 +111,7 @@ class SynonymsField extends DisplayedField {
 
 class LifeCycleField extends DisplayedField {
     title = "Life cycle";
-    visible = false;
+    visible = true;
     get_display(taxon: TaxonOrChecklistTaxon) {
         const result = taxon.life_cycle_display();
         if (!result) {
@@ -123,7 +123,7 @@ class LifeCycleField extends DisplayedField {
 
 class IntroducedField extends DisplayedField {
     title = "Introduced";
-    visible = false;
+    visible = true;
     get_display(taxon: TaxonOrChecklistTaxon) {
         const result = taxon.introduced_display();
         if (!result) {
@@ -135,7 +135,7 @@ class IntroducedField extends DisplayedField {
 
 class EndemicField extends DisplayedField {
     title = "Endemic";
-    visible = false;
+    visible = true;
     get_display(taxon: TaxonOrChecklistTaxon) {
         const result = taxon.endemic_display();
         if (!result) {
@@ -147,7 +147,7 @@ class EndemicField extends DisplayedField {
 
 class FirstObservationDateField extends DisplayedField {
     title = "First observation date";
-    visible = false;
+    visible = true;
     get_display(taxon: TaxonOrChecklistTaxon) {
         const result = taxon.first_observation_date();
         if (!result) {
@@ -159,7 +159,7 @@ class FirstObservationDateField extends DisplayedField {
 
 class LastObservationDateField extends DisplayedField {
     title = "Last observation date";
-    visible = false;
+    visible = true;
     get_display(taxon: TaxonOrChecklistTaxon) {
         const result = taxon.last_observation_date();
         if (!result) {
