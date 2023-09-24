@@ -94,7 +94,13 @@ type MinimalTaxonType = {
     first_observation_date?: string,
     first_observation_date_url?: string,
     last_observation_date?: string,
-    last_observation_date_url?: string
+    last_observation_date_url?: string,
+
+
+    local_population_strict_northern_range_limit?: boolean,
+    local_population_strict_southern_range_limit?: boolean,
+    local_population_strict_eastern_range_limit?: boolean,
+    local_population_strict_western_range_limit?: boolean,
 }
 
 

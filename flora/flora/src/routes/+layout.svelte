@@ -19,7 +19,9 @@
     <ul>
       <li><strong><a href="/">Home</a></strong></li>
       <li><strong><a href="/checklists">Checklists</a></strong></li>
-      <li><strong>Ranges</strong></li>
+      <li>
+        <strong><a href="/population_ranges">Population ranges</a></strong>
+      </li>
       <li><strong><a href="/introduced">Introduced</a></strong></li>
       <li><strong><a href="/endemic">Endemic</a></strong></li>
       <li><strong><a href="/life_cycles">Life cycles</a></strong></li>

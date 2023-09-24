@@ -236,18 +236,38 @@
 			<InlineCheckbox
 				label="North"
 				bind:value={taxon.local_population_strict_northern_range_limit}
+				apiMethod={(value) =>
+					update_taxon_endpoint.callExternal({
+						id: taxon.id,
+						local_population_strict_northern_range_limit: value,
+					})}
 			/>
 			<InlineCheckbox
 				label="South"
 				bind:value={taxon.local_population_strict_southern_range_limit}
+				apiMethod={(value) =>
+					update_taxon_endpoint.callExternal({
+						id: taxon.id,
+						local_population_strict_southern_range_limit: value,
+					})}
 			/>
 			<InlineCheckbox
 				label="West"
 				bind:value={taxon.local_population_strict_western_range_limit}
+				apiMethod={(value) =>
+					update_taxon_endpoint.callExternal({
+						id: taxon.id,
+						local_population_strict_western_range_limit: value,
+					})}
 			/>
 			<InlineCheckbox
 				label="East"
 				bind:value={taxon.local_population_strict_eastern_range_limit}
+				apiMethod={(value) =>
+					update_taxon_endpoint.callExternal({
+						id: taxon.id,
+						local_population_strict_eastern_range_limit: value,
+					})}
 			/>
 		</li>
 	</ul>
