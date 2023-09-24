@@ -116,6 +116,27 @@ class TaxonOrChecklistTaxon {
         return this.getValue<boolean>("has_collections");
     }
 
+    strict_population_limits_display() {
+        const northern = this.getValue<string>("local_population_strict_northern_range_limit");
+        const southern = this.getValue<string>("local_population_strict_southern_range_limit");
+        const eastern = this.getValue<string>("local_population_strict_eastern_range_limit");
+        const western = this.getValue<string>("local_population_strict_western_range_limit");
+
+        const result = [];
+        if (northern) {
+            result.push("north");
+        }
+        if (southern) {
+            result.push("south");
+        }
+        if (eastern) {
+            result.push("east");
+        }
+        if (western) {
+            result.push("west");
+        }
+        return result.join(', ');
+    }
 }
 
 type GroupedTaxa = {

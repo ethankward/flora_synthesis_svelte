@@ -183,10 +183,20 @@ class HasCollectionsField extends DisplayedField {
     }
 }
 
+
+class PopulationRangesField extends DisplayedField {
+    title = "Population range limits";
+    visible = false;
+
+    get_display(taxon: TaxonOrChecklistTaxon): string {
+        return taxon.strict_population_limits_display();
+    }
+
+}
 const all_field_types: (typeof DisplayedField)[] = [
     TaxonNameField, MappedToField, FamilyField, SynonymsField,
     LifeCycleField, IntroducedField, EndemicField,
-    FirstObservationDateField, LastObservationDateField, HasCollectionsField
+    FirstObservationDateField, LastObservationDateField, HasCollectionsField, PopulationRangesField
 ];
 
 export {
