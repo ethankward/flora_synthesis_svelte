@@ -7,7 +7,8 @@ import { checklist_record_note_exported_endpoints } from "../../../data_classes/
 import { exported_taxon_endpoints } from "../../../data_classes/taxon";
 import { taxon_synonym_exported_endpoints } from "../../../data_classes/taxon_synonym";
 import { exported_pcr_endpoints } from "../../../data_classes/personal_collection_record";
-
+import { collector_alias_exported_endpoints } from '../../../data_classes/collector_alias';
+import { collector_exported_endpoints } from '../../../data_classes/collector';
 import { APIManager } from "../../../util/api";
 
 
@@ -18,7 +19,9 @@ function execute(api_manager: APIManager, data: any, endpoint_identifier: string
         ...checklist_exported_endpoints,
         ...checklist_records_exported_endpoints,
         ...exported_taxon_endpoints,
-        ...exported_pcr_endpoints
+        ...exported_pcr_endpoints,
+        ...collector_alias_exported_endpoints,
+        ...collector_exported_endpoints
     ];
 
     let result;

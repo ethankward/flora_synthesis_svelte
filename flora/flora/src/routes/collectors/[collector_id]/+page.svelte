@@ -1,9 +1,21 @@
 <script lang="ts">
     import type { CollectorType } from "../../../data_classes/types";
+    import InlineList from "../../../components/crud/InlineList.svelte";
+    import {
+        CreateNewCollectorAlias,
+        UpdateCollectorAlias,
+        DeleteCollectorAlias,
+    } from "../../../data_classes/collector_alias";
 
     export let data;
 
     let collector: CollectorType = data.collector_data;
+
+    console.log(collector);
+
+    const create_collector_alias_endpoint = new CreateNewCollectorAlias();
+    const delete_collector_alias_endpoint = new DeleteCollectorAlias();
+    const update_collector_alias_endpoint = new UpdateCollectorAlias();
 </script>
 
 <svelte:head>
@@ -40,5 +52,27 @@
                 {/if}
             </li>
         {/each}
+    </ul>
+
+    <h4>Aliases</h4>
+    <ul>
+        <InlineList
+            existing_values={collector.collector_aliases}
+            createAPIMethod={(value) =>
+                create_collector_alias_endpoint.callExternal({
+                    collector: collector.id,
+                    alias: value,
+                })}
+            deleteAPIMethod={(value) =>
+                delete_collector_alias_endpoint.callExternal({
+                    id: parseInt(value),
+                })}
+            updateAPIMethod={(alias_id, value) =>
+                update_collector_alias_endpoint.callExternal({
+                    id: parseInt(alias_id),
+                    collector: collector.id,
+                    alias: value,
+                })}
+        />
     </ul>
 </article>

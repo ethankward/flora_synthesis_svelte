@@ -177,6 +177,7 @@ type PersonalCollectionRecordType = {
 
 type CollectorAliasType = {
     id: number,
+    collector: number,
     alias: string
 }
 
@@ -184,7 +185,7 @@ type CollectorType = {
     id: number,
     name: string,
     external_url?: string,
-    collector_aliases: CollectorAliasType[],
+    collector_aliases: ValueDisplayType[],
     first_collection_year?: number,
     last_collection_year?: number,
     seinet_collection_records: {
