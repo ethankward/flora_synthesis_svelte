@@ -35,13 +35,16 @@ const UpdateChecklistRecord = createNewEndpoint<{ checklist_type: string, checkl
     "POST", "update_checklist_record_mapping", "update_checklist_record_mapping",
 )
 
+const GetChecklistRecordsNoCollector = createNewEndpoint("GET", "checklist_records_no_collector", "checklist_records_no_collector");
+
 const checklist_records_exported_endpoints = [
     new GetTaxonChecklistRecords(),
     new GetChecklistRecord(),
-    new UpdateChecklistRecord()
+    new UpdateChecklistRecord(),
+    new GetChecklistRecordsNoCollector()
 ]
 
 export {
-    ChecklistRecordList, GetChecklistRecord, GetTaxonChecklistRecords, UpdateChecklistRecord, checklist_records_exported_endpoints
+    ChecklistRecordList, GetChecklistRecord, GetTaxonChecklistRecords, UpdateChecklistRecord, GetChecklistRecordsNoCollector, checklist_records_exported_endpoints
 };
 

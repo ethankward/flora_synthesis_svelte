@@ -125,6 +125,14 @@ type ChecklistRecordType = {
     notes: ChecklistRecordNoteType[]
 }
 
+type ChecklistRecordNoCollectorType = {
+    id: number,
+    observer: string,
+    date: string,
+    external_url: string
+}
+
+
 type TaxonSynonymType = {
     id: number,
     taxon: number,
@@ -194,12 +202,13 @@ type CollectorType = {
         date?: string,
         external_url?: string,
         observation_type: string,
-        taxon_name: string
+        taxon_name: string,
+        observer: string
     }[]
 }
 
 export type {
-    ChecklistRecordType, ChecklistStaleRecordCountType,
+    ChecklistRecordType, ChecklistRecordNoCollectorType, ChecklistStaleRecordCountType,
     ChecklistType, EndemicType,
     IntroducedType, LifeCycleType, MinimalTaxonType,
     ObservationDateType, TaxonNameType, TaxonSynonymType,

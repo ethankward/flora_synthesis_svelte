@@ -6,16 +6,24 @@
         UpdateCollectorAlias,
         DeleteCollectorAlias,
     } from "../../../data_classes/collector_alias";
+    import { DeleteCollector } from "../../../data_classes/collector";
 
     export let data;
 
     let collector: CollectorType = data.collector_data;
 
-    console.log(collector);
-
     const create_collector_alias_endpoint = new CreateNewCollectorAlias();
     const delete_collector_alias_endpoint = new DeleteCollectorAlias();
     const update_collector_alias_endpoint = new UpdateCollectorAlias();
+    const delete_collector_endpoint = new DeleteCollector();
+
+    function delete_collector() {
+        delete_collector_endpoint
+            .callExternal({ id: collector.id })
+            .then(() => {
+                window.location.href = "/collectors";
+            });
+    }
 </script>
 
 <svelte:head>
@@ -41,6 +49,7 @@
     <ul>
         {#each collector.seinet_collection_records as collection_record}
             <li>
+                {#if collection_record.observer}{collection_record.observer}{/if}
                 {#if collection_record.date}{collection_record.date}:{/if}
                 <a href="/checklist_record_detail/s/{collection_record.id}"
                     >{collection_record.taxon_name}</a
@@ -75,4 +84,8 @@
                 })}
         />
     </ul>
+</article>
+
+<article>
+    <button class="error" on:click={delete_collector}>Delete collector</button>
 </article>
