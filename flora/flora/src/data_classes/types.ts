@@ -174,10 +174,34 @@ type PersonalCollectionRecordType = {
     land_ownership?: string
 }
 
+
+type CollectorAliasType = {
+    id: number,
+    alias: string
+}
+
+type CollectorType = {
+    id: number,
+    name: string,
+    external_url?: string,
+    collector_aliases: CollectorAliasType[],
+    first_collection_year?: number,
+    last_collection_year?: number,
+    seinet_collection_records: {
+        id: number,
+        external_id?: string,
+        date?: string,
+        external_url?: string,
+        observation_type: string,
+        taxon_name: string
+    }[]
+}
+
 export type {
     ChecklistRecordType, ChecklistStaleRecordCountType,
     ChecklistType, EndemicType,
     IntroducedType, LifeCycleType, MinimalTaxonType,
     ObservationDateType, TaxonNameType, TaxonSynonymType,
-    TaxonType, PersonalCollectionRecordType, ValueDisplayType, ChecklistRecordNoteType
+    TaxonType, PersonalCollectionRecordType, ValueDisplayType, ChecklistRecordNoteType,
+    CollectorAliasType, CollectorType
 };

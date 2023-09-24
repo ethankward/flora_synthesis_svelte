@@ -28,7 +28,7 @@
       <li>
         <strong><a href="/observation_dates">Observation dates</a></strong>
       </li>
-      <li><strong>Collectors</strong></li>
+      <li><strong><a href="/collectors">Collectors</a></strong></li>
       <li>
         <strong
           ><a href="/personal_collection_records">Personal collection records</a
