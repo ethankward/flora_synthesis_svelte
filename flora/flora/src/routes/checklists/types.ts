@@ -70,7 +70,7 @@ class TaxonNameField extends DisplayedField {
 
 class FamilyField extends DisplayedField {
     title = "Family";
-    visible = false;
+    visible = true;
 
     get_display(taxon: TaxonOrChecklistTaxon) {
         return taxon.family();
@@ -98,7 +98,7 @@ class MappedToField extends DisplayedField {
 
 class SynonymsField extends DisplayedField {
     title = "Synonyms";
-    visible = true;
+    visible = false;
 
     get_display(taxon: TaxonOrChecklistTaxon) {
         return taxon.synonyms().map((synonym) => synonym.display).join(", ")
