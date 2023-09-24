@@ -4,7 +4,7 @@ import { createNewEndpoint } from "../util/api_util";
 import type { Optional } from "../util/api_util";
 
 
-const GetCollectors = createNewEndpoint("GET", "collectors", "get_collectors");
+const GetCollectors = createNewEndpoint("GET", "collector_list", "get_collectors");
 const GetCollector = createNewEndpoint<{ collector_id: number }>("GET", "collectors", "get_collector", (data) => [data.collector_id.toString()]);
 
 const CreateNewCollector = createNewEndpoint<Optional<CollectorType, 'id'>>(
