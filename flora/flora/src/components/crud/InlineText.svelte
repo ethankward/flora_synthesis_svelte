@@ -46,6 +46,11 @@
     role={"text"}><FakeLink display="edit" /></sup
 >
 
-<form class:hide={!active} on:change={handleOnSubmit} {id}>
+<form
+    class:hide={!active}
+    on:change={handleOnSubmit}
+    on:submit|preventDefault={() => {}}
+    {id}
+>
     <input type="text" bind:value aria-invalid={submission_invalid} />
 </form>
