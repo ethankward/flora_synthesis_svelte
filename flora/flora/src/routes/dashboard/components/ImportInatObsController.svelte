@@ -1,9 +1,8 @@
 <script lang="ts">
-    import type {
-        ChecklistStaleRecordCountType,
-        ChecklistType,
-    } from "../../../data_classes/types";
     import { ImportInatObservation } from "../../../data_classes/checklist";
+    import type {
+        ChecklistType
+    } from "../../../data_classes/types";
 
     const import_inat_obs_endpoint = new ImportInatObservation();
 

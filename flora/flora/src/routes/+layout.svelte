@@ -1,15 +1,13 @@
 <script lang="ts">
-  import { goto } from "$app/navigation";
   import "@picocss/pico";
-  import type { TaxonNameType } from "../data_classes/types";
   import TaxonNameAutocompletion from "../components/common/TaxonNameAutocompletion.svelte";
+  import type { TaxonNameType } from "../data_classes/types";
 
-  let selectedTaxon: TaxonNameType;
+  let selectedTaxon: TaxonNameType | undefined;
 
   async function goToTaxon() {
-    if (selectedTaxon) {
-      await goto("/empty_page");
-      goto("/taxon_detail/" + selectedTaxon.id);
+    if (selectedTaxon !== undefined) {
+      window.location.href = "/taxon_detail/" + selectedTaxon.id;
     }
   }
 </script>

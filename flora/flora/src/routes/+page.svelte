@@ -19,7 +19,7 @@
                 {#if checklist.citation}
                     <a
                         href="/checklists?primary_checklist={checklist.id}"
-                        target="_blank">{@html checklist.citation}</a
+                        >{@html checklist.citation}</a
                     >
                     {#if checklist.citation_url}
                         <a href={checklist.citation_url} target="_blank">→</a>

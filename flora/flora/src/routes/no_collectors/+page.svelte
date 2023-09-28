@@ -7,6 +7,10 @@
         data.no_collectors_data;
 </script>
 
+<svelte:head>
+    <title>Records with no collector</title>
+</svelte:head>
+
 <article>
     <header><h3>Records with no mapped collector</h3></header>
 

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { enhance } from "$app/forms";
     import type {
         ChecklistStaleRecordCountType,
         ChecklistType,
@@ -44,9 +45,15 @@
 
 <article>
     <header>Import iNaturalist observation</header>
-    <ImportInatObsController 
-    checklists={checklist_data.filter(
-        (checklist) => checklist.checklist_type === "i"
-    )}
+    <ImportInatObsController
+        checklists={checklist_data.filter(
+            (checklist) => checklist.checklist_type === "i"
+        )}
     />
+</article>
+
+<article>
+    <form method="POST" action="?/test" use:enhance>
+        <input type="submit" />
+    </form>
 </article>

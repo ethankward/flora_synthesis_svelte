@@ -36,11 +36,15 @@
 </script>
 
 {#if create_link !== undefined}
-    <a href={create_link(display_value)}>{display_value}</a>
+    <a href={create_link(value)}>{display_value}</a>
 {:else}
     {display_value}
 {/if}
-<sup on:click={handleActiveToggle} on:keypress={handleActiveToggle} role={"text"}><FakeLink display="edit" /></sup>
+<sup
+    on:click={handleActiveToggle}
+    on:keypress={handleActiveToggle}
+    role={"text"}><FakeLink display="edit" /></sup
+>
 
 <form class:hide={!active} on:change={handleOnSubmit} {id}>
     <input type="text" bind:value aria-invalid={submission_invalid} />
