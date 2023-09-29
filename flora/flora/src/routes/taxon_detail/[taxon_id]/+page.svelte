@@ -16,6 +16,8 @@
 	import InlineSelect from "../../../components/crud/InlineSelect.svelte";
 	import InlineText from "../../../components/crud/InlineText.svelte";
 	import InlineCheckbox from "../../../components/crud/InlineCheckbox.svelte";
+	import InlineTextarea from "../../../components/crud/InlineTextarea.svelte";
+
 	import {
 		CreateNewTaxonSynonym,
 		DeleteTaxonSynonym,
@@ -267,6 +269,18 @@
 					update_taxon_endpoint.callExternal({
 						id: taxon.id,
 						local_population_strict_eastern_range_limit: value,
+					})}
+			/>
+		</li>
+		<li>
+			Occurrence remarks:
+			<InlineText
+				id="occurrence_remarks_editor"
+				display_value={taxon.occurrence_remarks?.toString()}
+				apiMethod={(value) =>
+					update_taxon_endpoint.callExternal({
+						id: taxon.id,
+						occurrence_remarks: value,
 					})}
 			/>
 		</li>

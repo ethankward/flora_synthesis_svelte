@@ -77,6 +77,8 @@ type TaxonType = {
     local_population_strict_eastern_range_limit?: boolean,
     local_population_strict_western_range_limit?: boolean,
 
+    occurrence_remarks?: string
+
 }
 
 
