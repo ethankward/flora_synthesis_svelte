@@ -3,15 +3,15 @@ import { createNewEndpoint } from "../util/api_util";
 
 
 const CreateNewChecklistRecordNote = createNewEndpoint<{ checklist_record_id: number, checklist_record_type: string, note: string }>(
-    "PUT", "create_new_checklist_record_note", "create_new_checklist_record_note"
+    "POST", "checklist_record_notes", "create_new_checklist_record_note"
 )
 
 const UpdateChecklistRecordNote = createNewEndpoint<{ id: number, note: string }>(
-    "POST", "update_checklist_record_note", "update_checklist_record_note"
+    "PATCH", "checklist_record_notes", "update_checklist_record_note", (crn) => [crn.id.toString()]
 );
 
 const DeleteChecklistRecordNote = createNewEndpoint<{ id: number }>(
-    "POST", "delete_checklist_record_note", "delete_checklist_record_note"
+    "DELETE", "checklist_record_notes", "delete_checklist_record_note", (crn) => [crn.id.toString()]
 );
 
 

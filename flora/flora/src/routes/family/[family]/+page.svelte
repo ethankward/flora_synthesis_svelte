@@ -23,7 +23,7 @@
 
 <article>
     <header>
-        Family: <mark>{data.family}</mark>
+        Family <mark>{data.family}</mark>
         <FNALink target={data.family} />
     </header>
     <ul>

@@ -8,8 +8,9 @@
         PersonalCollectionRecordType,
         TaxonNameType,
     } from "../../../data_classes/types";
+    import type { Optional } from "../../../util/api_util";
 
-    export let data: PersonalCollectionRecordType;
+    export let data: Optional<PersonalCollectionRecordType, "id">;
     export let create_or_edit: "create" | "edit";
     export let record_id: string | undefined = undefined;
     export let selectedSpecificTaxon: TaxonNameType | undefined = undefined;

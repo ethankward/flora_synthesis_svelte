@@ -1,7 +1,7 @@
 <script lang="ts">
     import {
         RetrieveChecklist,
-        UpdateChecklist,
+        LoadChecklist,
     } from "../../../data_classes/checklist";
     import type {
         ChecklistStaleRecordCountType,
@@ -21,7 +21,7 @@
 
     let n_records = 10;
 
-    let updateChecklistEndpoint = new UpdateChecklist();
+    let loadChecklistEndpoint = new LoadChecklist();
     let retrievechecklistEndpoint = new RetrieveChecklist();
 
     async function submitUpdateRequest(checklist_index: number) {
@@ -30,7 +30,7 @@
         update_invalid = new Array(checklists.length).fill(undefined);
         update_loading[checklist_index] = true;
 
-        updateChecklistEndpoint
+        loadChecklistEndpoint
             .callExternal({ checklist_id: checklist.id })
             .then(() => {
                 update_invalid[checklist_index] = false;

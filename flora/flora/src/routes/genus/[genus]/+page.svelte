@@ -15,7 +15,7 @@
 
 <article>
     <header>
-        Genus: <mark>{data.genus}</mark>
+        Genus <mark>{data.genus}</mark>
         {#if families.length > 0}
             ({#if families.length === 1}
                 family

@@ -69,10 +69,10 @@
   }
 
   :global(.error) {
-    background-color: red;
+    background-color: rgb(185, 59, 59);
   }
   :global(.success) {
-    background-color: green;
+    background-color: rgb(87, 177, 87);
   }
   :global(.fake-link) {
     color: #1095c1;
