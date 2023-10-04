@@ -24,18 +24,6 @@ type TaxonNameType = {
     taxon_name: string
 }
 
-// type ChecklistTaxonType = {
-//     id: number,
-//     taxon_name: string,
-//     family: string,
-//     external_id: number,
-//     rank: string,
-//     genus: string,
-//     checklist: number,
-//     all_mapped_taxa: TaxonNameType[],
-//     primary_checklist: boolean
-// }
-
 type ObservationDateType = {
     date: string,
     url: string

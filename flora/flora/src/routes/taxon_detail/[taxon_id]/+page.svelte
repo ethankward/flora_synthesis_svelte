@@ -9,6 +9,7 @@
 	import SEINETLink from "../../../components/common/SEINETLink.svelte";
 	import SEINETMapLink from "../../../components/common/SEINETMapLink.svelte";
 	import POWOLink from "../../../components/common/POWOLink.svelte";
+	import IPNILink from "../../../components/common/IPNILink.svelte";
 
 	import TaxonNameAutocompletion from "../../../components/common/TaxonNameAutocompletion.svelte";
 	import TaxonNameLink from "../../../components/common/TaxonNameLink.svelte";
@@ -83,6 +84,8 @@
 		{/if}
 		<FNALink target={taxon.taxon_name} />
 		<POWOLink taxon_name={taxon.taxon_name} />
+		<IPNILink taxon_name={taxon.taxon_name} />
+
 		{#if taxon.primary_checklist}
 			<ins>Known from Rincons</ins>
 		{:else}
