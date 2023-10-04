@@ -116,6 +116,10 @@ class TaxonOrChecklistTaxon {
         return this.getValue<boolean>("has_collections");
     }
 
+    author() {
+        return this.getValue<string>("author");
+    }
+
     strict_population_limits_display() {
         const northern = this.getValue<string>("local_population_strict_northern_range_limit");
         const southern = this.getValue<string>("local_population_strict_southern_range_limit");
@@ -137,6 +141,8 @@ class TaxonOrChecklistTaxon {
         }
         return result.join(', ');
     }
+
+
 }
 
 type GroupedTaxa = {

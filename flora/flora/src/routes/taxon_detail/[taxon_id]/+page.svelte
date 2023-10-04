@@ -65,8 +65,13 @@
 <article>
 	<header>
 		Taxon details: <span id="taxon_name_span"
-			><mark>{taxon.taxon_name}</mark></span
+			><mark
+				>{taxon.taxon_name}
+				{#if taxon.author}{taxon.author}
+				{/if}</mark
+			></span
 		>
+
 		<small
 			><kbd
 				on:click={copyTaxonName}
@@ -102,6 +107,19 @@
 				apiMethod={(value) =>
 					update_taxon_endpoint.callExternal({
 						taxon_name: value,
+						id: taxon.id,
+					})}
+			/>
+		</li>
+		<li>
+			Author:
+			<InlineText
+				id="author_editor"
+				bind:display_value={taxon.author}
+				bind:value={taxon.author}
+				apiMethod={(value) =>
+					update_taxon_endpoint.callExternal({
+						author: value,
 						id: taxon.id,
 					})}
 			/>

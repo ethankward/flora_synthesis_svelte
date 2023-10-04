@@ -37,7 +37,7 @@
 
 {#if create_link !== undefined}
     <a href={create_link(value)}>{display_value}</a>
-{:else if display_value !== undefined}
+{:else if display_value}
     {display_value}
 {/if}
 <sup

@@ -193,10 +193,25 @@ class PopulationRangesField extends DisplayedField {
     }
 
 }
+
+class AuthorField extends DisplayedField {
+    title = "Author";
+    visible = false;
+
+    get_display(taxon: TaxonOrChecklistTaxon): string {
+        const result = taxon.author();
+        if (!result) {
+            return "Unknown";
+        }
+        return result;
+    }
+
+}
+
 const all_field_types: (typeof DisplayedField)[] = [
     TaxonNameField, MappedToField, FamilyField, SynonymsField,
     LifeCycleField, IntroducedField, EndemicField,
-    FirstObservationDateField, LastObservationDateField, HasCollectionsField, PopulationRangesField
+    FirstObservationDateField, LastObservationDateField, HasCollectionsField, PopulationRangesField, AuthorField
 ];
 
 export {
