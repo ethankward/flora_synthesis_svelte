@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { MinimalTaxonType } from "../../data_classes/types";
+    import SEINETMapLink from "../../components/common/SEINETMapLink.svelte";
 
     export let data;
 
@@ -34,7 +35,7 @@
 
 {#each Object.keys(groups) as population_type}
     <article>
-        <details>
+        <details open>
             <summary
                 >Taxa reaching the {population_type} edge of their range in the Rincons</summary
             >
@@ -44,6 +45,10 @@
                         <a href={"/taxon_detail/" + taxon.id} rel="external"
                             >{taxon.taxon_name}</a
                         >
+
+                        {#if taxon.seinet_id}
+                            <SEINETMapLink seinet_id={taxon.seinet_id} />
+                        {/if}
                     </li>
                 {/each}
             </ul>

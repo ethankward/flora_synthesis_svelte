@@ -33,6 +33,9 @@
           ></strong
         >
       </li>
+      <li>
+        <strong><a href="/herbarium_reports">Herbarium reports</a></strong>
+      </li>
     </ul>
     <ul>
       <li>

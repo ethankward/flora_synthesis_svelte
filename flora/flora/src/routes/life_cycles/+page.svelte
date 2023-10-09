@@ -26,7 +26,7 @@
 
 {#each Object.keys(groups) as life_cycle_status_type}
     <article>
-        <details>
+        <details open>
             <summary>{status_types[life_cycle_status_type]}</summary>
             <ul>
                 {#each Object.values(groups[life_cycle_status_type]) as taxon}

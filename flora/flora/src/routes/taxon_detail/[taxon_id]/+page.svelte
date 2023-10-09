@@ -71,7 +71,7 @@
 				{/if}</mark
 			></span
 		>
-
+		&nbsp;
 		<small
 			><kbd
 				on:click={copyTaxonName}

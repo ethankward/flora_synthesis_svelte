@@ -201,11 +201,18 @@ type CollectorType = {
     }[]
 }
 
+type HerbariumReportType = {
+    id: number,
+    taxon: string,
+    url: string
+}
+
+
 export type {
     ChecklistRecordType, ChecklistRecordNoCollectorType, ChecklistStaleRecordCountType,
     ChecklistType, EndemicType,
     IntroducedType, LifeCycleType, MinimalTaxonType,
     ObservationDateType, TaxonNameType, TaxonSynonymType,
     TaxonType, PersonalCollectionRecordType, ValueDisplayType, ChecklistRecordNoteType,
-    CollectorAliasType, CollectorType
+    CollectorAliasType, CollectorType, HerbariumReportType
 };

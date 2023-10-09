@@ -11,11 +11,13 @@
     taxa.forEach((taxon) => {
         let introduced_status = taxon.introduced.value;
         if (introduced_status) {
-            if (!(introduced_status in groups)) {
-                groups[introduced_status] = [];
-                status_types[introduced_status] = taxon.introduced.display;
+            if (introduced_status !== "n") {
+                if (!(introduced_status in groups)) {
+                    groups[introduced_status] = [];
+                    status_types[introduced_status] = taxon.introduced.display;
+                }
+                groups[introduced_status].push(taxon);
             }
-            groups[introduced_status].push(taxon);
         }
     });
 </script>
@@ -26,7 +28,7 @@
 
 {#each Object.keys(groups) as introduced_status_type}
     <article>
-        <details>
+        <details open>
             <summary>{status_types[introduced_status_type]}</summary>
             <ul>
                 {#each Object.values(groups[introduced_status_type]) as taxon}
@@ -34,6 +36,9 @@
                         <a href={"/taxon_detail/" + taxon.id} rel="external"
                             >{taxon.taxon_name}</a
                         >
+                        {#if taxon.first_observation_date !== null}
+                            ({taxon.first_observation_date})
+                        {/if}
                     </li>
                 {/each}
             </ul>

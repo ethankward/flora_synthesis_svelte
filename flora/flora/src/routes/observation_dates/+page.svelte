@@ -48,7 +48,7 @@
 </svelte:head>
 
 <article>
-    <details>
+    <details open>
         <summary>First observed on</summary>
         {#each Object.keys(first_years) as first_year}
             <h4>{first_year}</h4>
@@ -67,7 +67,7 @@
 </article>
 
 <article>
-    <details>
+    <details open>
         <summary>Last observed on</summary>
         {#each Object.keys(last_years) as last_year}
             <h4>{last_year}</h4>
