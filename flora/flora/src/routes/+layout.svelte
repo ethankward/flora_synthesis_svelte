@@ -14,7 +14,7 @@
   function randomBgImage() {
     var seconds = Math.floor(new Date().getTime() / 1000);
     let x = (seconds % 8) + 1;
-    return `/src/lib/images/bg_${x}.JPG`;
+    return `/images/bg_${x}.JPG`;
   }
 </script>
 
