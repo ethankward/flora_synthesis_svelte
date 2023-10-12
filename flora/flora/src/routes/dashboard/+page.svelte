@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { enhance } from "$app/forms";
     import type {
         ChecklistStaleRecordCountType,
         ChecklistType,
@@ -50,10 +49,4 @@
             (checklist) => checklist.checklist_type === "i"
         )}
     />
-</article>
-
-<article>
-    <form method="POST" action="?/test" use:enhance>
-        <input type="submit" />
-    </form>
 </article>

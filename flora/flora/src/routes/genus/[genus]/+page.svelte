@@ -34,14 +34,12 @@
             <li>
                 {#if !taxon.taxon_checklist_taxa.some((checklist_taxon) => checklist_taxon.primary_checklist)}
                     <del
-                        ><a href={"/taxon_detail/" + taxon.id} rel="external"
+                        ><a href={"/taxon_detail/" + taxon.id}
                             >{taxon.taxon_name}</a
                         ></del
                     >
                 {:else}
-                    <a href={"/taxon_detail/" + taxon.id} rel="external"
-                        >{taxon.taxon_name}</a
-                    >
+                    <a href={"/taxon_detail/" + taxon.id}>{taxon.taxon_name}</a>
                 {/if}
             </li>
         {/each}

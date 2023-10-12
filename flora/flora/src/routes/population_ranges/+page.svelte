@@ -42,7 +42,7 @@
             <ul>
                 {#each Object.values(groups[population_type]) as taxon}
                     <li>
-                        <a href={"/taxon_detail/" + taxon.id} rel="external"
+                        <a href={"/taxon_detail/" + taxon.id}
                             >{taxon.taxon_name}</a
                         >
 

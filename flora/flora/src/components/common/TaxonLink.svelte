@@ -6,10 +6,8 @@
 </script>
 
 {#if !taxon.is_checklist_taxon}
-    <a
-        href={"/taxon_detail/" + taxon.id()}
-        target={new_tab ? "_blank" : ""}
-        rel="external">{taxon.taxon_name()}</a
+    <a href={"/taxon_detail/" + taxon.id()} target={new_tab ? "_blank" : ""}
+        >{taxon.taxon_name()}</a
     >
 {:else}
     {taxon.taxon_name()}

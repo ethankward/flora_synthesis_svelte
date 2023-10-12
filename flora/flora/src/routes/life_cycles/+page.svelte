@@ -26,12 +26,12 @@
 
 {#each Object.keys(groups) as life_cycle_status_type}
     <article>
-        <details open>
+        <details>
             <summary>{status_types[life_cycle_status_type]}</summary>
             <ul>
                 {#each Object.values(groups[life_cycle_status_type]) as taxon}
                     <li>
-                        <a href={"/taxon_detail/" + taxon.id} rel="external"
+                        <a href={"/taxon_detail/" + taxon.id}
                             >{taxon.taxon_name}</a
                         >
                     </li>

@@ -30,6 +30,7 @@
 	"type": "module",
 	"dependencies": {
 		"@picocss/pico": "^1.5.10",
+		"@tanstack/react-query": "^4.36.1",
 		"axios": "^1.4.0",
 		"simple-svelte-autocomplete": "^2.5.2",
 		"svelte-table": "^0.6.1",

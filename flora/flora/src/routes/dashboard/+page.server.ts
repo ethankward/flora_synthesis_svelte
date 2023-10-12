@@ -12,9 +12,3 @@ export async function load() {
         stale_record_counts: (await stale_record_counts_endpoint.action(api_manager, {})).data
     }
 }
-
-export const actions = {
-    test: async () => {
-        console.log("testing");
-    }
-}

@@ -33,7 +33,7 @@
             <ul>
                 {#each Object.values(groups[endemic_status_type]) as taxon}
                     <li>
-                        <a href={"/taxon_detail/" + taxon.id} rel="external"
+                        <a href={"/taxon_detail/" + taxon.id}
                             >{taxon.taxon_name}</a
                         >
                         {#if taxon.seinet_id}

@@ -1,34 +1,33 @@
 <script lang="ts">
 	import FakeLink from "../../../components/common/FakeLink.svelte";
 	import { ChecklistRecordList } from "../../../data_classes/checklist_record";
-	import { MakeSynonymOf, UpdateTaxon } from "../../../data_classes/taxon";
+	import { UpdateTaxon } from "../../../data_classes/taxon";
 	import type { TaxonNameType, TaxonType } from "../../../data_classes/types";
 
 	import FNALink from "../../../components/common/FNALink.svelte";
+	import IPNILink from "../../../components/common/IPNILink.svelte";
 	import InatLink from "../../../components/common/InatLink.svelte";
+	import POWOLink from "../../../components/common/POWOLink.svelte";
 	import SEINETLink from "../../../components/common/SEINETLink.svelte";
 	import SEINETMapLink from "../../../components/common/SEINETMapLink.svelte";
-	import POWOLink from "../../../components/common/POWOLink.svelte";
-	import IPNILink from "../../../components/common/IPNILink.svelte";
 
 	import TaxonNameAutocompletion from "../../../components/common/TaxonNameAutocompletion.svelte";
 	import TaxonNameLink from "../../../components/common/TaxonNameLink.svelte";
+	import InlineCheckbox from "../../../components/crud/InlineCheckbox.svelte";
 	import InlineList from "../../../components/crud/InlineList.svelte";
 	import InlineSelect from "../../../components/crud/InlineSelect.svelte";
 	import InlineText from "../../../components/crud/InlineText.svelte";
-	import InlineCheckbox from "../../../components/crud/InlineCheckbox.svelte";
-	import InlineTextarea from "../../../components/crud/InlineTextarea.svelte";
 
 	import {
-		CreateNewTaxonSynonym,
-		DeleteTaxonSynonym,
-		UpdateTaxonSynonym,
+	    CreateNewTaxonSynonym,
+	    DeleteTaxonSynonym,
+	    UpdateTaxonSynonym,
 	} from "../../../data_classes/taxon_synonym";
 
 	import type {
-		EndemicType,
-		IntroducedType,
-		LifeCycleType,
+	    EndemicType,
+	    IntroducedType,
+	    LifeCycleType,
 	} from "../../../data_classes/types";
 
 	export let data;
@@ -39,7 +38,6 @@
 	let introduced_choices: IntroducedType[] = data.introduced_data;
 	let checklist_records = new ChecklistRecordList(data.checklist_records);
 	let selectedSynonymOfChoice: TaxonNameType;
-	let make_synonym_of_endpoint = new MakeSynonymOf();
 	let update_taxon_endpoint = new UpdateTaxon();
 	let create_taxon_synonym_endpoint = new CreateNewTaxonSynonym();
 	let update_taxon_synonym_endpoint = new UpdateTaxonSynonym();
@@ -47,14 +45,6 @@
 
 	function copyTaxonName() {
 		navigator.clipboard.writeText(taxon.taxon_name);
-	}
-
-	function submitMakeSynonymOf() {
-		let synonym_of_id: number = selectedSynonymOfChoice.id;
-		let data = { taxon_id_1: taxon.id, taxon_id_2: synonym_of_id };
-		make_synonym_of_endpoint.callExternal(data).then(() => {
-			window.location.href = "/taxon_detail/" + synonym_of_id;
-		});
 	}
 </script>
 
@@ -368,10 +358,16 @@
 
 <article>
 	<header>Synonymize</header>
-	<form on:submit={submitMakeSynonymOf}>
+	<form method="POST" action="?/synonymize">
 		<div class="grid">
 			<TaxonNameAutocompletion
 				bind:selectedItem={selectedSynonymOfChoice}
+			/>
+			<input type="hidden" name="taxon_id_1" value={taxon.id} />
+			<input
+				type="hidden"
+				name="taxon_id_2"
+				value={selectedSynonymOfChoice?.id}
 			/>
 		</div>
 		<hr />
