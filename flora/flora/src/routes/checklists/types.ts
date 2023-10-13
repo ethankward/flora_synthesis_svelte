@@ -24,10 +24,10 @@ class DisplayedField {
     }
 
     update_sort_direction() {
-        if (this.sort_direction == "asc") {
+        if (this.sort_direction === "asc") {
             this.sort_direction = "desc";
             this.sort_arrow = "▼";
-        } else if (this.sort_direction == "desc") {
+        } else if (this.sort_direction === "desc") {
             this.sort_direction = "asc";
             this.sort_arrow = "▲";
         } else {

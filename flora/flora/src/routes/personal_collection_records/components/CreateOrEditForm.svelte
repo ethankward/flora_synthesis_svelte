@@ -18,7 +18,7 @@
     let submit_text: string;
     let submit_url: string;
 
-    if (create_or_edit == "create") {
+    if (create_or_edit === "create") {
         submit_text = "Create new record";
         submit_url = "/personal_collection_records";
     } else {
@@ -33,7 +33,7 @@
             data.specific_taxon = null;
         }
         let endpoint;
-        if (create_or_edit == "create") {
+        if (create_or_edit === "create") {
             endpoint = new CreatePersonalCollectionRecord();
         } else {
             endpoint = new EditPersonalCollectionRecord();

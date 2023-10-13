@@ -49,7 +49,7 @@
 <form
     class:hide={!active}
     on:change={handleOnSubmit}
-    on:submit|preventDefault={() => {}}
+    on:submit|preventDefault={handleOnSubmit}
     {id}
 >
     <input type="text" bind:value aria-invalid={submission_invalid} />

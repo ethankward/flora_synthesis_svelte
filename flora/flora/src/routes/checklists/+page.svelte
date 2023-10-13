@@ -43,14 +43,6 @@
         displayAllRanks: true,
     };
 
-    onMount(async () => {
-        if (primary_checklist_id !== null) {
-            formProperties.selectedChecklistID = parseInt(primary_checklist_id);
-            primary_checklist_id = null;
-            await handleChecklistChange();
-        }
-    });
-
     class TaxonManager {
         canonical_taxa: checklistTaxaType;
         checklist_taxa: checklistTaxaType;
@@ -101,12 +93,13 @@
         result = result.filterByTaxonFamilyContains(
             formProperties.taxonFamilyFilter
         );
-        result = result.filterByHasCollections(formProperties.hasCollectionsFilter);
+        result = result.filterByHasCollections(
+            formProperties.hasCollectionsFilter
+        );
         if (!formProperties.displayAllRanks) {
             result = result.filterByIsSpecies();
         }
-        console.log("here");
-        console.log(result);
+
         return result;
     }
 
@@ -163,6 +156,14 @@
             );
         }
     }
+
+    onMount(async () => {
+        if (primary_checklist_id !== null) {
+            formProperties.selectedChecklistID = parseInt(primary_checklist_id);
+            primary_checklist_id = null;
+            await handleChecklistChange();
+        }
+    });
 </script>
 
 <svelte:head>

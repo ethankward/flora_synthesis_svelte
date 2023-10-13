@@ -19,15 +19,15 @@
 	import InlineText from "../../../components/crud/InlineText.svelte";
 
 	import {
-	    CreateNewTaxonSynonym,
-	    DeleteTaxonSynonym,
-	    UpdateTaxonSynonym,
+		CreateNewTaxonSynonym,
+		DeleteTaxonSynonym,
+		UpdateTaxonSynonym,
 	} from "../../../data_classes/taxon_synonym";
 
 	import type {
-	    EndemicType,
-	    IntroducedType,
-	    LifeCycleType,
+		EndemicType,
+		IntroducedType,
+		LifeCycleType,
 	} from "../../../data_classes/types";
 
 	export let data;
@@ -122,7 +122,7 @@
 				bind:display_value={taxon.family}
 				bind:value={taxon.family}
 				create_link={(value) => "/family/" + value}
-				apiMethod={(value) => update_taxon_endpoint.callExternal(taxon)}
+				apiMethod={() => update_taxon_endpoint.callExternal(taxon)}
 			/>
 		</li>
 		<li>

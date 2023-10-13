@@ -29,7 +29,6 @@
 
         createAPIMethod(new_value)
             .then((response) => {
-                console.log;
                 existing_values = [
                     ...existing_values,
                     { value: response.data.id, display: new_value },

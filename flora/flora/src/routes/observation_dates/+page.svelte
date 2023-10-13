@@ -24,7 +24,7 @@
     }
 
     taxa.forEach((taxon) => {
-        if (taxon.rank == "S") {
+        if (taxon.rank === "S") {
             if (taxon.first_observation_date) {
                 let first_year = getYear(taxon.first_observation_date);
                 if (!(first_year in first_years)) {

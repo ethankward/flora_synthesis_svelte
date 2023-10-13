@@ -12,7 +12,7 @@ import { collector_exported_endpoints } from '../../../data_classes/collector';
 import { APIManager } from "../../../util/api";
 
 
-function execute(api_manager: APIManager, data: any, endpoint_identifier: string): AxiosPromise | undefined {
+function execute(api_manager: APIManager, data: object, endpoint_identifier: string): AxiosPromise | undefined {
     const all_endpoints = [
         ...taxon_synonym_exported_endpoints,
         ...checklist_record_note_exported_endpoints,

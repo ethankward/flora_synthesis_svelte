@@ -1,5 +1,4 @@
 <script lang="ts">
-    import { updated } from "$app/stores";
     import type { AxiosPromise } from "axios";
 
     export let label: string;
