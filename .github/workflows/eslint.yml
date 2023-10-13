@@ -8,6 +8,6 @@ jobs:
     - name: Install modules
       run: |
         cd flora/flora/
-        npm
+        npm install
     - name: Run ESLint
       run: npx eslint "flora/flora/src/**"
