@@ -10,4 +10,4 @@ jobs:
         cd flora/flora/
         npm install
     - name: Run ESLint
-      run: npx eslint "flora/flora/src/**"
+      run: npx eslint "src/**"
