@@ -80,8 +80,10 @@
         />
     </div>
     <p>
-        {stale_record_counts.filter((src) => src.id === checklist.id)[0]
-            .stale_record_count} records without metadata or older than 60 days
+        <a href="/checklists/{checklist.id}">
+            {stale_record_counts.filter((src) => src.id === checklist.id)[0]
+                .stale_record_count} records without metadata or older than 60 days</a
+        >
     </p>
     <div class="grid">
         <RetrievalButton

@@ -36,6 +36,7 @@ class TaxonOrChecklistTaxon {
         if (r2 !== undefined) {
             return r2 as DataType;
         }
+
         return undefined;
     }
 
@@ -241,7 +242,6 @@ class TaxonList {
         const common_taxon_ids = new Set(
             [...this_taxon_ids].filter((x) => other_taxon_ids.has(x))
         );
-
 
         return new TaxonList(
             this.taxa.filter((taxon) => {

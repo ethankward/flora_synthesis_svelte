@@ -19,6 +19,7 @@ type ChecklistStaleRecordCountType = {
     stale_record_count: number
 }
 
+
 type TaxonNameType = {
     id: number,
     taxon_name: string
@@ -119,6 +120,12 @@ type ChecklistRecordType = {
     notes: ChecklistRecordNoteType[]
 }
 
+type ChecklistStaleRecordType = {
+    id: number,
+    stale_records: ChecklistRecordType[]
+}
+
+
 type ChecklistRecordNoCollectorType = {
     id: number,
     observer: string,
@@ -214,5 +221,5 @@ export type {
     IntroducedType, LifeCycleType, MinimalTaxonType,
     ObservationDateType, TaxonNameType, TaxonSynonymType,
     TaxonType, PersonalCollectionRecordType, ValueDisplayType, ChecklistRecordNoteType,
-    CollectorAliasType, CollectorType, HerbariumReportType
+    CollectorAliasType, CollectorType, HerbariumReportType, ChecklistStaleRecordType
 };
