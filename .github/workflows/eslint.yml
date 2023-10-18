@@ -1,0 +1,15 @@
+name: eslint
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install modules
+      run: |
+        cd flora/flora/
+        npm install
+    - name: Run ESLint
+      run: |
+          cd flora/flora/
+          npx eslint "src/**"
