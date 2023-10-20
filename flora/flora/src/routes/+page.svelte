@@ -17,15 +17,16 @@
         {#each checklists as checklist}
             <li>
                 {#if checklist.citation}
-                    <a
-                        href="/checklists?primary_checklist={checklist.id}"
+                    <a href="/checklists?primary_checklist={checklist.id}"
                         >{@html checklist.citation}</a
                     >
-                    {#if checklist.citation_url}
-                        <a href={checklist.citation_url} target="_blank">→</a>
-                    {/if}
                 {:else}
-                    {checklist.checklist_name}
+                    <a href="/checklists?primary_checklist={checklist.id}"
+                        >{@html checklist.checklist_name}</a
+                    >
+                {/if}
+                {#if checklist.citation_url}
+                    <a href={checklist.citation_url} target="_blank">→</a>
                 {/if}
             </li>
         {/each}
