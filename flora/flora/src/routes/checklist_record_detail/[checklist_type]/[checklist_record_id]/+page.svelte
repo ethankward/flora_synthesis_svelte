@@ -110,7 +110,5 @@
 
 <article>
     <header>Refresh record</header>
-    <form on:submit={submitRetrieveRecord}>
-        <input type="submit" value="Update" />
-    </form>
+    <button on:click={submitRetrieveRecord}=>Update</button>
 </article>
