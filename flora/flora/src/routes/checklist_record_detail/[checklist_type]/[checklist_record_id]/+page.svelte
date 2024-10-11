@@ -41,6 +41,7 @@
         retrieve_record_endpoint
             .callExternal({
                 record_id: checklist_record.id,
+                checklist_type: data.checklist_type,
             })
             .then(() => {
                 window.location.href =
