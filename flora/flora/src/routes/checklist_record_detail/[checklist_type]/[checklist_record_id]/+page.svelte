@@ -5,13 +5,12 @@
 
     import InlineTextarea from "../../../../components/crud/InlineTextarea.svelte";
     import DisplayChecklistRecord from "../../components/DisplayChecklistRecord.svelte";
-    import { UpdateChecklistRecord } from "../../../../data_classes/checklist_record";
+    import { UpdateChecklistRecord, RetrieveChecklistRecord } from "../../../../data_classes/checklist_record";
     import {
         CreateNewChecklistRecordNote,
         UpdateChecklistRecordNote,
         DeleteChecklistRecordNote,
     } from "../../../../data_classes/checklist_record_note";
-
     export let data;
 
     let checklist_record: ChecklistRecordType = data.checklist_record_data;
@@ -20,6 +19,7 @@
     let create_crn_endpoint = new CreateNewChecklistRecordNote();
     let update_crn_endpoint = new UpdateChecklistRecordNote();
     let delete_crn_endpoint = new DeleteChecklistRecordNote();
+    let retrieve_record_endpoint = new RetrieveChecklistRecord();
 
     function submitUpdateMapping() {
         update_record_endpoint
@@ -27,6 +27,20 @@
                 checklist_type: data.checklist_type,
                 checklist_record_id: checklist_record.id,
                 mapped_to_id: mapped_to_choice.id,
+            })
+            .then(() => {
+                window.location.href =
+                    "/checklist_record_detail/" +
+                    data.checklist_type +
+                    "/" +
+                    checklist_record.id;
+            });
+    }
+
+    function submitRetrieveRecord() {
+        retrieve_record_endpoint
+            .callExternal({
+                record_id: checklist_record.id,
             })
             .then(() => {
                 window.location.href =
@@ -90,6 +104,13 @@
             <TaxonNameAutocompletion bind:selectedItem={mapped_to_choice} />
         </div>
         <hr />
+        <input type="submit" value="Update" />
+    </form>
+</article>
+
+<article>
+    <header>Refresh record</header>
+    <form on:submit={submitRetrieveRecord}>
         <input type="submit" value="Update" />
     </form>
 </article>

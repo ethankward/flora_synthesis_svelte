@@ -37,14 +37,19 @@ const UpdateChecklistRecord = createNewEndpoint<{ checklist_type: string, checkl
 
 const GetChecklistRecordsNoCollector = createNewEndpoint("GET", "checklist_records_no_collector", "checklist_records_no_collector");
 
+const RetrieveChecklistRecord = createNewEndpoint<{ record_id: number}>("POST", "retrieve_checklist_record", "retrieve_checklist_record");
+
 const checklist_records_exported_endpoints = [
     new GetTaxonChecklistRecords(),
     new GetChecklistRecord(),
     new UpdateChecklistRecord(),
-    new GetChecklistRecordsNoCollector()
+    new GetChecklistRecordsNoCollector(),
+    new RetrieveChecklistRecord(),
 ]
 
 export {
-    ChecklistRecordList, GetChecklistRecord, GetTaxonChecklistRecords, UpdateChecklistRecord, GetChecklistRecordsNoCollector, checklist_records_exported_endpoints
+    ChecklistRecordList, GetChecklistRecord, GetTaxonChecklistRecords, UpdateChecklistRecord, GetChecklistRecordsNoCollector,
+    RetrieveChecklistRecord,
+    checklist_records_exported_endpoints
 };
 
