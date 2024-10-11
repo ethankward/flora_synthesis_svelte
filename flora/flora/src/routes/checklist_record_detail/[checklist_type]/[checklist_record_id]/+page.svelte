@@ -110,5 +110,5 @@
 
 <article>
     <header>Refresh record</header>
-    <button on:click={submitRetrieveRecord}=>Update</button>
+    <button on:click={submitRetrieveRecord}>Update</button>
 </article>
